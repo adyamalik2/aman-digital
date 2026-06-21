@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# berisi URL deploy hook rahasia - jangan commit
+publish-blog.bat
+
 # vercel
 .vercel
 

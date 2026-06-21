@@ -1,0 +1,31 @@
+name: Rebuild blog (jadwal otomatis)
+
+# Memicu deploy hook Cloudflare Pages secara berkala supaya artikel baru
+# di Notion otomatis muncul tanpa perlu klik apa pun.
+#
+# Butuh secret: CLOUDFLARE_DEPLOY_HOOK
+#   GitHub repo -> Settings -> Secrets and variables -> Actions -> New repository secret
+#   Name : CLOUDFLARE_DEPLOY_HOOK
+#   Value: URL deploy hook Cloudflare Pages kamu (yang diawali https://api.cloudflare.com/.../deploy_hooks/...)
+
+on:
+  schedule:
+    # Setiap 30 menit. Catatan: GitHub kadang menunda jadwal beberapa menit saat sibuk.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {} # tombol "Run workflow" untuk memicu manual kapan saja
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Picu Cloudflare Pages deploy hook
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::Secret CLOUDFLARE_DEPLOY_HOOK belum di-set di GitHub repo Settings."
+            exit 1
+          fi
+          curl -fsS -X POST "$HOOK"
+          echo ""
+          echo "Deploy hook terpicu. Situs akan rebuild ~1-2 menit."

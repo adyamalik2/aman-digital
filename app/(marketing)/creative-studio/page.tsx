@@ -1,16 +1,17 @@
-import type { Metadata } from "next";
 import { Clapperboard, Video, Bot, Pencil, type LucideIcon } from "lucide-react";
 import ServiceHero from "@/components/layout/ServiceHero";
 import { TiktokIcon, InstagramIcon } from "@/components/icons/BrandIcons";
+import { pageMeta } from "@/lib/seo";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Creative Studio | AMAN Digital",
   description:
     "Creative Studio AMAN Digital menghadirkan produksi konten video, AI prompt engineering, dan voice-over profesional untuk kebutuhan branding digital.",
-};
+  path: "/creative-studio",
+});
 
 /* ---------------- Data ---------------- */
 

@@ -10,7 +10,6 @@ import {
   Calculator,
   ArrowLeftRight,
   PieChart,
-  Smartphone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -200,6 +199,149 @@ const faqs = [
     a: "Hubungi kami via WhatsApp dan tim kami akan membantu proses upgrade. Pembayaran bisa via transfer bank.",
   },
 ];
+
+/* ---------------- Demo mockups ---------------- */
+
+function TambahTransaksiMock() {
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <p className="text-[9px] font-bold text-navy">Tambah Transaksi</p>
+      <div className="grid grid-cols-2 gap-1.5">
+        <div className="rounded-lg border border-slate-200 bg-white py-1 text-center text-[8px] text-slate-500">
+          Pemasukan
+        </div>
+        <div className="rounded-lg border-[1.5px] border-red-300 bg-red-50 py-1 text-center text-[8px] font-bold text-red-600">
+          Pengeluaran
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-1.5">
+        <div className="rounded-lg border border-slate-200 bg-white px-2 py-1">
+          <p className="text-[6px] text-slate-500">Grup</p>
+          <p className="text-[8px] font-semibold text-navy">Ayah</p>
+        </div>
+        <div className="rounded-lg border border-slate-200 bg-white px-2 py-1">
+          <p className="text-[6px] text-slate-500">Kategori</p>
+          <p className="text-[8px] font-semibold text-navy">Sekolah</p>
+        </div>
+      </div>
+      <div className="flex gap-1">
+        <span className="rounded-md border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[7px] font-bold text-amber-700">
+          Estimasi
+        </span>
+        <span className="rounded-md border border-slate-200 bg-white px-1.5 py-0.5 text-[7px] text-slate-500">
+          Selesai
+        </span>
+        <span className="rounded-md border border-slate-200 bg-white px-1.5 py-0.5 text-[7px] text-slate-500">
+          Batal
+        </span>
+      </div>
+      <div className="rounded-lg border border-slate-200 bg-white px-2 py-1">
+        <p className="text-[6px] text-slate-500">Hubungkan ke Goal</p>
+        <p className="text-[8px] text-navy">Dana Sekolah Anak</p>
+      </div>
+      <div className="mt-auto rounded-lg bg-gradient-to-br from-emerald to-emerald-dark py-1.5 text-center text-[9px] font-bold text-white">
+        Simpan Transaksi
+      </div>
+    </div>
+  );
+}
+
+function LaporanKeluargaMock() {
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-2">
+        <p className="mb-1 text-[8px] font-bold text-navy">
+          Distribusi Pengeluaran
+        </p>
+        <div className="flex items-center gap-2">
+          <div
+            className="relative h-12 w-12 shrink-0 rounded-full"
+            style={{
+              background:
+                "conic-gradient(#ec4899 0 65%, #3b82f6 65% 98%, #059669 98% 100%)",
+            }}
+          >
+            <div className="absolute inset-[10px] rounded-full bg-white" />
+          </div>
+          <div className="flex-1 text-[7.5px] text-slate-600">
+            {[
+              { c: "bg-pink-500", l: "Bunda", v: "65%" },
+              { c: "bg-blue-500", l: "Ayah", v: "33%" },
+              { c: "bg-emerald", l: "Zakat/Sedekah", v: "3%" },
+            ].map((r) => (
+              <div
+                key={r.l}
+                className="mb-0.5 flex items-center justify-between"
+              >
+                <span className="flex items-center gap-1">
+                  <span className={`h-1.5 w-1.5 rounded-full ${r.c}`} />
+                  {r.l}
+                </span>
+                <b className="text-navy">{r.v}</b>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex-1 rounded-xl border border-slate-200 bg-white p-2">
+        <p className="mb-1 text-[8px] font-bold text-navy">Arus Kas Mingguan</p>
+        <div className="flex h-8 items-end justify-around">
+          {[
+            [80, 90],
+            [45, 30],
+            [60, 55],
+            [35, 50],
+          ].map((pair, i) => (
+            <span key={i} className="flex h-full items-end gap-0.5">
+              <span
+                className="w-1 rounded-t bg-emerald"
+                style={{ height: `${pair[0]}%` }}
+              />
+              <span
+                className="w-1 rounded-t bg-red-500"
+                style={{ height: `${pair[1]}%` }}
+              />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FiturLengkapMock() {
+  const rows = [
+    { l: "Transfer Planner", c: "bg-blue-100 text-blue-600", badge: "" },
+    { l: "Kalkulator Zakat", c: "bg-emerald/10 text-emerald", badge: "" },
+    { l: "Family Sync", c: "bg-pink-100 text-pink-600", badge: "Segera" },
+    { l: "Reminder Tagihan", c: "bg-amber-100 text-amber-600", badge: "PRO" },
+    { l: "OCR Struk", c: "bg-violet-100 text-violet-600", badge: "Segera" },
+  ];
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <div className="rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 px-2 py-1.5 text-white">
+        <p className="text-[8.5px] font-extrabold">Upgrade ke Pro</p>
+        <p className="text-[6.5px] opacity-95">Buka semua fitur · Rp 99rb/bln</p>
+      </div>
+      {rows.map((r) => (
+        <div
+          key={r.l}
+          className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-1"
+        >
+          <span className={`h-4 w-4 rounded ${r.c}`} />
+          <span className="text-[8px] font-semibold text-navy">{r.l}</span>
+          {r.badge && (
+            <span className="ml-auto rounded bg-amber-100 px-1 text-[6px] font-bold text-amber-700">
+              {r.badge}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const demoMocks = [TambahTransaksiMock, LaporanKeluargaMock, FiturLengkapMock];
 
 /* ---------------- Page ---------------- */
 
@@ -441,18 +583,21 @@ export default function BudgetPage() {
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {demos.map((d) => (
-              <div
-                key={d.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-              >
-                <div className="mb-4 flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-emerald/40">
-                  <Smartphone size={56} strokeWidth={1.5} />
+            {demos.map((d, i) => {
+              const Mock = demoMocks[i];
+              return (
+                <div
+                  key={d.title}
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+                >
+                  <div className="mb-4 aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                    <Mock />
+                  </div>
+                  <h3 className="text-base font-bold text-navy">{d.title}</h3>
+                  <p className="mt-1 text-sm text-slate-600">{d.desc}</p>
                 </div>
-                <h3 className="text-base font-bold text-navy">{d.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{d.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

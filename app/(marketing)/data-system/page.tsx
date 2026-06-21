@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   LineChart,
@@ -9,15 +8,17 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import ServiceHero from "@/components/layout/ServiceHero";
+import { pageMeta } from "@/lib/seo";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Data & System Integration | AMAN Digital",
   description:
     "Layanan Data & System Integration AMAN Digital untuk dashboard Looker Studio, AppSheet no-code app, dan sistem operasional berbasis data.",
-};
+  path: "/data-system",
+});
 
 /* ---------------- Data ---------------- */
 

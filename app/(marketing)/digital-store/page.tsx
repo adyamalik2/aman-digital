@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   Store,
   LayoutDashboard,
@@ -8,15 +7,17 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import ServiceHero from "@/components/layout/ServiceHero";
+import { pageMeta } from "@/lib/seo";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Digital Store | AMAN Digital",
   description:
     "Digital Store AMAN Digital menyediakan produk digital, template, e-book, lisensi software, serta aksesori IT untuk produktivitas bisnis modern.",
-};
+  path: "/digital-store",
+});
 
 /* ---------------- Data ---------------- */
 

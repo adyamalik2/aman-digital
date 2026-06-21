@@ -8,7 +8,7 @@ import {
   Cloud,
   BarChart3,
   WifiOff,
-  Smartphone,
+  ScanLine,
   type LucideIcon,
 } from "lucide-react";
 
@@ -252,6 +252,139 @@ const faqs = [
     a: "Chat WhatsApp langsung ke tim AMAN Digital. Bahasa Indonesia, jam kerja 09.00–21.00 WIB. Untuk paket Pro, response time prioritas 2 jam. Untuk paket Dasar, dijawab dalam 24 jam. Untuk paket Gratis, dijawab dalam 3 hari kerja.",
   },
 ];
+
+/* ---------------- Demo mockups ---------------- */
+
+const stockBadge = (text: string, tone: "ok" | "out") =>
+  tone === "ok"
+    ? "bg-emerald/10 text-emerald"
+    : "bg-red-100 text-red-600";
+
+function KasirMock() {
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <div className="flex items-center gap-1.5">
+        <div className="flex-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[9px] text-slate-400">
+          Cari produk atau scan…
+        </div>
+        <div className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[9px] font-semibold text-navy">
+          <ScanLine size={9} /> Scan
+        </div>
+      </div>
+      {[
+        { n: "Buku Tulis", q: "2 × Rp5.000", t: "Rp10.000" },
+        { n: "Spidol", q: "1 × Rp12.000", t: "Rp12.000" },
+      ].map((r) => (
+        <div
+          key={r.n}
+          className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-1.5"
+        >
+          <div>
+            <p className="text-[9px] font-bold leading-none text-navy">{r.n}</p>
+            <p className="text-[8px] text-slate-500">{r.q}</p>
+          </div>
+          <p className="font-mono text-[9px] font-bold text-navy">{r.t}</p>
+        </div>
+      ))}
+      <div className="mt-auto flex items-center justify-between rounded-lg bg-gradient-to-br from-emerald to-emerald-dark p-2 text-white">
+        <div>
+          <p className="text-[7px] uppercase tracking-wider text-white/70">
+            Total
+          </p>
+          <p className="font-mono text-[11px] font-bold leading-none">
+            Rp22.000
+          </p>
+        </div>
+        <span className="rounded-md bg-white px-2.5 py-1 text-[9px] font-bold text-emerald-dark">
+          Bayar
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ProdukMock() {
+  const rows = [
+    { n: "Buku Tulis", m: "PRD-CHA0Z0XG · Alat Tulis", p: "Rp5.000", s: "18 pcs", tone: "ok" as const },
+    { n: "Spidol", m: "PRD-00005 · Alat Tulis", p: "Rp12.000", s: "Habis", tone: "out" as const },
+    { n: "Print Warna", m: "PRD-00003 · Fotokopi", p: "Rp2.000", s: "9999 lbr", tone: "ok" as const },
+  ];
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <div className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[8px] text-slate-400">
+        Cari nama, SKU, atau barcode…
+      </div>
+      <div className="flex gap-1">
+        <span className="rounded-full bg-emerald px-1.5 py-0.5 text-[7px] text-white">
+          Semua
+        </span>
+        <span className="rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[7px] text-slate-500">
+          Alat Tulis
+        </span>
+        <span className="rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[7px] text-slate-500">
+          Fotokopi
+        </span>
+      </div>
+      {rows.map((r) => (
+        <div
+          key={r.n}
+          className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-1.5"
+        >
+          <div>
+            <p className="text-[9px] font-bold leading-none text-navy">{r.n}</p>
+            <p className="text-[7px] text-slate-500">{r.m}</p>
+          </div>
+          <div className="text-right">
+            <p className="font-mono text-[9px] font-bold text-emerald">{r.p}</p>
+            <span
+              className={`rounded px-1 text-[7px] ${stockBadge(r.s, r.tone)}`}
+            >
+              {r.s}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LaporanMock() {
+  const bars = [40, 70, 52, 88, 64, 78, 100];
+  return (
+    <div className="flex h-full flex-col gap-1.5 p-3">
+      <div className="rounded-lg border border-slate-200 bg-white p-2">
+        <div className="mb-1 flex items-center justify-between">
+          <p className="text-[8px] font-bold text-navy">Omzet 7 Hari</p>
+          <p className="font-mono text-[8px] font-bold text-emerald">Rp4,2jt</p>
+        </div>
+        <div className="flex h-9 items-end gap-1">
+          {bars.map((h, i) => (
+            <span
+              key={i}
+              className="flex-1 rounded-t bg-emerald"
+              style={{ height: `${h}%`, opacity: 0.4 + (h / 100) * 0.6 }}
+            />
+          ))}
+        </div>
+      </div>
+      {[
+        { l: "Produk Terlaris", c: "bg-emerald" },
+        { l: "Laba & Margin", c: "bg-emerald-light" },
+        { l: "Piutang", c: "bg-amber-500" },
+      ].map((r) => (
+        <div
+          key={r.l}
+          className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-1.5"
+        >
+          <span className={`h-3 w-3 rounded-md ${r.c}`} />
+          <p className="text-[8px] font-semibold text-navy">{r.l}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const demoMocks = [KasirMock, ProdukMock, LaporanMock];
 
 /* ---------------- Page ---------------- */
 
@@ -542,20 +675,23 @@ export default function KasirPage() {
             </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {demos.map((d) => (
+            {demos.map((d, i) => {
+              const Mock = demoMocks[i];
+              return (
               <div
                 key={d.title}
                 className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-emerald/40">
-                  <Smartphone size={56} strokeWidth={1.5} />
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                  <Mock />
                 </div>
                 <h3 className="mt-5 text-xl font-bold text-navy">{d.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {d.desc}
                 </p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Zap,
@@ -11,17 +10,19 @@ import {
   MapPin,
   type LucideIcon,
 } from "lucide-react";
+import { pageMeta } from "@/lib/seo";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
 const KONSULTASI_WA = wa("Halo AMAN Digital, saya ingin konsultasi gratis.");
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Tentang AMAN Digital — Adya Malik",
   description:
     "AMAN Digital dibangun oleh Adya Malik, praktisi IT dan data dari Aceh. Membantu UMKM, toko, dan kantor kecil punya sistem kerja yang lebih rapi — mulai dari konsultasi gratis.",
-};
+  path: "/tentang",
+});
 
 /* ---------------- Data ---------------- */
 

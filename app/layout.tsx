@@ -12,7 +12,12 @@ export const metadata: Metadata = {
   title: "AMAN Digital — Partner Digital UMKM",
   description: "Platform digital untuk UMKM Indonesia",
   icons: { icon: "/icon.png" },
+  alternates: { canonical: "/" },
   openGraph: {
+    title: "AMAN Digital — Partner Digital UMKM",
+    description:
+      "Bantu UMKM, toko, dan kantor kecil punya sistem kerja yang lebih rapi — aplikasi kasir, keuangan, invoice, plus layanan data, IT, cetak, dan kreatif.",
+    url: "/",
     type: "website",
     siteName: "AMAN Digital",
     locale: "id_ID",
@@ -20,6 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "AMAN Digital — Partner Digital UMKM",
+    description: "Partner digital praktis untuk UMKM Indonesia.",
     images: ["/images/og-image.png"],
   },
 };

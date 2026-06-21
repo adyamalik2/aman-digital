@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import {
   InstagramIcon,
   TiktokIcon,
   ShopeeIcon,
 } from "@/components/icons/BrandIcons";
+import { pageMeta } from "@/lib/seo";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Kontak | AMAN Digital",
   description:
     "Hubungi tim AMAN Digital via WhatsApp, email, atau media sosial. Konsultasi awal gratis untuk kebutuhan digital bisnis Anda.",
-};
+  path: "/kontak",
+});
 
 /* ---------------- Data ---------------- */
 

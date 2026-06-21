@@ -381,15 +381,22 @@ export default function KasirPage() {
       </section>
 
       {/* ===== MARQUEE STRIP ===== */}
-      <section className="bg-navy py-7">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 text-lg font-light italic text-white sm:text-xl">
-          {marqueeItems.map((m, i) => (
-            <span key={m} className="flex items-center gap-6">
-              {m}
-              {i < marqueeItems.length - 1 && (
-                <span className="text-emerald-light">✦</span>
-              )}
-            </span>
+      <section className="overflow-hidden bg-navy py-7">
+        <div className="animate-marquee">
+          {/* Two identical copies so the -50% loop is seamless */}
+          {[0, 1].map((copy) => (
+            <div
+              key={copy}
+              aria-hidden={copy === 1}
+              className="flex shrink-0 items-center gap-6 px-3 text-lg font-light italic text-white sm:text-xl"
+            >
+              {marqueeItems.map((m) => (
+                <span key={m} className="flex items-center gap-6 whitespace-nowrap">
+                  {m}
+                  <span className="text-emerald-light">✦</span>
+                </span>
+              ))}
+            </div>
           ))}
         </div>
       </section>

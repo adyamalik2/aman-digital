@@ -1,6 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Zap,
+  MessagesSquare,
+  PackageOpen,
+  Cloud,
+  BarChart3,
+  WifiOff,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -55,29 +65,29 @@ const problems = [
   },
 ];
 
-const features = [
+const features: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "⚡",
+    icon: Zap,
     title: "Transaksi <15 Detik",
     desc: "Search produk → pilih → bayar → struk. Tanpa loading panjang, tanpa antrian frustrasi.",
   },
   {
-    icon: "💬",
+    icon: MessagesSquare,
     title: "Support Bahasa Indonesia",
     desc: "Dukungan dan dokumentasi 100% Bahasa Indonesia. Tanya via WhatsApp, dijawab cepat.",
   },
   {
-    icon: "📦",
+    icon: PackageOpen,
     title: "Master Data Produk",
     desc: "Produk lengkap dengan SKU, barcode, kategori, dan multi-satuan. Stok berkurang otomatis tiap transaksi, plus koreksi, histori, dan impor/ekspor CSV.",
   },
   {
-    icon: "☁️",
+    icon: Cloud,
     title: "Backup Lokal & Cloud",
     desc: "Export semua data ke JSON kapan saja. Atau aktifkan backup otomatis ke Google. Data milikmu, di tanganmu.",
   },
   {
-    icon: "📊",
+    icon: BarChart3,
     title: "Laporan & Export",
     desc: "Ringkasan penjualan, produk terlaris, laba dan margin, piutang pelanggan, sampai stok menipis. Export PDF, CSV, atau JPG untuk WhatsApp.",
   },
@@ -256,9 +266,9 @@ export default function KasirPage() {
         style={{ backgroundColor: "#070B14" }}
       >
         <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+          <div className="stagger lg:col-span-7">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/10 px-3 py-1.5 text-xs font-semibold text-emerald-light">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald" />
+              <span className="ping-dot h-1.5 w-1.5 rounded-full bg-emerald" />
               Versi Awal — Gratis untuk Early Adopter
             </span>
             <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
@@ -448,8 +458,8 @@ export default function KasirPage() {
             {/* Offline-first big card */}
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm lg:col-span-7 lg:p-12">
               <div className="flex items-center gap-4">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-2xl">
-                  📡
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-white">
+                  <WifiOff size={24} />
                 </div>
                 <span className="text-xs font-bold uppercase tracking-widest text-emerald">
                   Offline-First Sejati
@@ -475,37 +485,43 @@ export default function KasirPage() {
 
             {/* Two stacked cards */}
             <div className="grid gap-6 lg:col-span-5">
-              {features.slice(0, 2).map((f) => (
+              {features.slice(0, 2).map((f) => {
+                const Icon = f.icon;
+                return (
                 <div
                   key={f.title}
                   className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
                 >
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald/10 text-2xl">
-                    {f.icon}
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                    <Icon size={24} />
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-navy">{f.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">
                     {f.desc}
                   </p>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Three bottom cards */}
-            {features.slice(2).map((f) => (
+            {features.slice(2).map((f) => {
+              const Icon = f.icon;
+              return (
               <div
                 key={f.title}
                 className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm lg:col-span-4"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald/10 text-2xl">
-                  {f.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-xl font-bold text-navy">{f.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {f.desc}
                 </p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -531,8 +547,8 @@ export default function KasirPage() {
                 key={d.title}
                 className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-5xl">
-                  📱
+                <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-emerald/40">
+                  <Smartphone size={56} strokeWidth={1.5} />
                 </div>
                 <h3 className="mt-5 text-xl font-bold text-navy">{d.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">

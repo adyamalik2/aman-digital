@@ -1,6 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import {
+  UsersRound,
+  PiggyBank,
+  Bell,
+  Users,
+  Target,
+  Calculator,
+  ArrowLeftRight,
+  PieChart,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -10,52 +22,52 @@ const TANYA_WA = wa("Halo AMAN Digital, saya ingin tanya tentang AMAN Budget.");
 
 /* ---------------- Data ---------------- */
 
-const masalah = [
+const masalah: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "👨‍👩‍👧",
+    icon: UsersRound,
     title: "Tak Tahu Siapa Habis Berapa",
     desc: "Pengeluaran Ayah, Bunda, dan kebutuhan anak campur jadi satu — sulit tahu ke mana uang keluarga mengalir.",
   },
   {
-    icon: "🐷",
+    icon: PiggyBank,
     title: "Susah Konsisten Menabung",
     desc: "Niat menabung untuk umrah, sekolah, atau dana darurat sering terpakai karena tak ada target yang jelas.",
   },
   {
-    icon: "🔔",
+    icon: Bell,
     title: "Lupa Tagihan & Zakat",
     desc: "Tagihan telat, zakat lupa dihitung, dan di akhir bulan bingung kenapa saldo cepat menipis.",
   },
 ];
 
-const fitur = [
+const fitur: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "👥",
+    icon: Users,
     title: "Catat per Grup Keluarga",
     desc: "Setiap transaksi dicatat per anggota — Ayah, Bunda, anak. Lihat jelas siapa pemasukan dan siapa pengeluaran terbesar.",
   },
   {
-    icon: "🎯",
+    icon: Target,
     title: "Goals Tabungan Keluarga",
     desc: "Buat target — umrah, sekolah, dana darurat — lalu hubungkan transaksi ke goal agar progres menabung terlihat nyata.",
   },
   {
-    icon: "🧮",
+    icon: Calculator,
     title: "Kalkulator Zakat",
     desc: "Hitung zakat penghasilan 2,5% otomatis. Tunaikan kewajiban tanpa repot menghitung manual.",
   },
   {
-    icon: "🔄",
+    icon: ArrowLeftRight,
     title: "Transfer Planner",
     desc: "Alokasikan dan bagi anggaran bulanan per anggota keluarga supaya pengeluaran tetap terkendali.",
   },
   {
-    icon: "🔔",
+    icon: Bell,
     title: "Reminder Tagihan",
     desc: "Pengingat jatuh tempo otomatis untuk listrik, cicilan, dan langganan — tidak ada lagi telat bayar.",
   },
   {
-    icon: "📊",
+    icon: PieChart,
     title: "Laporan & Arus Kas",
     desc: "Distribusi pengeluaran per grup dan arus kas mingguan dalam grafik yang mudah dibaca.",
   },
@@ -204,7 +216,7 @@ export default function BudgetPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div className="text-center lg:text-left">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/10 px-4 py-1.5 text-sm font-bold uppercase tracking-widest text-emerald-light">
-              <span className="h-2 w-2 rounded-full bg-emerald" />
+              <span className="ping-dot h-2 w-2 rounded-full bg-emerald" />
               AMAN Budget
             </span>
             <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl">
@@ -357,20 +369,23 @@ export default function BudgetPage() {
             keuangan rumah tangga yang sangat umum.
           </p>
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {masalah.map((m) => (
+            {masalah.map((m) => {
+              const Icon = m.icon;
+              return (
               <div
                 key={m.title}
                 className="rounded-2xl border border-slate-200 bg-white p-6 text-left"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-2xl">
-                  {m.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-navy">
                   {m.title}
                 </h3>
                 <p className="mt-1 text-sm text-slate-600">{m.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -387,13 +402,15 @@ export default function BudgetPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {fitur.map((f) => (
+            {fitur.map((f) => {
+              const Icon = f.icon;
+              return (
               <div
                 key={f.title}
                 className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-2xl">
-                  {f.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-navy">
                   {f.title}
@@ -402,7 +419,8 @@ export default function BudgetPage() {
                   {f.desc}
                 </p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -428,8 +446,8 @@ export default function BudgetPage() {
                 key={d.title}
                 className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <div className="mb-4 flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-5xl">
-                  📱
+                <div className="mb-4 flex aspect-[4/3] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-emerald/40">
+                  <Smartphone size={56} strokeWidth={1.5} />
                 </div>
                 <h3 className="text-base font-bold text-navy">{d.title}</h3>
                 <p className="mt-1 text-sm text-slate-600">{d.desc}</p>

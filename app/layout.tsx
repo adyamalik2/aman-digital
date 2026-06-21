@@ -8,8 +8,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AMAN Digital",
+  metadataBase: new URL("https://amandigital.web.id"),
+  title: "AMAN Digital — Partner Digital UMKM",
   description: "Platform digital untuk UMKM Indonesia",
+  icons: { icon: "/icon.png" },
+  openGraph: {
+    type: "website",
+    siteName: "AMAN Digital",
+    locale: "id_ID",
+    images: ["/images/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/og-image.png"],
+  },
 };
 
 export default function RootLayout({

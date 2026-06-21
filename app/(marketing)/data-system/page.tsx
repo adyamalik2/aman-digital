@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  LineChart,
+  Smartphone,
+  Receipt,
+  Workflow,
+  CircleCheck,
+  type LucideIcon,
+} from "lucide-react";
+import ServiceHero from "@/components/layout/ServiceHero";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -20,30 +29,32 @@ const cocok = [
   "Siapapun yang ingin data bisnis lebih rapi dan mudah dibaca langsung",
 ];
 
-const services = [
+const services: {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+  href?: string;
+}[] = [
   {
-    icon: "📊",
+    icon: LineChart,
     title: "Dashboard Bisnis (Looker Studio)",
     desc: "Visualisasi data penjualan, stok, keuangan, dan metrik penting dalam satu dashboard Google Looker Studio yang otomatis update setiap kali data berubah — tanpa perlu buka spreadsheet satu per satu.",
-    href: undefined as string | undefined,
   },
   {
-    icon: "📱",
+    icon: Smartphone,
     title: "Aplikasi No-Code (AppSheet)",
     desc: "Aplikasi web atau mobile sederhana tanpa coding rumit. Cocok untuk absensi tim, catatan alat, stok barang, atau alur order yang masih dicatat manual di buku atau grup chat.",
-    href: undefined,
   },
   {
-    icon: "🧾",
+    icon: Receipt,
     title: "Sistem POS Web & SOP Operasional",
     desc: "Rancangan sistem kasir berbasis web dan flowchart alur kerja agar transaksi harian, stok, dan laporan bisa dikelola tim kecil tanpa kebingungan.",
     href: "/kasir",
   },
   {
-    icon: "🔗",
+    icon: Workflow,
     title: "Integrasi Google Workspace",
     desc: "Koneksikan Google Sheets, Forms, Drive, dan Looker Studio agar semua data bisnis tersentralisasi. Tidak perlu salin-tempel antar file — data mengalir otomatis ke tempat yang tepat.",
-    href: undefined,
   },
 ];
 
@@ -76,23 +87,11 @@ export default function DataSystemPage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section
-        className="px-4 pb-16 pt-28 text-center sm:pt-36"
-        style={{ backgroundColor: "#070B14" }}
-      >
-        <div className="mx-auto max-w-3xl">
-          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-light text-3xl shadow-lg">
-            📈
-          </div>
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
-            Rapikan Data Bisnis dalam Satu Dashboard
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-xl text-slate-300">
-            Dari spreadsheet berantakan hingga dashboard yang bisa dibaca dalam
-            30 detik — tanpa perlu jago coding.
-          </p>
-        </div>
-      </section>
+      <ServiceHero
+        icon={<LineChart size={32} />}
+        title="Rapikan Data Bisnis dalam Satu Dashboard"
+        subtitle="Dari spreadsheet berantakan hingga dashboard yang bisa dibaca dalam 30 detik — tanpa perlu jago coding."
+      />
 
       {/* ===== COCOK UNTUK SIAPA ===== */}
       <section className="bg-white py-16">
@@ -110,7 +109,10 @@ export default function DataSystemPage() {
                 key={c}
                 className="flex items-start gap-3.5 border-b border-slate-100 py-3.5 last:border-none"
               >
-                <span className="mt-0.5 shrink-0 text-emerald">✓</span>
+                <CircleCheck
+                  size={20}
+                  className="mt-0.5 shrink-0 text-emerald"
+                />
                 <span className="text-slate-700">{c}</span>
               </div>
             ))}
@@ -123,9 +125,12 @@ export default function DataSystemPage() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="grid gap-6 md:grid-cols-2">
             {services.map((s) => {
+              const Icon = s.icon;
               const inner = (
                 <>
-                  <div className="text-4xl">{s.icon}</div>
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                    <Icon size={28} />
+                  </div>
                   <h2 className="mt-4 text-xl font-bold text-navy">{s.title}</h2>
                   <p className="mt-2 leading-relaxed text-slate-600">
                     {s.desc}

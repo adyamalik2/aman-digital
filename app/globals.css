@@ -140,6 +140,136 @@
   }
 }
 
+/* Reveal-on-scroll (ported from the static site's data-reveal animation).
+   ScrollReveal adds [data-reveal] to off-screen sections, then .reveal-visible
+   once they enter the viewport. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+[data-reveal].reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Service-page aurora background orbs ── */
+.aurora-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+}
+.aurora-float-1 {
+  animation: auroraFloat1 16s ease-in-out infinite;
+}
+.aurora-float-2 {
+  animation: auroraFloat2 22s ease-in-out infinite;
+}
+@keyframes auroraFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(28px, 22px) scale(1.12); }
+}
+@keyframes auroraFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-26px, -16px) scale(1.08); }
+}
+
+/* ── Subtle noise overlay ── */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Rotating conic-gradient ring (hero icon badge) ── */
+.ring-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.ring-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    #059669,
+    #34d399,
+    #a7f3d0,
+    #34d399,
+    #059669
+  );
+  animation: ringSpin 6s linear infinite;
+}
+.ring-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 9999px;
+  background: #070b14;
+}
+.ring-inner {
+  position: relative;
+  z-index: 1;
+}
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Pulsing dot (app badge) ── */
+.ping-dot {
+  animation: pingDot 2s infinite;
+}
+@keyframes pingDot {
+  0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+}
+
+/* ── Hero stagger entrance ── */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger > *:nth-child(2) { animation-delay: 0.25s; }
+.stagger > *:nth-child(3) { animation-delay: 0.4s; }
+.stagger > *:nth-child(4) { animation-delay: 0.55s; }
+.stagger > *:nth-child(5) { animation-delay: 0.7s; }
+@keyframes rise {
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-float-1,
+  .aurora-float-2,
+  .ring-wrap::before,
+  .ping-dot {
+    animation: none;
+  }
+  .stagger > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }

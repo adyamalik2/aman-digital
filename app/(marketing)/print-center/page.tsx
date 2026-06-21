@@ -1,55 +1,69 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Printer,
+  FileText,
+  Image as ImageIcon,
+  Coffee,
+  Tag,
+  Layers,
+  MapPin,
+  Clock,
+  Upload,
+  MessageCircle,
+  type LucideIcon,
+} from "lucide-react";
+import ServiceHero from "@/components/layout/ServiceHero";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
 /* ---------------- Data ---------------- */
 
-const services = [
+const services: { icon: LucideIcon; title: string; desc: string; wide: boolean }[] = [
   {
-    icon: "📄",
+    icon: FileText,
     title: "Cetak Dokumen",
     desc: "Cetak laporan bisnis, makalah, skripsi, proposal, dan dokumen kerja harian. Tersedia pilihan kertas HVS, art paper, dan jasa penjilidan spiral maupun softcover.",
     wide: false,
   },
   {
-    icon: "🖼️",
+    icon: ImageIcon,
     title: "Banner & Spanduk",
     desc: "Cetak banner ukuran besar untuk promosi toko, acara, dan kebutuhan outdoor. Tersedia spanduk, x-banner, roll-up banner, dan backdrop dengan material tahan cuaca.",
     wide: false,
   },
   {
-    icon: "☕",
+    icon: Coffee,
     title: "Merchandise Promosi",
     desc: "Cetak logo dan desain bisnis Anda pada mug, kaos, topi, dan pin. Cocok untuk souvenir, hadiah pelanggan, atau kelengkapan seragam tim usaha.",
     wide: false,
   },
   {
-    icon: "🏷️",
+    icon: Tag,
     title: "Stiker & Label",
     desc: "Cetak stiker produk, label kemasan, stiker promosi, dan QR code. Tersedia pilihan bahan vinyl, kertas, dan laminasi glossy maupun matte sesuai kebutuhan.",
     wide: false,
   },
   {
-    icon: "📑",
+    icon: Layers,
     title: "Brosur & Pamflet",
     desc: "Cetak brosur lipat (bifold/trifold), pamflet A4/A5, dan flyer promosi untuk bisnis lokal. Tersedia jasa desain jika Anda belum punya file siap cetak — hubungi kami via WhatsApp untuk konsultasi.",
     wide: true,
   },
 ];
 
-const infoItems = [
-  { icon: "📍", label: "Lokasi", value: "Blangpidie, Aceh Barat Daya" },
+const infoItems: { icon: LucideIcon; label: string; value: string }[] = [
+  { icon: MapPin, label: "Lokasi", value: "Blangpidie, Aceh Barat Daya" },
   {
-    icon: "⏰",
+    icon: Clock,
     label: "Estimasi Pengerjaan",
     value: "1–3 hari kerja (setelah file disetujui)",
   },
-  { icon: "📤", label: "Format File Diterima", value: "PDF, PNG, JPG, CDR, AI" },
+  { icon: Upload, label: "Format File Diterima", value: "PDF, PNG, JPG, CDR, AI" },
   {
-    icon: "💬",
+    icon: MessageCircle,
     label: "Cara Pesan",
     value: "Chat via WhatsApp, kirim file + keterangan ukuran",
   },
@@ -82,40 +96,37 @@ export default function PrintCenterPage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section
-        className="px-4 pb-16 pt-28 text-center sm:pt-36"
-        style={{ backgroundColor: "#070B14" }}
-      >
-        <div className="mx-auto max-w-3xl">
-          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-light text-3xl shadow-lg">
-            🖨️
-          </div>
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
-            Print Center — Cetak Cepat, Hasil Rapi
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-xl text-slate-300">
-            Dari dokumen harian hingga banner promosi — dikerjakan cepat dengan
-            warna akurat dan bahan sesuai kebutuhan bisnis Anda.
-          </p>
-        </div>
-      </section>
+      <ServiceHero
+        icon={<Printer size={32} />}
+        title="Print Center — Cetak Cepat, Hasil Rapi"
+        subtitle="Dari dokumen harian hingga banner promosi — dikerjakan cepat dengan warna akurat dan bahan sesuai kebutuhan bisnis Anda."
+      />
 
       {/* ===== LAYANAN ===== */}
       <section className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((s) => (
-              <div
-                key={s.title}
-                className={`rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald hover:shadow-md ${
-                  s.wide ? "md:col-span-2" : ""
-                }`}
-              >
-                <div className="text-4xl">{s.icon}</div>
-                <h2 className="mt-3 text-2xl font-bold text-navy">{s.title}</h2>
-                <p className="mt-2 leading-relaxed text-slate-600">{s.desc}</p>
-              </div>
-            ))}
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.title}
+                  className={`rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald hover:shadow-md ${
+                    s.wide ? "md:col-span-2" : ""
+                  }`}
+                >
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                    <Icon size={28} />
+                  </div>
+                  <h2 className="mt-3 text-2xl font-bold text-navy">
+                    {s.title}
+                  </h2>
+                  <p className="mt-2 leading-relaxed text-slate-600">
+                    {s.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -128,12 +139,14 @@ export default function PrintCenterPage() {
             Yang perlu Anda ketahui sebelum memesan.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {infoItems.map((info) => (
+            {infoItems.map((info) => {
+              const Icon = info.icon;
+              return (
               <div
                 key={info.label}
                 className="flex items-start gap-3.5 rounded-2xl border border-slate-200 bg-white p-5"
               >
-                <span className="mt-0.5 shrink-0 text-xl">{info.icon}</span>
+                <Icon size={22} className="mt-0.5 shrink-0 text-emerald" />
                 <div>
                   <div className="text-xs uppercase tracking-wide text-slate-500">
                     {info.label}
@@ -143,7 +156,8 @@ export default function PrintCenterPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

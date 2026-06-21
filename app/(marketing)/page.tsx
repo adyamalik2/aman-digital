@@ -2,6 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  AlertTriangle,
+  PackageOpen,
+  BarChart3,
+  Palette,
+  Link2,
+  TrendingUp,
+  LayoutDashboard,
+  MonitorCog,
+  Printer,
+  Store,
+  BadgeCheck,
+  MessageCircle,
+  Settings,
+  Target,
+  type LucideIcon,
+} from "lucide-react";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -12,66 +29,66 @@ const HERO_WA = wa(
 
 /* ---------------- Data ---------------- */
 
-const problems = [
+const problems: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "⚠️",
+    icon: AlertTriangle,
     title: "Catatan transaksi tercecer",
     desc: "Transaksi dari toko, WhatsApp, dan catatan manual dirapikan agar lebih mudah dicari ulang.",
   },
   {
-    icon: "📦",
+    icon: PackageOpen,
     title: "Stok tidak terpantau",
     desc: "Stok masuk, stok keluar, dan barang menipis dibuat lebih jelas untuk keputusan belanja.",
   },
   {
-    icon: "📊",
+    icon: BarChart3,
     title: "Laporan bisnis masih manual",
     desc: "Rekap penjualan, omzet, dan kebutuhan laporan harian dibuat lebih ringkas.",
   },
   {
-    icon: "🎨",
+    icon: Palette,
     title: "Desain promosi tidak konsisten",
     desc: "Materi promosi digital dan cetak dijaga agar terlihat satu identitas.",
   },
   {
-    icon: "🔗",
+    icon: Link2,
     title: "Cetak dan digital berjalan terpisah",
     desc: "Kebutuhan banner, brosur, konten, dan template dibuat dalam alur yang lebih praktis.",
   },
   {
-    icon: "📈",
+    icon: TrendingUp,
     title: "Data harian sulit dibaca",
     desc: "Pemilik bisnis dibantu melihat angka penting tanpa harus membuka banyak file.",
   },
 ];
 
-const services = [
+const services: { icon: LucideIcon; title: string; desc: string; href: string }[] = [
   {
-    icon: "🖥️",
+    icon: LayoutDashboard,
     title: "Data & System",
     desc: "Membantu bisnis mencatat transaksi, stok, dan laporan tanpa spreadsheet yang berantakan. Cocok untuk dashboard, sistem stok, dan aplikasi no-code.",
     href: "/data-system",
   },
   {
-    icon: "💻",
+    icon: MonitorCog,
     title: "IT Advisor",
     desc: "Membantu memilih, merapikan, dan memperbaiki kebutuhan IT kantor kecil: perangkat, jaringan, software kerja, dan alur operasional digital.",
     href: "/it-advisor",
   },
   {
-    icon: "🖨️",
+    icon: Printer,
     title: "Print Center",
     desc: "Membantu kebutuhan cetak promosi, dokumen, banner, dan merchandise agar hasilnya rapi, cepat dipakai, dan sesuai identitas bisnis.",
     href: "/print-center",
   },
   {
-    icon: "🛒",
+    icon: Store,
     title: "Digital Store",
     desc: "Menyediakan template, aset digital, dan kebutuhan pendukung kerja agar bisnis tidak perlu mulai dari nol untuk sistem dan promosi sederhana.",
     href: "/digital-store",
   },
   {
-    icon: "🎨",
+    icon: Palette,
     title: "Creative Studio",
     desc: "Membantu desain promosi, konten pendek, visual katalog, dan materi brand agar tampilan bisnis lebih konsisten di kanal digital maupun cetak.",
     href: "/creative-studio",
@@ -152,6 +169,7 @@ const portfolio = [
   {
     category: "Data & System",
     emoji: "📊",
+    image: "/images/portfolio-equipment-health-card.webp",
     judul: "Dashboard Equipment Health Monitoring",
     masalah: "Status inspeksi dan kesehatan unit sulit dibaca cepat.",
     solusi: "Dashboard Looker Studio dengan ringkasan status dan rating.",
@@ -163,6 +181,7 @@ const portfolio = [
   {
     category: "Data & System",
     emoji: "📱",
+    image: "/images/aman-pos-kasir-card.webp",
     judul: "Aplikasi Tracking Order & Stok (AppSheet)",
     masalah: "Order dan stok mudah tercecer saat dicatat manual.",
     solusi: "Aplikasi no-code untuk alur order, stok, dan rekap.",
@@ -174,6 +193,7 @@ const portfolio = [
   {
     category: "Print Center",
     emoji: "🖨️",
+    image: "/images/percetakan-card.webp",
     judul: "Cetak Banner & Spanduk Promosi",
     masalah: "Materi promosi perlu cepat dicetak dengan visual rapi.",
     solusi: "Persiapan desain dan cetak banner sesuai kebutuhan.",
@@ -185,6 +205,7 @@ const portfolio = [
   {
     category: "Creative Studio",
     emoji: "🎬",
+    image: "/images/pekerja-digital-futuristik-card.webp",
     judul: "Konten Video Promosi Faceless",
     masalah: "Konten promosi sulit konsisten karena waktu terbatas.",
     solusi: "Video pendek untuk kebutuhan edukasi dan promosi.",
@@ -196,6 +217,7 @@ const portfolio = [
   {
     category: "IT Advisor",
     emoji: "🌐",
+    image: "/images/jaringan-wifi-digital-card.webp",
     judul: "Setup Jaringan & Manajemen WiFi Kantor",
     masalah: "Koneksi kerja tidak stabil dan bandwidth belum teratur.",
     solusi: "Pengaturan jaringan, router, dan manajemen akses WiFi.",
@@ -207,6 +229,7 @@ const portfolio = [
   {
     category: "Digital Store",
     emoji: "🛒",
+    image: "/images/dashboard-card.webp",
     judul: "Template Sistem Manajemen & Dashboard",
     masalah: "Banyak bisnis butuh format kerja siap pakai.",
     solusi: "Template sistem dan dashboard yang dapat disesuaikan.",
@@ -274,29 +297,29 @@ const packages = [
   },
 ];
 
-const reasons = [
+const reasons: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "✅",
+    icon: BadgeCheck,
     title: "Praktis untuk UMKM",
     desc: "Solusi disusun sesuai kondisi toko kecil, bukan sistem yang terlalu berat.",
   },
   {
-    icon: "💬",
+    icon: MessageCircle,
     title: "Konsultasi via WhatsApp",
     desc: "Bisa mulai dari cerita masalah bisnis, lalu kami bantu arahkan solusinya.",
   },
   {
-    icon: "🔗",
+    icon: Link2,
     title: "Cetak dan digital menyatu",
     desc: "Kebutuhan banner, konten, data, dan sistem bisa ditangani dalam satu alur.",
   },
   {
-    icon: "⚙️",
+    icon: Settings,
     title: "Disesuaikan dengan alur bisnis",
     desc: "Sistem dibuat mengikuti cara kerja yang sudah ada agar mudah diadopsi.",
   },
   {
-    icon: "🎯",
+    icon: Target,
     title: "Fokus pada sistem yang mudah dipakai",
     desc: "Targetnya bukan sekadar terlihat canggih, tetapi benar-benar membantu pekerjaan harian.",
   },
@@ -424,18 +447,21 @@ export default function HomePage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             {[
-              { icon: "📊", label: "Data" },
-              { icon: "🖨️", label: "Cetak" },
-              { icon: "💬", label: "WA" },
-            ].map((b) => (
+              { icon: BarChart3, label: "Data" },
+              { icon: Printer, label: "Cetak" },
+              { icon: MessageCircle, label: "WA" },
+            ].map((b) => {
+              const Icon = b.icon;
+              return (
               <span
                 key={b.label}
                 className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-sm text-slate-300"
               >
-                <span>{b.icon}</span>
+                <Icon size={16} className="text-emerald-light" />
                 {b.label}
               </span>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -448,16 +474,21 @@ export default function HomePage() {
             subtitle="Operasional kecil sering bocor di hal yang terlihat sederhana"
           />
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {problems.map((p) => (
+            {problems.map((p) => {
+              const Icon = p.icon;
+              return (
               <div
                 key={p.title}
                 className="rounded-xl border border-slate-200 bg-white p-6"
               >
-                <div className="text-3xl">{p.icon}</div>
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
+                </div>
                 <h3 className="mt-4 font-bold text-navy">{p.title}</h3>
                 <p className="mt-2 text-sm text-slate-600">{p.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -471,12 +502,16 @@ export default function HomePage() {
             subtitle="Bukan sekadar daftar jasa. Setiap layanan diarahkan untuk menyelesaikan masalah operasional UMKM, toko, dan kantor kecil."
           />
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {services.map((s) => (
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
               <div
                 key={s.title}
                 className="rounded-xl border border-l-4 border-slate-200 border-l-emerald bg-white p-6 shadow-sm"
               >
-                <div className="text-3xl">{s.icon}</div>
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
+                </div>
                 <h3 className="mt-4 text-lg font-bold text-navy">{s.title}</h3>
                 <p className="mt-2 text-sm text-slate-600">{s.desc}</p>
                 <Link
@@ -486,7 +521,8 @@ export default function HomePage() {
                   Lihat detail →
                 </Link>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -610,8 +646,16 @@ export default function HomePage() {
                 key={item.judul}
                 className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white"
               >
-                <div className="flex aspect-video items-center justify-center bg-slate-100 text-5xl">
-                  {item.emoji}
+                <div className="relative aspect-video overflow-hidden bg-slate-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.image}
+                    alt={item.judul}
+                    width={720}
+                    height={405}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
                   <span className="self-start rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald">
@@ -757,16 +801,21 @@ export default function HomePage() {
             subtitle="Kami fokus membantu UMKM, toko, dan kantor kecil punya sistem kerja yang lebih rapi tanpa proses yang dibuat rumit."
           />
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {reasons.map((r) => (
+            {reasons.map((r) => {
+              const Icon = r.icon;
+              return (
               <div
                 key={r.title}
                 className="rounded-xl border border-slate-200 bg-white p-6"
               >
-                <div className="text-3xl">{r.icon}</div>
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
+                </div>
                 <h3 className="mt-4 font-bold text-navy">{r.title}</h3>
                 <p className="mt-2 text-sm text-slate-600">{r.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

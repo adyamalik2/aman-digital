@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Clapperboard, Video, Bot, Pencil, type LucideIcon } from "lucide-react";
+import ServiceHero from "@/components/layout/ServiceHero";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -11,19 +13,19 @@ export const metadata: Metadata = {
 
 /* ---------------- Data ---------------- */
 
-const services = [
+const services: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "🎬",
+    icon: Video,
     title: "Faceless Video Content",
     desc: "Pembuatan video TikTok dan Reels tanpa wajah yang edukatif (sains, fakta unik, dakwah) dengan metrik pemasaran Problem-Function-Solution yang terbukti efektif.",
   },
   {
-    icon: "🤖",
+    icon: Bot,
     title: "AI Prompt Engineering",
     desc: "Penyusunan prompt presisi tinggi untuk Leonardo.AI dan Midjourney guna menghasilkan aset visual unik untuk cover dan ilustrasi materi promosi berkualitas tinggi.",
   },
   {
-    icon: "✍️",
+    icon: Pencil,
     title: "Narasi & Copywriting Video",
     desc: "Penulisan naskah, narasi, dan teks promosi untuk TikTok, YouTube Shorts, Reels, dan iklan digital. Pesan yang tepat, gaya yang sesuai audiens, dan struktur yang bikin orang nonton sampai selesai.",
   },
@@ -54,42 +56,33 @@ export default function CreativeStudioPage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section
-        className="px-4 pb-16 pt-28 text-center sm:pt-36"
-        style={{ backgroundColor: "#070B14" }}
-      >
-        <div className="mx-auto max-w-3xl">
-          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-light text-3xl shadow-lg">
-            🎬
-          </div>
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
-            Creative Studio
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-xl text-slate-300">
-            Kesulitan membuat konten visual yang menarik perhatian audiens di
-            media sosial? Kami memproduksi konten video edukatif, rekayasa
-            visual AI, dan voice-over profesional untuk membantu brand Anda
-            tampil lebih meyakinkan dan berpotensi meningkatkan konversi.
-          </p>
-        </div>
-      </section>
+      <ServiceHero
+        icon={<Clapperboard size={32} />}
+        title="Creative Studio"
+        subtitle="Kesulitan membuat konten visual yang menarik perhatian audiens di media sosial? Kami memproduksi konten video edukatif, rekayasa visual AI, dan voice-over profesional untuk membantu brand Anda tampil lebih meyakinkan dan berpotensi meningkatkan konversi."
+      />
 
       {/* ===== LAYANAN ===== */}
       <section className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-4">
           <div className="grid gap-6 md:grid-cols-3">
-            {services.map((s) => (
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
               <div
                 key={s.title}
                 className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-emerald hover:shadow-md"
               >
-                <div className="text-4xl">{s.icon}</div>
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                  <Icon size={28} />
+                </div>
                 <h2 className="mt-4 text-xl font-bold text-navy">{s.title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {s.desc}
                 </p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

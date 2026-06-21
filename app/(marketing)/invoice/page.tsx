@@ -1,6 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Receipt,
+  Clock,
+  Search,
+  FileText,
+  MessageCircle,
+  CircleCheck,
+  Contact,
+  Files,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -16,52 +28,52 @@ const invoiceItems = [
   { desc: "Laminasi", amount: "Rp 75.000" },
 ];
 
-const masalah = [
+const masalah: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "🧾",
+    icon: Receipt,
     title: "Nota Tidak Profesional",
     desc: "Faktur tulisan tangan atau format seadanya membuat pelanggan meragukan kredibilitas usaha Anda.",
   },
   {
-    icon: "⏳",
+    icon: Clock,
     title: "Lupa Follow-Up Pembayaran",
     desc: "Tidak ada pengingat, tidak tahu mana yang sudah lunas dan mana yang masih menunggak.",
   },
   {
-    icon: "🔍",
+    icon: Search,
     title: "Rekap Manual & Sulit",
     desc: "Harus cek satu per satu untuk tahu total piutang yang masih beredar di luar sana.",
   },
 ];
 
-const fitur = [
+const fitur: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "📄",
+    icon: FileText,
     title: "Buat Invoice Instan",
     desc: "Isi nama pelanggan, daftar barang/jasa, nominal, dan invoice profesional langsung siap dalam hitungan menit.",
   },
   {
-    icon: "💬",
+    icon: MessageCircle,
     title: "Kirim via WhatsApp & PDF",
     desc: "Bagikan link tagihan langsung ke WhatsApp pelanggan atau download sebagai PDF untuk dikirim via email.",
   },
   {
-    icon: "✅",
+    icon: CircleCheck,
     title: "Pantau Status Pembayaran",
     desc: "Tandai invoice lunas, menunggu, atau jatuh tempo — lihat ringkasan piutang dari dashboard Anda.",
   },
   {
-    icon: "📇",
+    icon: Contact,
     title: "Database Pelanggan",
     desc: "Simpan data pelanggan, tidak perlu ketik ulang setiap buat invoice baru untuk pelanggan yang sama.",
   },
   {
-    icon: "🗂️",
+    icon: Files,
     title: "Riwayat & Arsip Invoice",
     desc: "Semua invoice tersimpan dan bisa dicari kapan saja — tidak ada yang hilang atau tercecer.",
   },
   {
-    icon: "📱",
+    icon: Smartphone,
     title: "Cukup dari HP",
     desc: "Buka dari browser HP kapan saja. Tidak perlu laptop, tidak perlu instal aplikasi tambahan.",
   },
@@ -183,7 +195,7 @@ export default function InvoicePage() {
       >
         <div className="mx-auto max-w-4xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/10 px-4 py-1.5 text-sm font-bold uppercase tracking-widest text-emerald-light">
-            <span className="h-2 w-2 rounded-full bg-emerald" />
+            <span className="ping-dot h-2 w-2 rounded-full bg-emerald" />
             AMAN Invoice
           </span>
           <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-6xl md:text-7xl">
@@ -284,20 +296,23 @@ export default function InvoicePage() {
             Tampil profesional bukan hak eksklusif perusahaan besar.
           </p>
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {masalah.map((m) => (
+            {masalah.map((m) => {
+              const Icon = m.icon;
+              return (
               <div
                 key={m.title}
                 className="rounded-2xl border border-slate-200 bg-white p-6 text-left"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-2xl">
-                  {m.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-navy">
                   {m.title}
                 </h3>
                 <p className="mt-1 text-sm text-slate-600">{m.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -314,13 +329,15 @@ export default function InvoicePage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {fitur.map((f) => (
+            {fitur.map((f) => {
+              const Icon = f.icon;
+              return (
               <div
                 key={f.title}
                 className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-2xl">
-                  {f.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-navy">
                   {f.title}
@@ -329,7 +346,8 @@ export default function InvoicePage() {
                   {f.desc}
                 </p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -1,39 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Cpu,
+  Laptop,
+  Wifi,
+  ShieldCheck,
+  Printer,
+  Headset,
+  type LucideIcon,
+} from "lucide-react";
+import ServiceHero from "@/components/layout/ServiceHero";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
 /* ---------------- Data ---------------- */
 
-const services = [
+const services: { icon: LucideIcon; title: string; desc: string; wide: boolean }[] = [
   {
-    icon: "💻",
+    icon: Laptop,
     title: "Hardware & Komputer",
     desc: "Perbaikan laptop dan PC, upgrade RAM/SSD, bersih debu, instalasi ulang OS, dan diagnosis kerusakan komponen. Ditangani langsung, bukan dikira-kira.",
     wide: false,
   },
   {
-    icon: "📶",
+    icon: Wifi,
     title: "Jaringan & WiFi Kantor",
     desc: "Setup router, konfigurasi jaringan LAN/WiFi, manajemen bandwidth per ruangan, dan stabilisasi koneksi agar kerja tim tidak terganggu sinyal buruk.",
     wide: false,
   },
   {
-    icon: "🛡️",
+    icon: ShieldCheck,
     title: "Keamanan & Backup Data",
     desc: "Instalasi antivirus, enkripsi folder penting, dan sistem backup data reguler. Melindungi file operasional bisnis dari kehilangan maupun ancaman siber.",
     wide: false,
   },
   {
-    icon: "🖨️",
+    icon: Printer,
     title: "Setup Peripheral",
     desc: "Instalasi dan konfigurasi printer, scanner, mesin kasir, kamera CCTV, dan perangkat tambahan kantor agar semua tersambung dan berfungsi dengan benar.",
     wide: false,
   },
   {
-    icon: "🎧",
+    icon: Headset,
     title: "Konsultasi & Rekomendasi Perangkat",
     desc: "Tidak perlu riset sendiri sebelum beli laptop, printer, atau router. Kami bantu petakan kebutuhan kantor, rekomendasikan pilihan yang tepat sesuai anggaran, dan bantu proses setup awal setelah pembelian.",
     wide: true,
@@ -67,40 +77,37 @@ export default function ItAdvisorPage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section
-        className="px-4 pb-16 pt-28 text-center sm:pt-36"
-        style={{ backgroundColor: "#070B14" }}
-      >
-        <div className="mx-auto max-w-3xl">
-          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-light text-3xl shadow-lg">
-            🖥️
-          </div>
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
-            IT Support & Advisor untuk Kantor Kecil
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-xl text-slate-300">
-            Perangkat, jaringan, dan sistem kerja kantor kecil Anda ditangani
-            oleh teknisi berpengalaman — tanpa biaya vendor besar.
-          </p>
-        </div>
-      </section>
+      <ServiceHero
+        icon={<Cpu size={32} />}
+        title="IT Support & Advisor untuk Kantor Kecil"
+        subtitle="Perangkat, jaringan, dan sistem kerja kantor kecil Anda ditangani oleh teknisi berpengalaman — tanpa biaya vendor besar."
+      />
 
       {/* ===== LAYANAN ===== */}
       <section className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((s) => (
-              <div
-                key={s.title}
-                className={`rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald hover:shadow-md ${
-                  s.wide ? "md:col-span-2" : ""
-                }`}
-              >
-                <div className="text-4xl">{s.icon}</div>
-                <h2 className="mt-3 text-2xl font-bold text-navy">{s.title}</h2>
-                <p className="mt-2 leading-relaxed text-slate-600">{s.desc}</p>
-              </div>
-            ))}
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.title}
+                  className={`rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald hover:shadow-md ${
+                    s.wide ? "md:col-span-2" : ""
+                  }`}
+                >
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl bg-emerald/10 text-emerald">
+                    <Icon size={28} />
+                  </div>
+                  <h2 className="mt-3 text-2xl font-bold text-navy">
+                    {s.title}
+                  </h2>
+                  <p className="mt-2 leading-relaxed text-slate-600">
+                    {s.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

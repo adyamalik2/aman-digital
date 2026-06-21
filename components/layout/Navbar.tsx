@@ -58,10 +58,18 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="text-xl font-bold text-emerald"
+          className="flex items-center gap-2.5"
           onClick={closeMobile}
         >
-          AMAN Digital
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logo-header.webp"
+            alt="Logo AMAN Digital"
+            width={160}
+            height={160}
+            className="h-9 w-auto"
+          />
+          <span className="text-xl font-bold text-emerald">AMAN Digital</span>
         </Link>
 
         {/* Desktop links */}

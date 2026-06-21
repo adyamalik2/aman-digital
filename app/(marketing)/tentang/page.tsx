@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  Zap,
+  Handshake,
+  MessagesSquare,
+  Key,
+  UserRound,
+  MessageCircle,
+  Camera,
+  MapPin,
+  type LucideIcon,
+} from "lucide-react";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -27,24 +38,24 @@ const founderParagraphs = [
   "AMAN Digital adalah ekosistem layanan yang tumbuh dari kebutuhan nyata: kasir offline, keuangan keluarga, invoice digital, cetak promosi, dan IT support harian — semuanya dalam satu ekosistem yang terjangkau.",
 ];
 
-const nilai = [
+const nilai: { icon: LucideIcon; title: string; desc: string }[] = [
   {
-    icon: "⚡",
+    icon: Zap,
     title: "Praktis Dulu",
     desc: "Solusi yang kami buat harus bisa langsung dipakai — bukan demo yang terlihat bagus tapi sulit diadopsi tim kecil. Kalau bisa disederhanakan, kami sederhanakan.",
   },
   {
-    icon: "🤝",
+    icon: Handshake,
     title: "Jujur",
     desc: "Kami tidak menjanjikan fitur yang belum ada atau harga yang berubah mendadak. Kalau ada keterbatasan, kami sampaikan sejak awal agar Anda bisa membuat keputusan yang tepat.",
   },
   {
-    icon: "💬",
+    icon: MessagesSquare,
     title: "Konsultasi Dulu",
     desc: "Sebelum mengerjakan apa pun, kami ajak diskusi dulu untuk memahami masalah sebenarnya. Banyak kasus yang solusinya ternyata lebih sederhana dari yang dibayangkan.",
   },
   {
-    icon: "🔑",
+    icon: Key,
     title: "Sistem Milik Anda",
     desc: "Setiap sistem yang kami buat menjadi milik klien sepenuhnya. Bukan sistem yang terus bergantung pada kami — Anda harus bisa mengelola dan memahaminya sendiri.",
   },
@@ -101,10 +112,10 @@ const timeline = [
   },
 ];
 
-const contacts = [
-  { icon: "💬", label: "0822-1076-8038" },
-  { icon: "📷", label: "@aman.digital.id" },
-  { icon: "📍", label: "Blangpidie, Aceh Barat Daya" },
+const contacts: { icon: LucideIcon; label: string }[] = [
+  { icon: MessageCircle, label: "0822-1076-8038" },
+  { icon: Camera, label: "@aman.digital.id" },
+  { icon: MapPin, label: "Blangpidie, Aceh Barat Daya" },
 ];
 
 /* ---------------- Page ---------------- */
@@ -152,8 +163,8 @@ export default function TentangPage() {
       <section className="bg-white py-20">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 px-4 lg:grid-cols-2">
           <div className="flex flex-col items-center rounded-3xl border border-emerald/15 bg-emerald/5 p-10 text-center">
-            <div className="grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-dark text-4xl text-white shadow-lg">
-              👤
+            <div className="grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-dark text-white shadow-lg">
+              <UserRound size={44} />
             </div>
             <p className="mt-4 text-xl font-bold text-navy">Adya Malik</p>
             <p className="mt-1 text-sm text-slate-600">
@@ -201,18 +212,21 @@ export default function TentangPage() {
             </h2>
           </div>
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {nilai.map((n) => (
+            {nilai.map((n) => {
+              const Icon = n.icon;
+              return (
               <div
                 key={n.title}
                 className="rounded-2xl border border-slate-200 bg-white p-7"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-2xl">
-                  {n.icon}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-emerald/10 text-emerald">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mt-4 text-xl font-bold text-navy">{n.title}</h3>
                 <p className="mt-2 leading-relaxed text-slate-600">{n.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -292,15 +306,18 @@ export default function TentangPage() {
             kami bantu arahkan solusi yang tepat.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-5">
-            {contacts.map((c) => (
+            {contacts.map((c) => {
+              const Icon = c.icon;
+              return (
               <div
                 key={c.label}
                 className="flex items-center gap-2 text-slate-600"
               >
-                <span>{c.icon}</span>
+                <Icon size={18} className="text-emerald" />
                 <span>{c.label}</span>
               </div>
-            ))}
+              );
+            })}
           </div>
           <a
             href={KONSULTASI_WA}

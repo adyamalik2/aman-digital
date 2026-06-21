@@ -9,14 +9,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://amandigital.web.id"),
-  title: "AMAN Digital — Partner Digital UMKM",
-  description: "Platform digital untuk UMKM Indonesia",
+  title: "AMAN Digital | Sistem Bisnis, Dashboard & Digital Printing",
+  description:
+    "AMAN Digital bantu UMKM, toko, dan kantor kecil merapikan sistem kerja: dashboard, aplikasi no-code, IT support, digital printing, dan konten promosi.",
   icons: { icon: "/icon.png" },
   alternates: { canonical: "/" },
   openGraph: {
-    title: "AMAN Digital — Partner Digital UMKM",
+    title:
+      "AMAN Digital | Jasa Sistem Bisnis, Dashboard, IT Support, dan Digital Printing",
     description:
-      "Bantu UMKM, toko, dan kantor kecil punya sistem kerja yang lebih rapi — aplikasi kasir, keuangan, invoice, plus layanan data, IT, cetak, dan kreatif.",
+      "Partner digital praktis untuk UMKM, toko, dan kantor kecil: dashboard bisnis, aplikasi no-code, IT support, digital printing, dan konten promosi.",
     url: "/",
     type: "website",
     siteName: "AMAN Digital",
@@ -25,8 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AMAN Digital — Partner Digital UMKM",
-    description: "Partner digital praktis untuk UMKM Indonesia.",
+    title:
+      "AMAN Digital | Jasa Sistem Bisnis, Dashboard, IT Support, dan Digital Printing",
+    description: "Solusi digital praktis untuk UMKM, toko, dan kantor kecil.",
     images: ["/images/og-image.png"],
   },
 };

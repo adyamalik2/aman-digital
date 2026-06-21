@@ -34,6 +34,7 @@ const dropdowns: { key: DropdownKey; label: string; items: NavItem[] }[] = [
 const simpleLinks: NavItem[] = [
   { label: "Harga", href: "/harga" },
   { label: "Tentang", href: "/tentang" },
+  { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "/faq" },
 ];
 

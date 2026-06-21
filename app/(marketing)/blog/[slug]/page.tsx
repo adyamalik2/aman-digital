@@ -5,6 +5,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Calendar, Clock, ArrowLeft, BookOpen } from 'lucide-react';
 
+// Jangan render slug di luar daftar (output: export tidak bisa render runtime).
+// Ini juga mencegah build GAGAL TOTAL kalau Notion sempat error saat build:
+// daftar kosong -> 0 halaman blog, tapi sisa situs tetap ter-deploy.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return await getAllSlugs();
 }

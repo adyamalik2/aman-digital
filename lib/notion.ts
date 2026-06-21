@@ -78,7 +78,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPostWithContent |
       category: page.properties.Category?.select?.name || 'Umum',
       summary: page.properties.Summary?.rich_text[0]?.plain_text || '',
       cover: page.properties.Cover?.url || '',
-      content: mdString.parent,
+      content: mdString?.parent ?? '',
     };
   } catch (e) {
     console.error('Notion getPostBySlug error:', e);
@@ -101,5 +101,7 @@ export function formatDate(dateString: string): string {
 }
 
 export function estimateReadTime(content: string): number {
-  return Math.max(1, Math.ceil(content.split(/\s+/).length / 200));
+  if (!content) return 1;
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
 }

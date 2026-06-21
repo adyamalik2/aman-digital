@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Clapperboard, Video, Bot, Pencil, type LucideIcon } from "lucide-react";
 import ServiceHero from "@/components/layout/ServiceHero";
+import { TiktokIcon, InstagramIcon } from "@/components/icons/BrandIcons";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -33,7 +34,7 @@ const services: { icon: LucideIcon; title: string; desc: string }[] = [
 
 const platforms = [
   {
-    icon: "🎵",
+    Icon: TiktokIcon,
     name: "TikTok",
     handle: "@adya.vision",
     desc: "Konten faceless video, fakta bisnis, dan edukasi UMKM",
@@ -41,7 +42,7 @@ const platforms = [
     iconBg: "bg-gradient-to-br from-slate-900 to-cyan-500",
   },
   {
-    icon: "📸",
+    Icon: InstagramIcon,
     name: "Instagram",
     handle: "@aman.digital01",
     desc: "Visual promosi, template bisnis, dan update produk digital",
@@ -97,7 +98,9 @@ export default function CreativeStudioPage() {
             Cek langsung hasil kerja kami di platform berikut.
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {platforms.map((p) => (
+            {platforms.map((p) => {
+              const Icon = p.Icon;
+              return (
               <a
                 key={p.name}
                 href={p.href}
@@ -106,9 +109,9 @@ export default function CreativeStudioPage() {
                 className="flex items-center gap-5 rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-emerald hover:shadow-md"
               >
                 <div
-                  className={`grid h-14 w-14 shrink-0 place-items-center rounded-xl text-2xl ${p.iconBg}`}
+                  className={`grid h-14 w-14 shrink-0 place-items-center rounded-xl text-white ${p.iconBg}`}
                 >
-                  {p.icon}
+                  <Icon className="h-7 w-7" />
                 </div>
                 <div>
                   <div className="text-base font-bold text-navy">{p.name}</div>
@@ -120,7 +123,8 @@ export default function CreativeStudioPage() {
                   </div>
                 </div>
               </a>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-10 text-center">
             <a

@@ -1,4 +1,9 @@
 import type { Metadata } from "next";
+import {
+  InstagramIcon,
+  TiktokIcon,
+  ShopeeIcon,
+} from "@/components/icons/BrandIcons";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -13,19 +18,19 @@ export const metadata: Metadata = {
 
 const sosmed = [
   {
-    icon: "📸",
+    Icon: InstagramIcon,
     label: "Instagram",
     handle: "@aman.digital01",
     href: "https://instagram.com/aman.digital01",
   },
   {
-    icon: "🎵",
+    Icon: TiktokIcon,
     label: "TikTok",
     handle: "@adya.vision",
     href: "https://tiktok.com/@adya.vision",
   },
   {
-    icon: "🛒",
+    Icon: ShopeeIcon,
     label: "Shopee",
     handle: "aman.digital",
     href: "https://shopee.co.id/aman.digital",
@@ -121,15 +126,17 @@ export default function KontakPage() {
               Temukan kami di platform berikut:
             </p>
             <div className="flex flex-col gap-2.5">
-              {sosmed.map((s) => (
+              {sosmed.map((s) => {
+                const Icon = s.Icon;
+                return (
                 <a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200"
+                  className="flex items-center gap-2.5 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200"
                 >
-                  <span>{s.icon}</span>
+                  <Icon className="h-4 w-4 shrink-0 text-emerald" />
                   <span>
                     {s.label}{" "}
                     <span className="font-normal text-slate-500">
@@ -137,7 +144,8 @@ export default function KontakPage() {
                     </span>
                   </span>
                 </a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

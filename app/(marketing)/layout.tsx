@@ -1,6 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WAButton from "@/components/layout/WAButton";
+import BackToTop from "@/components/layout/BackToTop";
 import ScrollReveal from "@/components/layout/ScrollReveal";
 
 export default function MarketingLayout({
@@ -14,6 +15,7 @@ export default function MarketingLayout({
       <main className="flex-1">{children}</main>
       <Footer />
       <WAButton />
+      <BackToTop />
       <ScrollReveal />
     </div>
   );

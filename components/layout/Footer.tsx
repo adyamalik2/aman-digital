@@ -1,4 +1,9 @@
 import Link from "next/link";
+import {
+  InstagramIcon,
+  TiktokIcon,
+  ShopeeIcon,
+} from "@/components/icons/BrandIcons";
 
 const WA = "https://wa.me/6282210768038";
 
@@ -25,9 +30,21 @@ const tentang = [
 ];
 
 const socials = [
-  { label: "Instagram", icon: "📸", href: "https://instagram.com/aman.digital01" },
-  { label: "TikTok", icon: "🎵", href: "https://tiktok.com/@adya.vision" },
-  { label: "Shopee", icon: "🛒", href: "https://shopee.co.id/aman.digital" },
+  {
+    label: "Instagram",
+    Icon: InstagramIcon,
+    href: "https://instagram.com/aman.digital01",
+  },
+  {
+    label: "TikTok",
+    Icon: TiktokIcon,
+    href: "https://tiktok.com/@adya.vision",
+  },
+  {
+    label: "Shopee",
+    Icon: ShopeeIcon,
+    href: "https://shopee.co.id/aman.digital",
+  },
 ];
 
 function FooterCol({
@@ -82,18 +99,21 @@ export default function Footer() {
               Partner digital praktis untuk UMKM, toko, dan kantor kecil.
             </p>
             <div className="mt-5 flex gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-lg transition-colors hover:border-emerald/40 hover:bg-emerald/10"
-                >
-                  {s.icon}
-                </a>
-              ))}
+              {socials.map((s) => {
+                const Icon = s.Icon;
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-emerald/40 hover:bg-emerald/10 hover:text-emerald-light"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 

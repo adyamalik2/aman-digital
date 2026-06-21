@@ -270,6 +270,28 @@
   }
 }
 
+/* ── Navbar dropdown / mobile-menu entrance ── */
+@keyframes ddIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+.dd-anim {
+  animation: ddIn 0.18s ease-out;
+}
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+.menu-anim {
+  animation: menuIn 0.22s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dd-anim,
+  .menu-anim {
+    animation: none;
+  }
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }

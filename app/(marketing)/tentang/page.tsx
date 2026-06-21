@@ -87,27 +87,27 @@ const amanPrinciples = [
 
 const timeline = [
   {
-    year: "2022",
+    year: "Awal 2025",
     title: "Ide pertama lahir",
-    desc: "Melihat pemilik toko percetakan masih mencatat transaksi manual di buku, mulai merancang solusi kasir sederhana berbasis web.",
+    desc: "Melihat pemilik toko percetakan dan UMKM di sekitar masih mencatat transaksi manual di buku, muncul ide membuat solusi digital sederhana berbasis web.",
   },
   {
-    year: "2023",
-    title: "AMAN Kasir diluncurkan",
-    desc: "Aplikasi kasir pertama mulai digunakan beberapa toko kecil di sekitar Blangpidie. Feedback pertama mengalir dan langsung diperbaiki.",
+    year: "Akhir 2025",
+    title: "Mulai dirancang & diuji",
+    desc: "Prototipe pertama dibangun dan diuji langsung bersama beberapa pelaku usaha kecil di sekitar Blangpidie. Masukan awal langsung dipakai untuk memperbaiki.",
   },
   {
-    year: "2024",
-    title: "AMAN Budget & Invoice hadir",
-    desc: "Berdasarkan permintaan pengguna, dikembangkan AMAN Budget untuk keuangan keluarga dan AMAN Invoice untuk pengelolaan tagihan profesional.",
-  },
-  {
-    year: "2025",
-    title: "Ekosistem layanan lengkap",
-    desc: "AMAN Digital berkembang dengan Print Center, IT Advisor, Creative Studio, dan Digital Store — satu ekosistem untuk kebutuhan operasional UMKM.",
+    year: "Awal 2026",
+    title: "AMAN Kasir, Budget & Invoice diluncurkan",
+    desc: "Tiga aplikasi inti resmi dirilis: AMAN Kasir untuk toko, AMAN Budget untuk keuangan keluarga, dan AMAN Invoice untuk pengelolaan tagihan profesional.",
   },
   {
     year: "2026",
+    title: "Ekosistem layanan lengkap",
+    desc: "AMAN Digital melengkapi diri dengan Print Center, IT Advisor, Creative Studio, dan Digital Store — satu ekosistem untuk kebutuhan operasional UMKM.",
+  },
+  {
+    year: "Sekarang",
     title: "Terus bertumbuh bersama UMKM",
     desc: "Menambah fitur, memperbaiki pengalaman, dan mendampingi makin banyak usaha kecil — mulai dari Aceh, untuk Indonesia.",
   },

@@ -241,31 +241,10 @@ const portfolio = [
 ];
 
 const stats = [
-  { value: "50+", label: "UMKM & Bisnis Terbantu" },
+  { value: "Early Access", label: "Mengajak UMKM pertama bergabung" },
   { value: "5", label: "Layanan dalam Satu Ekosistem" },
   { value: "3", label: "Aplikasi Gratis untuk Mulai" },
   { value: "100%", label: "Konsultasi Gratis via WhatsApp" },
-];
-
-const testimonials = [
-  {
-    initial: "N",
-    text: "Stok barang akhirnya bisa terpantau. Dulu sering tidak tahu kapan harus restock, sekarang langsung kelihatan dari HP.",
-    name: "Ibu Nadia",
-    role: "Pemilik Warung Kelontong, Blangpidie",
-  },
-  {
-    initial: "D",
-    text: "Invoice saya sekarang terlihat profesional. Klien lebih percaya dan pembayaran lebih cepat masuk karena ada nomor invoice yang jelas.",
-    name: "Mas Dedi",
-    role: "Freelancer Desainer, Banda Aceh",
-  },
-  {
-    initial: "R",
-    text: "Stok material sekarang jauh lebih mudah terpantau. Rekap harian yang dulu makan waktu, sekarang bisa dilihat langsung dari laporan.",
-    name: "Pak Reza",
-    role: "Manajer Operasional, Toko Material, Aceh Selatan",
-  },
 ];
 
 const packages = [
@@ -722,42 +701,32 @@ export default function HomePage() {
                 <div className="text-4xl font-bold text-white sm:text-5xl">
                   {s.value}
                 </div>
-                <p className="mt-2 text-sm text-slate-400">{s.label}</p>
+                <p className="mt-2 text-sm text-slate-300">{s.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== SECTION 8 — TESTIMONI ===== */}
+      {/* ===== SECTION 8 — EARLY ACCESS (testimoni nyata menyusul) ===== */}
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
-        <div className="mx-auto max-w-6xl px-4">
+        <div className="mx-auto max-w-3xl px-4 text-center">
           <SectionHeading
-            label="Kata Pengguna"
-            title="Yang mereka rasakan setelah pakai AMAN Digital"
+            label="Early Access"
+            title="Kami sedang membangun bersama UMKM pertama"
+            subtitle="AMAN Digital masih di tahap awal. Daripada memajang testimoni yang belum ada, kami mengajak Anda jadi salah satu pengguna pertama dan ikut membentuk produknya."
           />
-          <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="rounded-xl border border-slate-200 bg-white p-6"
-              >
-                <div className="text-4xl font-bold leading-none text-emerald">
-                  “
-                </div>
-                <p className="mt-2 text-sm italic text-slate-700">{t.text}</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald font-bold text-white">
-                    {t.initial}
-                  </span>
-                  <div>
-                    <p className="text-sm font-bold text-navy">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* TODO: isi testimoni nyata saat sudah ada pelanggan */}
+          <a
+            href={wa(
+              "Halo AMAN Digital, saya ingin jadi pengguna awal AMAN Digital."
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-block rounded-full bg-emerald px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-dark"
+          >
+            Jadi Pengguna Awal
+          </a>
         </div>
       </section>
 
@@ -837,8 +806,10 @@ export default function HomePage() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${i}`}
                     onClick={() => setOpenFaq(open ? null : i)}
                     aria-expanded={open}
+                    aria-controls={`faq-panel-${i}`}
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-navy"
                   >
                     {item.q}
@@ -850,9 +821,15 @@ export default function HomePage() {
                       +
                     </span>
                   </button>
-                  {open && (
-                    <p className="px-5 pb-5 text-sm text-slate-600">{item.a}</p>
-                  )}
+                  <p
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    hidden={!open}
+                    className="px-5 pb-5 text-sm text-slate-600"
+                  >
+                    {item.a}
+                  </p>
                 </div>
               );
             })}

@@ -78,7 +78,7 @@ const faqs: Faq[] = [
   {
     category: "kasir",
     q: "Apakah AMAN Kasir bisa digunakan offline?",
-    a: "AMAN Kasir berbasis web sehingga memerlukan koneksi internet. Namun dioptimalkan untuk koneksi mobile yang lambat sekalipun.",
+    a: "Bisa. AMAN Kasir adalah aplikasi web (PWA) yang offline-capable — transaksi tetap berjalan walau sinyal putus, lalu tersinkron otomatis saat online kembali. Cukup dibuka dari browser HP dan bisa ditambahkan ke layar utama seperti aplikasi biasa.",
   },
   {
     category: "kasir",
@@ -183,7 +183,7 @@ const faqs: Faq[] = [
 
 export default function FaqPage() {
   const [tab, setTab] = useState<CategoryKey>("semua");
-  const [openKey, setOpenKey] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const visible = faqs.filter((f) => tab === "semua" || f.category === tab);
 
@@ -203,7 +203,7 @@ export default function FaqPage() {
           >
             💬 Tanya via WhatsApp →
           </a>
-          <h1 className="mt-5 text-4xl font-bold leading-tight text-white md:text-5xl">
+          <h1 className="mt-5 text-4xl font-bold leading-tight text-white sm:text-5xl">
             Pertanyaan yang Sering Ditanya
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-slate-300 md:text-xl">
@@ -231,7 +231,7 @@ export default function FaqPage() {
                   aria-selected={active}
                   onClick={() => {
                     setTab(c.key);
-                    setOpenKey(null);
+                    setOpenFaq(0);
                   }}
                   className={`whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
                     active
@@ -248,16 +248,18 @@ export default function FaqPage() {
           {/* Accordion */}
           {visible.length > 0 ? (
             <div className="divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200">
-              {visible.map((f) => {
+              {visible.map((f, i) => {
                 const key = `${f.category}-${f.q}`;
-                const open = openKey === key;
+                const open = openFaq === i;
                 const badge = badgeStyles[f.category];
                 return (
                   <div key={key}>
                     <button
                       type="button"
+                      id={`faq-trigger-${i}`}
                       aria-expanded={open}
-                      onClick={() => setOpenKey(open ? null : key)}
+                      aria-controls={`faq-panel-${i}`}
+                      onClick={() => setOpenFaq(open ? null : i)}
                       className={`flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-base font-semibold transition-colors ${
                         open
                           ? "bg-emerald/5 text-emerald"
@@ -280,11 +282,15 @@ export default function FaqPage() {
                         ⌄
                       </span>
                     </button>
-                    {open && (
-                      <div className="border-t border-emerald/20 px-6 pb-5 pt-3.5 text-[0.9375rem] leading-relaxed text-slate-600">
-                        {f.a}
-                      </div>
-                    )}
+                    <div
+                      id={`faq-panel-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-trigger-${i}`}
+                      hidden={!open}
+                      className="border-t border-emerald/20 px-6 pb-5 pt-3.5 text-[0.9375rem] leading-relaxed text-slate-600"
+                    >
+                      {f.a}
+                    </div>
                   </div>
                 );
               })}

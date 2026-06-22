@@ -4,7 +4,6 @@ import {
   Handshake,
   MessagesSquare,
   Key,
-  UserRound,
   MessageCircle,
   Camera,
   MapPin,
@@ -115,7 +114,7 @@ const timeline = [
 
 const contacts: { icon: LucideIcon; label: string }[] = [
   { icon: MessageCircle, label: "0822-1076-8038" },
-  { icon: Camera, label: "@aman.digital.id" },
+  { icon: Camera, label: "@aman.digital01" },
   { icon: MapPin, label: "Blangpidie, Aceh Barat Daya" },
 ];
 
@@ -164,9 +163,14 @@ export default function TentangPage() {
       <section className="bg-white py-20">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 px-4 lg:grid-cols-2">
           <div className="flex flex-col items-center rounded-3xl border border-emerald/15 bg-emerald/5 p-10 text-center">
-            <div className="grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-emerald to-emerald-dark text-white shadow-lg">
-              <UserRound size={44} />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Photo.png"
+              alt="Adya Malik — Founder AMAN Digital"
+              width={112}
+              height={112}
+              className="h-28 w-28 rounded-full object-cover shadow-lg ring-4 ring-emerald/20"
+            />
             <p className="mt-4 text-xl font-bold text-navy">Adya Malik</p>
             <p className="mt-1 text-sm text-slate-600">
               Founder & Pengembang, AMAN Digital

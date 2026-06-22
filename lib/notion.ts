@@ -31,6 +31,32 @@ export type BlogPost = {
 
 export type BlogPostWithContent = BlogPost & { content: string };
 
+/**
+ * Parsing satu page Notion menjadi BlogPost secara defensif. Mengembalikan
+ * null (bukan throw) bila page tidak valid, sehingga satu artikel rusak
+ * di-skip dan tidak mengosongkan seluruh daftar blog.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parsePostMeta(page: any): BlogPost | null {
+  try {
+    const id: string | undefined = page?.id;
+    if (!id) return null;
+    const props = page.properties ?? {};
+    return {
+      id,
+      title: props.Title?.title?.[0]?.plain_text || 'Tanpa Judul',
+      slug: props.Slug?.rich_text?.[0]?.plain_text || id,
+      date: props.Date?.date?.start || '',
+      category: props.Category?.select?.name || 'Umum',
+      summary: props.Summary?.rich_text?.[0]?.plain_text || '',
+      cover: props.Cover?.url || '',
+    };
+  } catch (e) {
+    console.error('Notion parsePostMeta error (skipping post):', e);
+    return null;
+  }
+}
+
 export async function getPosts(): Promise<BlogPost[]> {
   try {
     const response = await notion.dataSources.query({
@@ -38,16 +64,9 @@ export async function getPosts(): Promise<BlogPost[]> {
       filter: { property: 'Published', checkbox: { equals: true } },
       sorts: [{ property: 'Date', direction: 'descending' }],
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => ({
-      id: page.id,
-      title: page.properties.Title?.title[0]?.plain_text || 'Tanpa Judul',
-      slug: page.properties.Slug?.rich_text[0]?.plain_text || page.id,
-      date: page.properties.Date?.date?.start || '',
-      category: page.properties.Category?.select?.name || 'Umum',
-      summary: page.properties.Summary?.rich_text[0]?.plain_text || '',
-      cover: page.properties.Cover?.url || '',
-    }));
+    return response.results
+      .map(parsePostMeta)
+      .filter((p): p is BlogPost => p !== null);
   } catch (e) {
     console.error('Notion getPosts error:', e);
     return [];
@@ -66,20 +85,11 @@ export async function getPostBySlug(slug: string): Promise<BlogPostWithContent |
       },
     });
     if (!response.results.length) return null;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const page = response.results[0] as any;
-    const mdBlocks = await n2m.pageToMarkdown(page.id);
+    const meta = parsePostMeta(response.results[0]);
+    if (!meta) return null;
+    const mdBlocks = await n2m.pageToMarkdown(meta.id);
     const mdString = n2m.toMarkdownString(mdBlocks);
-    return {
-      id: page.id,
-      title: page.properties.Title?.title[0]?.plain_text || 'Tanpa Judul',
-      slug: page.properties.Slug?.rich_text[0]?.plain_text || page.id,
-      date: page.properties.Date?.date?.start || '',
-      category: page.properties.Category?.select?.name || 'Umum',
-      summary: page.properties.Summary?.rich_text[0]?.plain_text || '',
-      cover: page.properties.Cover?.url || '',
-      content: mdString?.parent ?? '',
-    };
+    return { ...meta, content: mdString?.parent ?? '' };
   } catch (e) {
     console.error('Notion getPostBySlug error:', e);
     return null;

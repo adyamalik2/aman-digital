@@ -255,7 +255,7 @@ const faqs = [
 
 /* ---------------- Demo mockups ---------------- */
 
-const stockBadge = (text: string, tone: "ok" | "out") =>
+const stockBadge = (tone: "ok" | "out") =>
   tone === "ok"
     ? "bg-emerald/10 text-emerald"
     : "bg-red-100 text-red-600";
@@ -337,7 +337,7 @@ function ProdukMock() {
           <div className="text-right">
             <p className="font-mono text-[9px] font-bold text-emerald">{r.p}</p>
             <span
-              className={`rounded px-1 text-[7px] ${stockBadge(r.s, r.tone)}`}
+              className={`rounded px-1 text-[7px] ${stockBadge(r.tone)}`}
             >
               {r.s}
             </span>
@@ -404,7 +404,7 @@ export default function KasirPage() {
               <span className="ping-dot h-1.5 w-1.5 rounded-full bg-emerald" />
               Versi Awal — Gratis untuk Early Adopter
             </span>
-            <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl">
               Kasir yang{" "}
               <em className="font-light italic text-emerald-light">
                 jalan terus,
@@ -915,8 +915,10 @@ export default function KasirPage() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${i}`}
                     onClick={() => setOpenFaq(open ? null : i)}
                     aria-expanded={open}
+                    aria-controls={`faq-panel-${i}`}
                     className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-lg font-bold text-navy"
                   >
                     {item.q}
@@ -928,11 +930,15 @@ export default function KasirPage() {
                       +
                     </span>
                   </button>
-                  {open && (
-                    <p className="px-6 pb-6 leading-relaxed text-slate-600">
-                      {item.a}
-                    </p>
-                  )}
+                  <p
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    hidden={!open}
+                    className="px-6 pb-6 leading-relaxed text-slate-600"
+                  >
+                    {item.a}
+                  </p>
                 </div>
               );
             })}

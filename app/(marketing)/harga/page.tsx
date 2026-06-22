@@ -138,7 +138,7 @@ export default function HargaPage() {
                 type="button"
                 onClick={() => setAnnual(false)}
                 className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${
-                  !annual ? "bg-emerald text-white" : "text-slate-300"
+                  !annual ? "bg-emerald-cta text-white" : "text-slate-300"
                 }`}
               >
                 Bulanan
@@ -147,7 +147,7 @@ export default function HargaPage() {
                 type="button"
                 onClick={() => setAnnual(true)}
                 className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${
-                  annual ? "bg-emerald text-white" : "text-slate-300"
+                  annual ? "bg-emerald-cta text-white" : "text-slate-300"
                 }`}
               >
                 Tahunan
@@ -175,7 +175,7 @@ export default function HargaPage() {
                 }`}
               >
                 {meta.badge && (
-                  <span className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald px-4 py-1 text-xs font-extrabold text-white">
+                  <span className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald-cta px-4 py-1 text-xs font-extrabold text-white">
                     {meta.badge}
                   </span>
                 )}
@@ -226,7 +226,7 @@ export default function HargaPage() {
                   rel="noopener noreferrer"
                   className={`mt-auto rounded-full px-6 py-3 text-center text-sm font-bold transition-colors ${
                     cta.variant === "primary"
-                      ? "bg-emerald text-white hover:bg-emerald-dark"
+                      ? "bg-emerald-cta text-white hover:bg-emerald-cta-hover"
                       : "border border-white/20 text-slate-200 hover:border-emerald hover:text-emerald-light"
                   }`}
                 >
@@ -266,7 +266,7 @@ export default function HargaPage() {
                   onClick={() => setActiveApp(tab.key)}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     active
-                      ? "bg-emerald text-white"
+                      ? "bg-emerald-cta text-white"
                       : "border border-slate-300 text-slate-600 hover:border-emerald hover:text-emerald"
                   }`}
                 >
@@ -400,7 +400,7 @@ export default function HargaPage() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-emerald px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-dark"
+                className="rounded-full bg-emerald-cta px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
               >
                 Konsultasi via WhatsApp
               </a>

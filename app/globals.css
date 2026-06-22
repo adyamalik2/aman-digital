@@ -55,6 +55,8 @@
   --color-emerald: #059669;
   --color-emerald-dark: #047857;
   --color-emerald-light: #10b981;
+  --color-emerald-cta: #047857;        /* tombol CTA default — ~5.48:1 vs putih, lulus AA */
+  --color-emerald-cta-hover: #065f46;  /* hover tombol CTA — lebih gelap lagi */
   --color-navy: #0f172a;
   --color-navy-light: #1e293b;
   --color-wa: #25d366;

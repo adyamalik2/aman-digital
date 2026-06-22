@@ -145,7 +145,7 @@ export default function TentangPage() {
               href={KONSULTASI_WA}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-emerald px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="rounded-full bg-emerald-cta px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Mulai Konsultasi Gratis
             </a>
@@ -328,7 +328,7 @@ export default function TentangPage() {
             href={KONSULTASI_WA}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-block rounded-full bg-emerald px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-dark"
+            className="mt-8 inline-block rounded-full bg-emerald-cta px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
           >
             Hubungi via WhatsApp
           </a>

@@ -235,7 +235,7 @@ export default function FaqPage() {
                   }}
                   className={`whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
                     active
-                      ? "bg-emerald text-white"
+                      ? "bg-emerald-cta text-white"
                       : "border border-slate-300 text-slate-600 hover:border-emerald hover:text-emerald"
                   }`}
                 >

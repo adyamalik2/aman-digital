@@ -112,7 +112,7 @@ export default function DigitalStorePage() {
                   rel="noopener noreferrer"
                   className={`mt-5 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition-colors ${
                     p.cta.type === "lynk"
-                      ? "bg-emerald hover:bg-emerald-dark"
+                      ? "bg-emerald-cta hover:bg-emerald-cta-hover"
                       : "bg-wa hover:opacity-90"
                   }`}
                 >

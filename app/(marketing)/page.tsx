@@ -413,7 +413,7 @@ export default function HomePage() {
               href={HERO_WA}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg bg-emerald px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="rounded-lg bg-emerald-cta px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Konsultasi Kebutuhan Bisnis
             </a>
@@ -541,13 +541,13 @@ export default function HomePage() {
                     href={app.appUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-lg bg-emerald px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-dark"
+                    className="flex-1 rounded-lg bg-emerald-cta px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
                   >
                     Buka Aplikasi
                   </a>
                   <Link
                     href={app.detail}
-                    className="flex-1 rounded-lg border border-emerald px-4 py-2 text-center text-sm font-semibold text-emerald transition-colors hover:bg-emerald hover:text-white"
+                    className="flex-1 rounded-lg border border-emerald px-4 py-2 text-center text-sm font-semibold text-emerald transition-colors hover:bg-emerald-cta hover:text-white"
                   >
                     Detail
                   </Link>
@@ -608,7 +608,7 @@ export default function HomePage() {
                   onClick={() => setActiveCategory(cat)}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     active
-                      ? "bg-emerald text-white"
+                      ? "bg-emerald-cta text-white"
                       : "border border-slate-300 text-slate-600 hover:border-emerald hover:text-emerald"
                   }`}
                 >
@@ -723,7 +723,7 @@ export default function HomePage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-block rounded-full bg-emerald px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-dark"
+            className="mt-8 inline-block rounded-full bg-emerald-cta px-8 py-3 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
           >
             Jadi Pengguna Awal
           </a>
@@ -751,7 +751,7 @@ export default function HomePage() {
                   href={p.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 self-start rounded-lg border border-emerald px-5 py-2 text-sm font-semibold text-emerald transition-colors hover:bg-emerald hover:text-white"
+                  className="mt-4 self-start rounded-lg border border-emerald px-5 py-2 text-sm font-semibold text-emerald transition-colors hover:bg-emerald-cta hover:text-white"
                 >
                   Tanya paket
                 </a>

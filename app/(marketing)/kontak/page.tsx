@@ -71,7 +71,7 @@ export default function KontakPage() {
             href={wa("Halo AMAN Digital, saya ingin bertanya")}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-block rounded-full bg-emerald px-8 py-3.5 font-bold text-white transition-colors hover:bg-emerald-dark"
+            className="mt-8 inline-block rounded-full bg-emerald-cta px-8 py-3.5 font-bold text-white transition-colors hover:bg-emerald-cta-hover"
           >
             💬 Chat WhatsApp Sekarang
           </a>
@@ -95,7 +95,7 @@ export default function KontakPage() {
               href={WA}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 block rounded-full bg-emerald px-4 py-2.5 text-center text-sm font-bold text-white transition-opacity hover:opacity-90"
+              className="mt-6 block rounded-full bg-emerald-cta px-4 py-2.5 text-center text-sm font-bold text-white transition-opacity hover:opacity-90"
             >
               Chat Sekarang
             </a>
@@ -221,7 +221,7 @@ export default function KontakPage() {
               href={wa(t.text)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-emerald px-5 py-2.5 text-sm font-semibold text-emerald transition-colors hover:bg-emerald hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-emerald px-5 py-2.5 text-sm font-semibold text-emerald transition-colors hover:bg-emerald-cta hover:text-white"
             >
               <span>{t.icon}</span>
               {t.label}

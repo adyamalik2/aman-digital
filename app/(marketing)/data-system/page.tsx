@@ -194,7 +194,7 @@ export default function DataSystemPage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full rounded-full bg-emerald px-8 py-3 text-center font-bold text-white transition-colors hover:bg-emerald-dark sm:w-auto"
+            className="w-full rounded-full bg-emerald-cta px-8 py-3 text-center font-bold text-white transition-colors hover:bg-emerald-cta-hover sm:w-auto"
           >
             Diskusikan Proyek Data & System
           </a>

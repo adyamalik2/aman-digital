@@ -420,7 +420,7 @@ export default function KasirPage() {
                 href={APP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-emerald px-7 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-dark"
+                className="rounded-full bg-emerald-cta px-7 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
               >
                 Coba Gratis Sekarang →
               </a>
@@ -784,7 +784,7 @@ export default function KasirPage() {
                 }`}
               >
                 {plan.featured && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-emerald px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-emerald-cta px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
                     Paling Populer
                   </div>
                 )}
@@ -835,7 +835,7 @@ export default function KasirPage() {
                   rel="noopener noreferrer"
                   className={`mt-5 block rounded-full py-3 text-center text-sm font-semibold transition-colors ${
                     plan.featured
-                      ? "bg-emerald text-white hover:bg-emerald-dark"
+                      ? "bg-emerald-cta text-white hover:bg-emerald-cta-hover"
                       : "border border-white/30 text-white hover:bg-white/10"
                   }`}
                 >
@@ -874,7 +874,7 @@ export default function KasirPage() {
               href={BETA_WA}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-emerald px-8 py-4 text-center font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="rounded-full bg-emerald-cta px-8 py-4 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Daftar Beta via WhatsApp
             </a>
@@ -963,7 +963,7 @@ export default function KasirPage() {
               href={APP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-emerald px-10 py-5 text-lg font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="rounded-full bg-emerald-cta px-10 py-5 text-lg font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Saya Mau Coba Aman Kasir →
             </a>

@@ -214,7 +214,7 @@ export default function InvoicePage() {
               href={APP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-emerald px-8 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="rounded-full bg-emerald-cta px-8 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Buat Invoice Gratis Sekarang
             </a>
@@ -366,7 +366,7 @@ export default function InvoicePage() {
           <div className="space-y-6">
             {steps.map((s) => (
               <div key={s.num} className="flex items-start gap-5">
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-emerald text-lg font-black text-white">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-emerald-cta text-lg font-black text-white">
                   {s.num}
                 </div>
                 <div className="flex-1 rounded-2xl border border-slate-200 bg-white p-5">
@@ -381,7 +381,7 @@ export default function InvoicePage() {
               href={APP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-full bg-emerald px-8 py-3.5 font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="inline-block rounded-full bg-emerald-cta px-8 py-3.5 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Buat Invoice Pertama Saya
             </a>
@@ -415,7 +415,7 @@ export default function InvoicePage() {
                 }`}
               >
                 {plan.featured && (
-                  <div className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald px-4 py-1 text-xs font-extrabold text-white">
+                  <div className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald-cta px-4 py-1 text-xs font-extrabold text-white">
                     Paling Populer
                   </div>
                 )}
@@ -436,7 +436,7 @@ export default function InvoicePage() {
                   rel="noopener noreferrer"
                   className={`mb-6 block rounded-full py-2.5 text-center text-sm font-bold transition-colors ${
                     plan.featured
-                      ? "bg-emerald text-white hover:bg-emerald-dark"
+                      ? "bg-emerald-cta text-white hover:bg-emerald-cta-hover"
                       : "border-[1.5px] border-emerald text-emerald hover:bg-emerald/5"
                   }`}
                 >

@@ -164,7 +164,7 @@ export default function Navbar() {
 
           <Link
             href="/kontak"
-            className="ml-2 rounded-full bg-emerald px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-dark"
+            className="ml-2 rounded-full bg-emerald-cta px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
           >
             Kontak
           </Link>
@@ -245,7 +245,7 @@ export default function Navbar() {
             <Link
               href="/kontak"
               onClick={closeMobile}
-              className="mt-2 rounded-full bg-emerald px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-dark"
+              className="mt-2 rounded-full bg-emerald-cta px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               Kontak
             </Link>

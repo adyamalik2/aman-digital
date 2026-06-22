@@ -185,7 +185,7 @@ export default function ItAdvisorPage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block rounded-full bg-emerald px-8 py-3.5 font-bold text-white transition-colors hover:bg-emerald-dark"
+            className="inline-block rounded-full bg-emerald-cta px-8 py-3.5 font-bold text-white transition-colors hover:bg-emerald-cta-hover"
           >
             Konsultasi IT Advisor Gratis
           </a>

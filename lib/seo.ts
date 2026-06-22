@@ -6,7 +6,7 @@ const OG_IMAGE = "/images/og-image.png";
  * Builds a complete Metadata object (title, description, canonical, OpenGraph,
  * Twitter card) for a marketing page — mirrors the per-page meta tags from the
  * old static site. metadataBase is set in the root layout so relative URLs
- * resolve to https://amandigital.web.id.
+ * resolve to https://amandigital.my.id.
  */
 export function pageMeta({
   title,

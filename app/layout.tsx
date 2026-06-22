@@ -8,11 +8,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://amandigital.web.id"),
+  metadataBase: new URL("https://amandigital.my.id"),
   title: "AMAN Digital | Sistem Bisnis, Dashboard & Digital Printing",
   description:
     "AMAN Digital bantu UMKM, toko, dan kantor kecil merapikan sistem kerja: dashboard, aplikasi no-code, IT support, digital printing, dan konten promosi.",
-  icons: { icon: "/icon.png" },
   alternates: { canonical: "/" },
   openGraph: {
     title:

@@ -10,6 +10,7 @@ import {
   Headset,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 import ServiceHero from "@/components/layout/ServiceHero";
 
 const WA = "https://wa.me/6282210768038";
@@ -45,7 +46,7 @@ const services: { icon: LucideIcon; title: string; desc: string; wide: boolean }
   {
     icon: Headset,
     title: "Konsultasi & Rekomendasi Perangkat",
-    desc: "Tidak perlu riset sendiri sebelum beli laptop, printer, atau router. Kami bantu petakan kebutuhan kantor, rekomendasikan pilihan yang tepat sesuai anggaran, dan bantu proses setup awal setelah pembelian.",
+    desc: "Tidak perlu riset sendiri sebelum beli laptop, printer, atau router. Kami bantu petakan kebutuhan kantor, rekomendasikan pilihan yang tepat sesuai anggaran, dan bantu setup awal langsung di lokasi setelah pembelian.",
     wide: true,
   },
 ];
@@ -105,6 +106,19 @@ export default function ItAdvisorPage() {
                   <p className="mt-2 leading-relaxed text-slate-600">
                     {s.desc}
                   </p>
+                  {s.title === "Konsultasi & Rekomendasi Perangkat" && (
+                    <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                      Hanya butuh saran perangkat tanpa kunjungan? Tersedia sesi
+                      konsultasi singkat di{" "}
+                      <Link
+                        href="/digital-store"
+                        className="font-semibold text-emerald hover:text-emerald-dark"
+                      >
+                        Digital Store
+                      </Link>
+                      .
+                    </p>
+                  )}
                 </div>
               );
             })}

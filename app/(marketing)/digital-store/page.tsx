@@ -6,6 +6,7 @@ import {
   Headset,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 import ServiceHero from "@/components/layout/ServiceHero";
 import { pageMeta } from "@/lib/seo";
 
@@ -64,7 +65,7 @@ const products: Product[] = [
   {
     icon: Headset,
     title: "Konsultasi Perangkat Kantor",
-    desc: "Tidak yakin mau beli laptop, printer, atau router yang mana? Kami bantu pilihkan sesuai kebutuhan dan anggaran kantor Anda — tanpa beli perangkat yang salah.",
+    desc: "Belum yakin mau beli laptop, printer, atau router yang mana? Lewat sesi konsultasi singkat secara online, kami bantu rekomendasikan pilihan paling pas dengan kebutuhan dan anggaran kantor Anda — tanpa kunjungan ke lokasi.",
     cta: {
       label: "Konsultasi via WhatsApp",
       href: wa(
@@ -117,6 +118,19 @@ export default function DigitalStorePage() {
                 >
                   {p.cta.type === "lynk" ? "🔗" : "💬"} {p.cta.label}
                 </a>
+                {p.title === "Konsultasi Perangkat Kantor" && (
+                  <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                    Butuh sekalian setup atau perbaikan langsung di lokasi? Lihat
+                    layanan{" "}
+                    <Link
+                      href="/it-advisor"
+                      className="font-semibold text-emerald hover:text-emerald-dark"
+                    >
+                      IT Advisor
+                    </Link>
+                    .
+                  </p>
+                )}
               </div>
               );
             })}

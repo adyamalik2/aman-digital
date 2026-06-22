@@ -25,7 +25,7 @@ type Product = {
   icon: LucideIcon;
   title: string;
   desc: string;
-  cta: { label: string; href: string; type: "shopee" | "wa" };
+  cta: { label: string; href: string; type: "lynk" | "wa" };
 };
 
 const products: Product[] = [
@@ -34,9 +34,9 @@ const products: Product[] = [
     title: "Template Bisnis",
     desc: "Template siap pakai untuk proposal, laporan keuangan, SOP, dan presentasi bisnis. Tinggal isi data Anda, tampilan sudah rapi dan profesional.",
     cta: {
-      label: "Lihat di Shopee",
+      label: "Lihat di Lynk.id",
       href: "https://lynk.id/adya.malik",
-      type: "shopee",
+      type: "lynk",
     },
   },
   {
@@ -56,9 +56,9 @@ const products: Product[] = [
     title: "Prompt AI untuk Bisnis",
     desc: "Kumpulan prompt AI yang telah diuji untuk membuat konten, menyusun SOP, analisis data, dan ide promosi — langsung pakai tanpa harus eksperimen sendiri.",
     cta: {
-      label: "Lihat di Shopee",
+      label: "Lihat di Lynk.id",
       href: "https://lynk.id/adya.malik",
-      type: "shopee",
+      type: "lynk",
     },
   },
   {
@@ -110,12 +110,12 @@ export default function DigitalStorePage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`mt-5 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition-colors ${
-                    p.cta.type === "shopee"
-                      ? "bg-[#EE4D2D] hover:bg-[#C73D22]"
+                    p.cta.type === "lynk"
+                      ? "bg-emerald hover:bg-emerald-dark"
                       : "bg-wa hover:opacity-90"
                   }`}
                 >
-                  {p.cta.type === "shopee" ? "🛍️" : "💬"} {p.cta.label}
+                  {p.cta.type === "lynk" ? "🔗" : "💬"} {p.cta.label}
                 </a>
               </div>
               );

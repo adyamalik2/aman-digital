@@ -60,7 +60,7 @@ export default function KontakPage() {
         }}
       >
         <div className="mx-auto max-w-xl">
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
+          <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
             Ada yang Bisa Kami Bantu?
           </h1>
           <p className="mx-auto mt-4 max-w-lg text-lg text-white/80 md:text-xl">

@@ -72,7 +72,7 @@ const faqs = [
 /* ---------------- Page ---------------- */
 
 export default function ItAdvisorPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <>
@@ -128,7 +128,9 @@ export default function ItAdvisorPage() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${i}`}
                     aria-expanded={open}
+                    aria-controls={`faq-panel-${i}`}
                     onClick={() => setOpenFaq(open ? null : i)}
                     className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-bold text-navy"
                   >
@@ -141,11 +143,15 @@ export default function ItAdvisorPage() {
                       +
                     </span>
                   </button>
-                  {open && (
-                    <p className="px-6 pb-5 leading-relaxed text-slate-600">
-                      {item.a}
-                    </p>
-                  )}
+                  <p
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    hidden={!open}
+                    className="px-6 pb-5 leading-relaxed text-slate-600"
+                  >
+                    {item.a}
+                  </p>
                 </div>
               );
             })}

@@ -184,7 +184,7 @@ const faqs = [
 /* ---------------- Page ---------------- */
 
 export default function InvoicePage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <>
@@ -198,7 +198,7 @@ export default function InvoicePage() {
             <span className="ping-dot h-2 w-2 rounded-full bg-emerald" />
             AMAN Invoice
           </span>
-          <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-6xl md:text-7xl">
+          <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl">
             Faktur Profesional
             <br />
             <span className="text-emerald-light">
@@ -489,8 +489,10 @@ export default function InvoicePage() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${i}`}
                     onClick={() => setOpenFaq(open ? null : i)}
                     aria-expanded={open}
+                    aria-controls={`faq-panel-${i}`}
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-bold text-navy"
                   >
                     {item.q}
@@ -502,11 +504,15 @@ export default function InvoicePage() {
                       +
                     </span>
                   </button>
-                  {open && (
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
-                      {item.a}
-                    </p>
-                  )}
+                  <p
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    hidden={!open}
+                    className="px-5 pb-5 text-sm leading-relaxed text-slate-600"
+                  >
+                    {item.a}
+                  </p>
                 </div>
               );
             })}

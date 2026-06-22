@@ -1,6 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import {
+  TIER_ORDER,
+  TIER_META,
+  tierCardFeatures,
+  comparisonRowsForGroups,
+  type TierKey,
+  type CellValue,
+  type FeatureGroup,
+} from "@/lib/pricing";
 
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -9,145 +18,34 @@ const KASIR_APP_URL = "https://amandigital.web.id/aman-kasir/";
 
 /* ---------------- Data ---------------- */
 
-type Feature = { label: string; included: boolean; dim?: boolean };
-
-type Plan = {
-  tier: string;
-  featured?: boolean;
-  badge?: string;
-  monthly: string;
-  annual: string;
-  monthlyPeriod: string;
-  annualPeriod: string;
-  features: Feature[];
-  cta: { label: string; href: string; variant: "primary" | "ghost" };
+const ctaByTier: Record<
+  TierKey,
+  { label: string; href: string; variant: "primary" | "ghost" }
+> = {
+  gratis: { label: "Mulai Gratis", href: KASIR_APP_URL, variant: "ghost" },
+  dasar: {
+    label: "Pilih Paket Dasar",
+    href: wa("Halo AMAN Digital, saya ingin berlangganan paket Dasar."),
+    variant: "primary",
+  },
+  pro: {
+    label: "Pilih Paket Pro",
+    href: wa("Halo AMAN Digital, saya ingin berlangganan paket Pro."),
+    variant: "ghost",
+  },
 };
 
-const plans: Plan[] = [
-  {
-    tier: "Gratis",
-    monthly: "Rp 0",
-    annual: "Rp 0",
-    monthlyPeriod: "selamanya",
-    annualPeriod: "selamanya",
-    features: [
-      { label: "Kasir: 100 transaksi/bln", included: true },
-      { label: "Budget: 100 transaksi/bln", included: true },
-      { label: "Invoice: 10 invoice/bln", included: true },
-      { label: "Laporan & export PDF", included: false, dim: true },
-      { label: "Manajemen stok", included: false, dim: true },
-      { label: "Multi pengguna", included: false, dim: true },
-    ],
-    cta: { label: "Mulai Gratis", href: KASIR_APP_URL, variant: "ghost" },
-  },
-  {
-    tier: "Dasar",
-    featured: true,
-    badge: "Paling Populer",
-    monthly: "49rb",
-    annual: "392rb",
-    monthlyPeriod: "per bulan",
-    annualPeriod: "per tahun (hemat Rp 196rb)",
-    features: [
-      { label: "Kasir: 500 transaksi/bln", included: true },
-      { label: "Budget: 500 transaksi/bln", included: true },
-      { label: "Invoice: 100 invoice/bln", included: true },
-      { label: "Laporan & export PDF", included: true },
-      { label: "Manajemen stok", included: true },
-      { label: "Multi pengguna", included: false, dim: true },
-    ],
-    cta: {
-      label: "Pilih Paket Dasar",
-      href: wa(
-        "Halo AMAN Digital, saya ingin berlangganan paket Dasar."
-      ),
-      variant: "primary",
-    },
-  },
-  {
-    tier: "Pro",
-    monthly: "99rb",
-    annual: "792rb",
-    monthlyPeriod: "per bulan",
-    annualPeriod: "per tahun (hemat Rp 396rb)",
-    features: [
-      { label: "Semua fitur Dasar", included: true },
-      { label: "Transaksi & invoice tak terbatas", included: true },
-      { label: "Export PDF & Excel", included: true },
-      { label: "Multi pengguna (3 akun)", included: true },
-      { label: "Backup otomatis harian", included: true },
-      { label: "Prioritas support WhatsApp", included: true },
-    ],
-    cta: {
-      label: "Pilih Paket Pro",
-      href: wa("Halo AMAN Digital, saya ingin berlangganan paket Pro."),
-      variant: "ghost",
-    },
-  },
+const appTabs: {
+  key: string;
+  label: string;
+  icon: string;
+  groups: FeatureGroup[];
+}[] = [
+  { key: "semua", label: "Semua Aplikasi", icon: "🗂️", groups: ["Kasir", "Budget", "Invoice", "Umum"] },
+  { key: "kasir", label: "AMAN Kasir", icon: "🧾", groups: ["Kasir"] },
+  { key: "budget", label: "AMAN Budget", icon: "👛", groups: ["Budget"] },
+  { key: "invoice", label: "AMAN Invoice", icon: "📄", groups: ["Invoice"] },
 ];
-
-type CellValue = boolean | string;
-type CompareRow =
-  | { group: string }
-  | { label: string; free: CellValue; basic: CellValue; pro: CellValue };
-
-const compareRows = {
-  kasir: [
-    { group: "AMAN Kasir" },
-    { label: "Transaksi per bulan", free: "100", basic: "500", pro: "Unlimited" },
-    { label: "Stok barang", free: true, basic: true, pro: true },
-    { label: "Laporan dasar", free: true, basic: true, pro: true },
-    { label: "Export PDF", free: true, basic: true, pro: true },
-    { label: "Backup lokal", free: true, basic: true, pro: true },
-    { label: "Cloud backup harian", free: false, basic: false, pro: true },
-    { label: "Export Excel", free: false, basic: false, pro: true },
-  ] as CompareRow[],
-  budget: [
-    { group: "AMAN Budget" },
-    { label: "Transaksi per bulan", free: "100", basic: "500", pro: "Unlimited" },
-    { label: "Goals tabungan", free: "3", basic: "10", pro: "Unlimited" },
-    { label: "Kalkulator Zakat", free: true, basic: true, pro: true },
-    { label: "Laporan arus kas", free: true, basic: true, pro: true },
-    { label: "Family Sync", free: false, basic: false, pro: true },
-    { label: "Reminder tagihan", free: false, basic: false, pro: true },
-    { label: "OCR Struk", free: false, basic: false, pro: true },
-  ] as CompareRow[],
-  invoice: [
-    { group: "AMAN Invoice" },
-    { label: "Invoice per bulan", free: "10", basic: "100", pro: "Unlimited" },
-    { label: "Kirim via WhatsApp", free: true, basic: true, pro: true },
-    { label: "Download PDF", free: true, basic: true, pro: true },
-    { label: "Logo usaha di invoice", free: false, basic: true, pro: true },
-    { label: "Database pelanggan", free: true, basic: true, pro: true },
-    { label: "Laporan piutang", free: false, basic: false, pro: true },
-    { label: "Pengingat jatuh tempo", free: false, basic: false, pro: true },
-  ] as CompareRow[],
-};
-
-const allRows: CompareRow[] = [
-  ...compareRows.kasir,
-  ...compareRows.budget,
-  ...compareRows.invoice,
-  { group: "Umum" },
-  { label: "Support WhatsApp", free: "3 hari", basic: "24 jam", pro: "Prioritas 2 jam" },
-  { label: "Multi pengguna", free: false, basic: "2 user", pro: "5 user" },
-];
-
-const appTabs = [
-  { key: "semua", label: "Semua Aplikasi", icon: "🗂️" },
-  { key: "kasir", label: "AMAN Kasir", icon: "🧾" },
-  { key: "budget", label: "AMAN Budget", icon: "👛" },
-  { key: "invoice", label: "AMAN Invoice", icon: "📄" },
-] as const;
-
-type AppKey = (typeof appTabs)[number]["key"];
-
-const rowsByApp: Record<AppKey, CompareRow[]> = {
-  semua: allRows,
-  kasir: compareRows.kasir,
-  budget: compareRows.budget,
-  invoice: compareRows.invoice,
-};
 
 const faqs = [
   {
@@ -207,10 +105,11 @@ function CompareCell({
 
 export default function HargaPage() {
   const [annual, setAnnual] = useState(false);
-  const [activeApp, setActiveApp] = useState<AppKey>("semua");
+  const [activeApp, setActiveApp] = useState<string>("semua");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const rows = rowsByApp[activeApp];
+  const activeTab = appTabs.find((t) => t.key === activeApp) ?? appTabs[0];
+  const rows = comparisonRowsForGroups(activeTab.groups);
 
   return (
     <>
@@ -262,75 +161,80 @@ export default function HargaPage() {
 
         {/* Pricing cards */}
         <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.tier}
-              className={`relative flex flex-col rounded-3xl border p-8 text-left transition-transform hover:-translate-y-1 ${
-                plan.featured
-                  ? "border-emerald/40 bg-emerald/[0.06] shadow-[0_0_40px_rgba(5,150,105,0.15)]"
-                  : "border-white/10 bg-white/[0.04]"
-              }`}
-            >
-              {plan.badge && (
-                <span className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald px-4 py-1 text-xs font-extrabold text-white">
-                  {plan.badge}
-                </span>
-              )}
+          {TIER_ORDER.map((key) => {
+            const meta = TIER_META[key];
+            const cta = ctaByTier[key];
+            const features = tierCardFeatures(key);
+            return (
               <div
-                className={`text-xs font-extrabold uppercase tracking-widest ${
-                  plan.featured ? "text-emerald-light" : "text-slate-400"
+                key={key}
+                className={`relative flex flex-col rounded-3xl border p-8 text-left transition-transform hover:-translate-y-1 ${
+                  meta.featured
+                    ? "border-emerald/40 bg-emerald/[0.06] shadow-[0_0_40px_rgba(5,150,105,0.15)]"
+                    : "border-white/10 bg-white/[0.04]"
                 }`}
               >
-                {plan.tier}
-              </div>
-              <div className="mt-2 flex items-start gap-1">
-                {plan.tier !== "Gratis" && (
-                  <span className="mt-1 text-lg font-semibold text-slate-400">
-                    Rp
+                {meta.badge && (
+                  <span className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-xl bg-emerald px-4 py-1 text-xs font-extrabold text-white">
+                    {meta.badge}
                   </span>
                 )}
-                <span className="text-5xl font-black leading-none tracking-tight text-white">
-                  {annual ? plan.annual : plan.monthly}
-                </span>
-              </div>
-              <div className="mt-2 text-sm text-slate-400">
-                {annual ? plan.annualPeriod : plan.monthlyPeriod}
-              </div>
-
-              <hr className="my-6 border-white/10" />
-
-              <ul className="space-y-3">
-                {plan.features.map((f) => (
-                  <li
-                    key={f.label}
-                    className={`flex items-start gap-3 text-sm ${
-                      f.dim ? "text-slate-500" : "text-slate-200"
-                    }`}
-                  >
-                    <span className="mt-0.5 shrink-0">
-                      <Mark included={f.included} />
+                <div
+                  className={`text-xs font-extrabold uppercase tracking-widest ${
+                    meta.featured ? "text-emerald-light" : "text-slate-400"
+                  }`}
+                >
+                  {meta.name}
+                </div>
+                <div className="mt-2 flex items-start gap-1">
+                  {key !== "gratis" && (
+                    <span className="mt-1 text-lg font-semibold text-slate-400">
+                      Rp
                     </span>
-                    <span>{f.label}</span>
-                  </li>
-                ))}
-              </ul>
+                  )}
+                  <span className="text-5xl font-black leading-none tracking-tight text-white">
+                    {annual ? meta.annual : meta.monthly}
+                  </span>
+                </div>
+                <div className="mt-2 text-sm text-slate-400">
+                  {annual ? meta.annualPeriod : meta.monthlyPeriod}
+                </div>
 
-              <hr className="my-6 border-white/10" />
+                <hr className="my-6 border-white/10" />
 
-              <a
-                href={plan.cta.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`mt-auto rounded-full px-6 py-3 text-center text-sm font-bold transition-colors ${
-                  plan.cta.variant === "primary"
-                    ? "bg-emerald text-white hover:bg-emerald-dark"
-                    : "border border-white/20 text-slate-200 hover:border-emerald hover:text-emerald-light"
-                }`}
-              >
-                {plan.cta.label}
-              </a>
-            </div>
-          ))}
+                <ul className="space-y-3">
+                  {features.map((f) => (
+                    <li
+                      key={f.label}
+                      className={`flex items-start gap-3 text-sm ${
+                        f.dim ? "text-slate-500" : "text-slate-200"
+                      }`}
+                    >
+                      <span className="mt-0.5 shrink-0">
+                        <Mark included={f.included} />
+                      </span>
+                      <span>{f.label}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <hr className="my-6 border-white/10" />
+
+                <a
+                  href={cta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-auto rounded-full px-6 py-3 text-center text-sm font-bold transition-colors ${
+                    cta.variant === "primary"
+                      ? "bg-emerald text-white hover:bg-emerald-dark"
+                      : "border border-white/20 text-slate-200 hover:border-emerald hover:text-emerald-light"
+                  }`}
+                >
+                  {cta.label}
+                </a>
+              </div>
+            );
+          })}
         </div>
 
         <p className="mx-auto mt-6 max-w-3xl text-xs text-slate-500">
@@ -394,7 +298,7 @@ export default function HargaPage() {
               </thead>
               <tbody>
                 {rows.map((row, i) =>
-                  "group" in row ? (
+                  row.type === "group" ? (
                     <tr key={`g-${row.group}-${i}`}>
                       <td
                         colSpan={4}
@@ -412,13 +316,13 @@ export default function HargaPage() {
                         {row.label}
                       </td>
                       <td className="px-4 py-3 text-center text-sm">
-                        <CompareCell value={row.free} />
+                        <CompareCell value={row.values.gratis} />
                       </td>
                       <td className="bg-emerald/5 px-4 py-3 text-center text-sm">
-                        <CompareCell value={row.basic} highlight />
+                        <CompareCell value={row.values.dasar} highlight />
                       </td>
                       <td className="px-4 py-3 text-center text-sm">
-                        <CompareCell value={row.pro} />
+                        <CompareCell value={row.values.pro} />
                       </td>
                     </tr>
                   )
@@ -447,8 +351,10 @@ export default function HargaPage() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${i}`}
                     onClick={() => setOpenFaq(open ? null : i)}
                     aria-expanded={open}
+                    aria-controls={`faq-panel-${i}`}
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-navy"
                   >
                     {item.q}
@@ -460,11 +366,15 @@ export default function HargaPage() {
                       +
                     </span>
                   </button>
-                  {open && (
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
-                      {item.a}
-                    </p>
-                  )}
+                  <p
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    hidden={!open}
+                    className="px-5 pb-5 text-sm leading-relaxed text-slate-600"
+                  >
+                    {item.a}
+                  </p>
                 </div>
               );
             })}

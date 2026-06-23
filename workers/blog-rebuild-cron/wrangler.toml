@@ -1,0 +1,17 @@
+name = "aman-digital-blog-rebuild"
+main = "src/index.js"
+compatibility_date = "2026-06-23"
+
+# Jadwal rebuild: setiap 30 menit (waktu UTC, tapi karena interval 30 menit
+# zona waktu tidak berpengaruh). Sama seperti workflow GitHub yang lama.
+# Ubah angkanya bila ingin lebih jarang, mis. "0 * * * *" = tiap 1 jam.
+[triggers]
+crons = ["*/30 * * * *"]
+
+# Aktifkan Workers Logs supaya console.log / error terlihat di dashboard
+# (Workers & Pages -> worker ini -> Logs) dan lewat `wrangler tail`.
+[observability]
+enabled = true
+
+# CATATAN: jangan menaruh URL deploy hook di sini. Simpan sebagai SECRET:
+#   npx wrangler secret put DEPLOY_HOOK

@@ -1,0 +1,16 @@
+{
+  "name": "aman-digital-blog-rebuild",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Cloudflare Worker (cron) pemicu deploy hook Cloudflare Pages — pengganti GitHub Actions rebuild-blog.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "dev:cron": "wrangler dev --test-scheduled",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "secret": "wrangler secret put DEPLOY_HOOK"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

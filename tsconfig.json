@@ -30,5 +30,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  // functions/ punya tsconfig sendiri (lihat functions/tsconfig.json).
+  // Tipe Cloudflare Workers (Response, Request, crypto) mendefinisikan ulang
+  // beberapa global dengan cara yang berbeda dari lib "dom" milik Next —
+  // digabung dalam satu tsconfig, keduanya saling bentrok.
+  "exclude": ["node_modules", "functions"]
 }

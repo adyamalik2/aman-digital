@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aman-digital",
+  "compatibility_date": "2026-08-21",
+  "pages_build_output_dir": "out",
+
+  // AMAN_LEDGER: penyimpanan kode akses & ikatan perangkat untuk
+  // /produk-digital (dan tool berbayar berikutnya, memakai awalan kode
+  // berbeda per produk — sama seperti sold-*.json di situs PHP lama).
+  // "id" diisi setelah namespace-nya dibuat lewat `wrangler kv namespace create`.
+  "kv_namespaces": [
+    { "binding": "AMAN_LEDGER", "id": "bafb921cce8e4a3bb73e89db2af90b9b" }
+  ]
+}

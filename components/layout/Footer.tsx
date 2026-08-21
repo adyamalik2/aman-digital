@@ -11,6 +11,8 @@ const produk = [
   { label: "AMAN Kasir", href: "/kasir" },
   { label: "AMAN Budget", href: "/budget" },
   { label: "AMAN Invoice", href: "/invoice" },
+  { label: "AMAN Engine", href: "/aman-engine" },
+  { label: "Produk Digital (700+)", href: "/digital-store" },
   { label: "Paket Harga", href: "/harga" },
 ];
 

@@ -10,5 +10,12 @@
   // "id" diisi setelah namespace-nya dibuat lewat `wrangler kv namespace create`.
   "kv_namespaces": [
     { "binding": "AMAN_LEDGER", "id": "bafb921cce8e4a3bb73e89db2af90b9b" }
+  ],
+
+  // DB: artikel blog. Menggantikan Notion -- ditulis lewat /admin/blog,
+  // dibaca & dirender langsung oleh Pages Functions (bukan static export),
+  // supaya terbit tanpa perlu rebuild situs.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "aman-blog", "database_id": "2cb3d9b6-92f4-44b9-93bb-932f73389a0d" }
   ]
 }

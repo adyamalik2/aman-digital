@@ -130,9 +130,14 @@ export default function AdminDashboardPage() {
       <div className="mx-auto max-w-5xl">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-xl font-black">🗂️ Admin Stok Kode Akses</h1>
-          <a href="/admin/logout" className="rounded-full border border-white/10 px-4 py-1.5 text-xs font-semibold text-slate-400 hover:text-white">
-            Keluar
-          </a>
+          <div className="flex items-center gap-3">
+            <a href="/admin/blog" className="rounded-full border border-white/10 px-4 py-1.5 text-xs font-semibold text-slate-300 hover:text-white">
+              📝 Kelola Blog
+            </a>
+            <a href="/admin/logout" className="rounded-full border border-white/10 px-4 py-1.5 text-xs font-semibold text-slate-400 hover:text-white">
+              Keluar
+            </a>
+          </div>
         </div>
 
         <div className="mt-6 flex gap-2">

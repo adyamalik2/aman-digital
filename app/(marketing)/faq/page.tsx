@@ -54,7 +54,7 @@ const faqs: Faq[] = [
   {
     category: "umum",
     q: "Apa saja metode pembayaran yang diterima?",
-    a: "Kami menerima transfer bank (BCA, BRI, BNI, Mandiri) dan dompet digital (GoPay, OVO, Dana). Detail rekening diberikan saat proses pemesanan.",
+    a: "Untuk layanan (Data & System, IT Advisor, Print Center, Creative Studio, Digital Store): harga disepakati dulu lewat WhatsApp, baru pembayaran diatur langsung di sana — tidak ada nomor rekening baku yang dipasang di muka. Untuk produk digital (AMAN Engine, Content Engine, Poster Generator, 700+ Produk Digital): checkout otomatis lewat Lynk.id.",
   },
   {
     category: "umum",

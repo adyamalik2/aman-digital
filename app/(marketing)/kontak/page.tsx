@@ -11,7 +11,7 @@ const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 export const metadata = pageMeta({
   title: "Kontak | AMAN Digital",
   description:
-    "Hubungi tim AMAN Digital via WhatsApp, email, atau media sosial. Konsultasi awal gratis untuk kebutuhan digital bisnis Anda.",
+    "Hubungi tim AMAN Digital via WhatsApp, telepon, atau media sosial. Konsultasi awal gratis untuk kebutuhan digital bisnis Anda.",
   path: "/kontak",
 });
 
@@ -101,21 +101,26 @@ export default function KontakPage() {
             </a>
           </div>
 
-          {/* Email */}
+          {/* Telepon — sementara menggantikan kartu Email. admin@amandigital.web.id
+              ikut mati bersama hosting lama (nameserver domain masih milik
+              Rumahweb; hosting sudah di-terminate 21 Agu 2026). Nomor yang sama
+              dengan kartu WhatsApp di atas, tapi jalur telepon langsung — bukan
+              duplikat, supaya tidak ada dua kartu WA identik berdampingan.
+              Kembalikan jadi kartu Email setelah domain aktif lagi di hosting baru. */}
           <div className="flex flex-col rounded-2xl border-t-4 border-sky-500 bg-white p-8">
-            <div className="text-3xl">✉️</div>
-            <h3 className="mt-4 text-xl font-bold text-navy">Email</h3>
+            <div className="text-3xl">📞</div>
+            <h3 className="mt-4 text-xl font-bold text-navy">Telepon</h3>
             <p className="mt-2 font-semibold text-slate-700">
-              admin@amandigital.web.id
+              +62 822-1076-8038
             </p>
             <p className="mt-1 flex-1 text-sm italic text-slate-500">
-              Respon dalam 1x24 jam
+              Bisa telepon langsung di jam kerja
             </p>
             <a
-              href="mailto:admin@amandigital.web.id"
+              href="tel:+6282210768038"
               className="mt-6 block rounded-full bg-sky-500 px-4 py-2.5 text-center text-sm font-bold text-white transition-opacity hover:opacity-90"
             >
-              Kirim Email
+              Telepon Sekarang
             </a>
           </div>
 

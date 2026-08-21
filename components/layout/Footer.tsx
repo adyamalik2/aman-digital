@@ -141,12 +141,18 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                ✉️{" "}
+                {/* Sementara diarahkan ke WhatsApp — email admin@amandigital.web.id
+                    ikut mati bersama hosting lama (nameserver domain masih milik
+                    Rumahweb; hosting sudah di-terminate 21 Agu 2026). Kembalikan
+                    setelah domain dipasang di hosting baru & email aktif lagi. */}
+                💬{" "}
                 <a
-                  href="mailto:admin@amandigital.web.id"
+                  href={`${WA}?text=${encodeURIComponent("Halo AMAN Digital, saya ingin bertanya.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="transition-colors hover:text-emerald"
                 >
-                  admin@amandigital.web.id
+                  Chat via WhatsApp
                 </a>
               </li>
               <li>⏰ Senin–Jumat, 09.00–21.00 WIB</li>

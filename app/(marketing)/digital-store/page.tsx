@@ -4,6 +4,7 @@ import {
   Smartphone,
   Bot,
   Headset,
+  Boxes,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -30,6 +31,16 @@ type Product = {
 };
 
 const products: Product[] = [
+  {
+    icon: Boxes,
+    title: "700+ Produk Digital 2026",
+    desc: "Koleksi produk digital siap pakai: 44 pilihan terkurasi (tema Islami, edukasi anak, game ringan, plus bonus template & tools) — dan akses folder Google Drive berisi 700+ berkas lengkap. Satu kode akses, langsung buka semua, tinggal klik tanpa unduh satu per satu.",
+    cta: {
+      label: "Beli di Lynk.id",
+      href: "https://lynk.id/adya.malik",
+      type: "lynk",
+    },
+  },
   {
     icon: LayoutDashboard,
     title: "Template Bisnis",
@@ -129,6 +140,17 @@ export default function DigitalStorePage() {
                       IT Advisor
                     </Link>
                     .
+                  </p>
+                )}
+                {p.title === "700+ Produk Digital 2026" && (
+                  <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                    Sudah beli?{" "}
+                    <Link
+                      href="/produk-digital"
+                      className="font-semibold text-emerald hover:text-emerald-dark"
+                    >
+                      Masuk pakai kode akses →
+                    </Link>
                   </p>
                 )}
               </div>

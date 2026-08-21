@@ -14,23 +14,32 @@ import {
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-const KASIR_APP_URL = "https://amandigital.web.id/aman-kasir/";
+// KASIR_APP_URL sengaja TIDAK dipakai lagi untuk tombol "Mulai Gratis" /
+// "Coba Gratis Sekarang" — lihat catatan di dekat pemakaiannya di bawah.
 
 /* ---------------- Data ---------------- */
 
+// Hanya Gratis yang punya jalur aktivasi otomatis. Dasar & Pro belum bisa
+// dibeli langsung, jadi labelnya "Daftar Minat" (bukan "Pilih Paket") dan
+// hanya mengantar ke WhatsApp untuk didaftarkan — tidak menjanjikan
+// aktivasi instan yang sebenarnya belum ada.
 const ctaByTier: Record<
   TierKey,
   { label: string; href: string; variant: "primary" | "ghost" }
 > = {
-  gratis: { label: "Mulai Gratis", href: KASIR_APP_URL, variant: "ghost" },
-  dasar: {
-    label: "Pilih Paket Dasar",
-    href: wa("Halo AMAN Digital, saya ingin berlangganan paket Dasar."),
+  gratis: {
+    label: "Mulai Gratis",
+    href: wa("Halo AMAN Digital, saya ingin coba AMAN Kasir/Budget/Invoice gratis."),
     variant: "primary",
   },
+  dasar: {
+    label: "Daftar Minat",
+    href: wa("Halo AMAN Digital, saya ingin didaftarkan minat untuk paket Dasar."),
+    variant: "ghost",
+  },
   pro: {
-    label: "Pilih Paket Pro",
-    href: wa("Halo AMAN Digital, saya ingin berlangganan paket Pro."),
+    label: "Daftar Minat",
+    href: wa("Halo AMAN Digital, saya ingin didaftarkan minat untuk paket Pro."),
     variant: "ghost",
   },
 };
@@ -61,9 +70,13 @@ const faqs = [
     a: "Ya. Satu paket berlaku untuk ketiga aplikasi AMAN — Kasir, Budget, dan Invoice. Anda tidak perlu berlangganan terpisah untuk setiap aplikasi.",
   },
   {
-    q: "Metode pembayaran apa yang tersedia?",
-    a: "Saat ini pembayaran dilakukan via transfer bank (BCA, Mandiri, BRI, BNI). Konfirmasi via WhatsApp setelah transfer dan akun Anda akan diaktifkan dalam 1×24 jam.",
+    q: "Berapa lama waktu respons support?",
+    a: "Selama Early Access semua pengguna dijawab sama cepatnya — biasanya dalam 1–2 jam di jam kerja, tanpa dibedakan berdasarkan paket.",
   },
+  // TODO(pemilik): paragraf metode pembayaran sebelumnya menyebut transfer
+  // bank (BCA/Mandiri/BRI/BNI) dengan aktivasi 1x24 jam — belum terverifikasi
+  // ini benar-benar jalur yang berjalan. Isi ulang setelah dikonfirmasi;
+  // jangan publikasikan janji pembayaran yang belum tentu berlaku.
   {
     q: "Apakah data saya aman jika saya downgrade atau berhenti berlangganan?",
     a: "Data Anda tetap tersimpan. Jika downgrade ke Gratis, data lama tetap ada — hanya fitur berbayar yang tidak bisa digunakan lagi. Kami tidak menghapus data tanpa persetujuan Anda.",
@@ -237,10 +250,6 @@ export default function HargaPage() {
           })}
         </div>
 
-        <p className="mx-auto mt-6 max-w-3xl text-xs text-slate-500">
-          * Harga adalah contoh awal dan dapat berubah sewaktu-waktu. Konfirmasi
-          harga terkini via WhatsApp.
-        </p>
       </section>
 
       {/* ===== COMPARISON TABLE ===== */}
@@ -405,7 +414,7 @@ export default function HargaPage() {
                 Konsultasi via WhatsApp
               </a>
               <a
-                href={KASIR_APP_URL}
+                href={wa("Halo AMAN Digital, saya ingin coba AMAN Kasir/Budget/Invoice gratis.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-full border border-slate-300 px-8 py-3 font-semibold text-slate-700 transition-colors hover:border-emerald hover:text-emerald"

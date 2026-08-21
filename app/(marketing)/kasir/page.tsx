@@ -15,7 +15,11 @@ import {
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-const APP_URL = "https://amandigital.web.id/aman-kasir/";
+// APP_URL DISENGAJA mengarah ke WhatsApp, bukan amandigital.web.id — hosting
+// domain itu sedang dinonaktifkan (~14 hari) untuk pindah paket promo, jadi
+// aplikasinya sendiri tidak bisa diakses sampai migrasi selesai. Kembalikan
+// ke "https://amandigital.web.id/aman-kasir/" setelah hosting baru aktif.
+const APP_URL = wa("Halo, saya ingin coba AMAN Kasir.");
 const DEMO_WA = wa(
   "Halo, saya ingin minta demo AMAN Kasir untuk warung/toko saya."
 );
@@ -112,7 +116,7 @@ const steps = [
   {
     num: "01",
     title: "Buka Aman Kasir dari browser HP",
-    desc: "Buka amandigital.web.id/aman-kasir/ dari Chrome atau browser modern di HP.",
+    desc: "Hubungi kami via WhatsApp untuk mulai — link aplikasinya kami kirimkan langsung.",
   },
   {
     num: "02",
@@ -977,7 +981,7 @@ export default function KasirPage() {
             </a>
           </div>
           <p className="mt-6 font-mono text-xs text-slate-500">
-            amandigital.web.id/aman-kasir/
+            wa.me/6282210768038
           </p>
         </div>
       </section>

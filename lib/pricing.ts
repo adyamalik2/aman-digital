@@ -6,12 +6,19 @@
  * ulang angka/fitur di page manapun — impor dari sini agar tidak bisa "drift".
  *
  * Canonical:
- *  - Tier: Gratis (Rp0) / Dasar (Rp49.000/bln) / Pro (Rp99.000/bln)
+ *  - Tier: Gratis (Rp0, TERSEDIA SEKARANG) / Dasar (Rp49.000/bln, Segera Hadir)
+ *    / Pro (Rp99.000/bln, Segera Hadir)
  *  - Kasir transaksi   : 100 / 500 / unlimited
  *  - Budget transaksi  : 100 / 500 / unlimited  + Goals 3 / 10 / unlimited
  *  - Invoice           : 10 / 100 / unlimited
- *  - Support WhatsApp  : 3 hari / 24 jam / prioritas 2 jam
  *  - Multi pengguna    : tidak / 2 user / 5 user
+ *
+ * Hanya Gratis yang aktif dijual sekarang — Dasar & Pro belum punya jalur
+ * aktivasi otomatis, jadi CTA-nya "Daftar Minat" (bukan "Pilih Paket"), dan
+ * ribbon "Tersedia Sekarang" ada di Gratis, bukan Dasar. Tidak ada baris
+ * "Support WhatsApp" di FEATURES: respons tidak dibedakan per paket — semua
+ * pengguna dijawab sama cepatnya — jadi tidak masuk akal jadi pembanding
+ * tabel harga. Pernyataannya ada di FAQ halaman /harga.
  */
 
 export type TierKey = "gratis" | "dasar" | "pro";
@@ -41,24 +48,26 @@ export const TIER_META: Record<TierKey, TierMeta> = {
     annual: "Rp 0",
     monthlyPeriod: "selamanya",
     annualPeriod: "selamanya",
+    featured: true,
+    badge: "Tersedia Sekarang",
   },
   dasar: {
     key: "dasar",
     name: "Dasar",
     monthly: "49rb",
-    annual: "392rb",
+    annual: "490rb",
     monthlyPeriod: "per bulan",
-    annualPeriod: "per tahun (hemat Rp 196rb)",
-    featured: true,
-    badge: "Paling Populer",
+    annualPeriod: "per tahun (hemat Rp 98rb)",
+    badge: "Segera Hadir",
   },
   pro: {
     key: "pro",
     name: "Pro",
     monthly: "99rb",
-    annual: "792rb",
+    annual: "990rb",
     monthlyPeriod: "per bulan",
-    annualPeriod: "per tahun (hemat Rp 396rb)",
+    annualPeriod: "per tahun (hemat Rp 198rb)",
+    badge: "Segera Hadir",
   },
 };
 
@@ -100,7 +109,9 @@ export const FEATURES: Feature[] = [
   { id: "invoice-jatuhtempo", group: "Invoice", label: "Pengingat jatuh tempo", values: { gratis: false, dasar: false, pro: true } },
 
   // ── Umum ──
-  { id: "umum-support", group: "Umum", label: "Support WhatsApp", values: { gratis: "3 hari", dasar: "24 jam", pro: "Prioritas 2 jam" } },
+  // TIDAK ADA baris "Support WhatsApp" di sini secara sengaja — lihat catatan
+  // di kepala berkas. Kalau butuh field ini lagi, pastikan nilainya SAMA di
+  // ketiga tier (bukan dibedakan per paket) supaya tidak kembali kontradiksi.
   { id: "umum-multiuser", group: "Umum", label: "Multi pengguna", values: { gratis: false, dasar: "2 user", pro: "5 user" } },
 ];
 
@@ -168,7 +179,6 @@ export function tierCardFeatures(tier: TierKey): TierCardFeature[] {
         { label: `Invoice: ${str("invoice-count", tier)} invoice/bln`, included: true },
         { label: "Download PDF & database pelanggan", included: bool("invoice-pdf", tier) && bool("invoice-db", tier) },
         { label: `Multi pengguna: ${str("umum-multiuser", tier)}`, included: true },
-        { label: `Support WhatsApp: ${str("umum-support", tier)}`, included: true },
       ];
     case "pro":
       return [
@@ -177,7 +187,6 @@ export function tierCardFeatures(tier: TierKey): TierCardFeature[] {
         { label: `Multi pengguna: ${str("umum-multiuser", tier)}`, included: true },
         { label: "Family Sync, OCR Struk & Reminder", included: bool("budget-familysync", tier) && bool("budget-ocr", tier) && bool("budget-reminder", tier) },
         { label: "Logo usaha & laporan piutang", included: bool("invoice-logo", tier) && bool("invoice-piutang", tier) },
-        { label: `Support WhatsApp: ${str("umum-support", tier)}`, included: true },
       ];
   }
 }

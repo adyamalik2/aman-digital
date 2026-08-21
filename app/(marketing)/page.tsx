@@ -106,7 +106,9 @@ const apps = [
       "Laporan omzet harian",
       "Bisa pakai offline",
     ],
-    appUrl: "https://amandigital.web.id/aman-kasir/",
+    // Sementara ke WhatsApp — amandigital.web.id nonaktif ~14 hari untuk
+    // migrasi hosting. Kembalikan URL aslinya setelah hosting baru aktif.
+    appUrl: wa("Halo, saya ingin coba AMAN Kasir."),
     detail: "/kasir",
   },
   {
@@ -119,7 +121,7 @@ const apps = [
       "Kalkulator zakat",
       "Gratis untuk mulai",
     ],
-    appUrl: "https://amandigital.web.id/aman-budget/",
+    appUrl: wa("Halo, saya ingin coba AMAN Budget."),
     detail: "/budget",
   },
   {
@@ -132,7 +134,7 @@ const apps = [
       "Kelola data pelanggan",
       "Kirim via WhatsApp",
     ],
-    appUrl: "https://amandigital.web.id/aman-invoice1/",
+    appUrl: wa("Halo, saya ingin coba AMAN Invoice."),
     detail: "/invoice",
   },
 ];

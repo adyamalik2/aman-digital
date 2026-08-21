@@ -32,7 +32,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   await ratelimitReset(context.env.AMAN_LEDGER, RATE_SCOPE, ip);
 
-  const headers = new Headers({ Location: "/aman-engine/app" });
+  const headers = new Headers({ Location: "/aman-engine/app/" });
   if (result.status === "ok-new" && result.token) {
     headers.append("Set-Cookie", setDeviceCookieHeader(DEV_COOKIE, result.token, PATH));
   }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMAN Engine — Storyboard Generator</title>
+    <meta name="description" content="AMAN Engine: alat AI untuk merangkai storyboard & prompt konten faceless TikTok/Instagram yang konsisten.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" type="image/png" href="/images/logo-tab.png">
+    <link rel="stylesheet" href="/aman-engine-app/tool.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .sparkle-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            transition: all 0.3s ease;
+        }
+        .sparkle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .loading-ring {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+
+        .code-block::-webkit-scrollbar { height: 8px; }
+        .code-block::-webkit-scrollbar-track { background: #1f2937; }
+        .code-block::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .aman-logout {
+            position: fixed; right: 14px; top: 14px; z-index: 9999;
+            font: 600 12px system-ui, sans-serif; text-decoration: none; color: #6b7280;
+            background: #fff; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <a class="aman-logout" href="/aman-engine/logout">Keluar</a>
+
+    <script src="/aman-engine-app/react.min.js"></script>
+    <script src="/aman-engine-app/react-dom.min.js"></script>
+    <script src="/aman-engine-app/app.js"></script>
+</body>
+</html>

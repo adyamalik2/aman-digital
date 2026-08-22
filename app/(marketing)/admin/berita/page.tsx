@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { marked } from "marked";
 
 type ArticleListItem = {
@@ -943,6 +943,7 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
   const [form, setForm] = useState(emptyAffForm);
   const [uploading, setUploading] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const formRef = useRef<HTMLDivElement>(null);
   const [bulkText, setBulkText] = useState("");
   const [bulkWithPrice, setBulkWithPrice] = useState(false);
   const [bulkPreview, setBulkPreview] = useState<{ title: string; url: string; price: string; merchant: string; image: string; error: string; warn: string }[] | null>(null);
@@ -1101,12 +1102,17 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
     finally { setDeleteAllBusy(false); }
   };
 
+  const editItem = (it: AffiliateItemRow) => {
+    setForm({ id: it.id, title: it.title, url: it.url, image: it.image, price_text: it.price_text, merchant: it.merchant, note: it.note, category_id: it.category_id ?? "", sort_order: it.sort_order, is_active: !!it.is_active });
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="mt-6">
       <p className="mb-4 text-sm text-slate-400">
         Widget &quot;Belanja Pilihan&quot; tampil di beranda, bawah artikel, dan halaman kategori/pencarian — otomatis tersembunyi kalau belum ada produk aktif.
       </p>
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+      <div ref={formRef} className="scroll-mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
         <h3 className="mb-3 text-sm font-bold">{form.id ? "Edit Produk" : "Tambah Produk Afiliasi"}</h3>
         <div className="grid gap-3 sm:grid-cols-2">
           <input type="text" placeholder="Nama produk" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} className={inputCls} />
@@ -1250,7 +1256,7 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
                   <div className="flex gap-2">
-                    <button onClick={() => setForm({ id: it.id, title: it.title, url: it.url, image: it.image, price_text: it.price_text, merchant: it.merchant, note: it.note, category_id: it.category_id ?? "", sort_order: it.sort_order, is_active: !!it.is_active })} className="rounded-full border border-white/15 px-3 py-1 text-xs">Edit</button>
+                    <button onClick={() => editItem(it)} className="rounded-full border border-white/15 px-3 py-1 text-xs">Edit</button>
                     <button onClick={() => remove(it.id)} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">🗑</button>
                   </div>
                 </td>

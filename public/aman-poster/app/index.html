@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMAN Poster Generator</title>
+  <meta name="description" content="Racik prompt poster promosi (JSON + teks) siap pakai untuk Canva, ChatGPT, Gemini & AI gambar lainnya.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/images/logo-tab.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/aman-poster-app/tool.css">
+  <style>
+    .aman-logout {
+      position: fixed; right: 14px; top: 14px; z-index: 9999;
+      font: 600 12px system-ui, sans-serif; text-decoration: none; color: #6b7280;
+      background: #fff; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+  </style>
+</head>
+<body>
+  <a class="aman-logout" href="/aman-poster/logout">Keluar</a>
+  <div class="wrap">
+    <header class="app-head">
+      <h1>AMAN Poster Generator Pro</h1>
+      <p class="tag">Racik prompt poster siap pakai untuk Canva, ChatGPT, Gemini &amp; AI gambar lainnya.</p>
+    </header>
+
+    <main class="grid">
+      <div class="col">
+        <div class="reset-row">
+          <button id="reset-btn" class="btn-reset">🗑️ Bersihkan Data</button>
+        </div>
+
+        <section class="card">
+          <span class="accent accent-cyan"></span>
+          <h2 class="card-title cyan">🏪 1. Info Bisnis &amp; Strategi</h2>
+
+          <div class="grid2">
+            <div class="field">
+              <label class="field-label" for="business-category">Kategori Usaha</label>
+              <select id="business-category" class="select">
+                <option value="edukasi" selected>📚 Edukasi &amp; Kursus</option>
+                <option value="teknologi">💻 Teknologi &amp; Komputer</option>
+                <option value="kuliner">🍔 Kuliner (F&amp;B)</option>
+                <option value="fashion">👗 Fashion &amp; Style</option>
+                <option value="jasa">🛠️ Jasa &amp; Service</option>
+                <option value="properti">🏠 Properti</option>
+                <option value="percetakan">🖨️ Percetakan &amp; Digital Printing</option>
+                <option value="event">🎉 Event &amp; Hiburan</option>
+                <option value="umum">✨ Produk Umum</option>
+                <option value="other">✨ Lainnya (Ketik Sendiri)</option>
+              </select>
+              <input type="text" id="business-category-manual" class="input manual-input hidden-input" placeholder="Ketik kategori usaha Anda...">
+            </div>
+            <div class="field">
+              <label class="field-label" for="target-audience">Target Audiens (Siapa?)</label>
+              <input type="text" id="target-audience" class="input" placeholder="Contoh: Siswa SD &amp; SMP, Gamer, Mahasiswa">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="brand-name">Nama Brand / Toko</label>
+            <input type="text" id="brand-name" class="input" placeholder="Contoh: AMAN DIGITAL / Toko Komputer Abdaya">
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label class="field-label" for="headline-text">Headline Promo</label>
+              <button id="btn-idea-headline" class="btn-ai ai-cyan" title="Perbaiki headline saya dengan AI">✨ Perbaiki Headline</button>
+            </div>
+            <input type="text" id="headline-text" class="input" placeholder="Contoh: YUK, JADI JAGOAN KOMPUTER CILIK!">
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label class="field-label" for="selling-point">Keunggulan Utama (USP)</label>
+              <button id="btn-idea-usp" class="btn-ai ai-yellow" title="Buat keunggulan produk dengan AI">⭐ Ide Keunggulan</button>
+            </div>
+            <input type="text" id="selling-point" class="input" placeholder="Contoh: Belajar Seru, Aman, Guru Sabar">
+          </div>
+        </section>
+
+        <section class="card">
+          <span class="accent accent-purple"></span>
+          <h2 class="card-title purple">🎨 2. Detail Desain Visual</h2>
+
+          <div class="grid2">
+            <div class="field">
+              <label class="field-label" for="design-type-select">Jenis Desain (Output Type)</label>
+              <select id="design-type-select" class="select"></select>
+              <input type="text" id="design-type-manual" class="input manual-input hidden-input" placeholder="Contoh: Kartu Nama, Cover Buku...">
+            </div>
+            <div class="field">
+              <label class="field-label" for="orientation-select">Format Ratio</label>
+              <select id="orientation-select" class="select">
+                <option value="square" selected>1:1 (Feed Instagram/WA)</option>
+                <option value="vertical">9:16 (TikTok/Story/Reels)</option>
+                <option value="portrait">4:5 (IG Portrait)</option>
+                <option value="landscape">16:9 (YouTube/Banner)</option>
+                <option value="other">📐 Lainnya (Custom)</option>
+              </select>
+              <input type="text" id="orientation-manual" class="input manual-input hidden-input" placeholder="Contoh: 3:1, 2:3...">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label class="field-label" id="label-content-details" for="content-details">Detail Isi / Materi</label>
+              <button id="btn-idea-content" class="btn-ai ai-pink" title="Biarkan AI mengisi detail materi sesuai jenis desain">📋 Isi Materi Otomatis</button>
+            </div>
+            <textarea id="content-details" class="textarea" placeholder="- Masukkan detail..."></textarea>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label class="field-label" for="visual-style-select">Gaya Gambar (Art Style)</label>
+              <select id="visual-style-select" class="select">
+                <option value="auto">✨ Otomatis (Sesuai Kategori)</option>
+                <option value="3d-cartoon" selected>🎨 Kartun 3D Ceria (Disney/Pixar)</option>
+                <option value="realistic">📸 Foto Realistik (Manusia Asli)</option>
+                <option value="vector">📐 Vektor Flat Design (Grafis)</option>
+                <option value="anime">⛩️ Anime / Manga</option>
+                <option value="cyberpunk">🌃 Cyberpunk / Neon Tech</option>
+                <option value="minimalist">⚪ Minimalist &amp; Clean</option>
+                <option value="luxury">💎 Luxury / Gold &amp; Black</option>
+                <option value="vintage">🎞️ Vintage / Retro 90s</option>
+                <option value="watercolor">🖌️ Watercolor / Lukisan Air</option>
+                <option value="other">✏️ Lainnya (Custom Style)</option>
+              </select>
+              <input type="text" id="visual-style-manual" class="input manual-input hidden-input" placeholder="Contoh: Gothic Dark, Sketch Pensil...">
+            </div>
+            <div class="field">
+              <label class="field-label" for="lighting-mood">Pencahayaan &amp; Mood</label>
+              <select id="lighting-mood" class="select">
+                <option value="bright" selected>☀️ Terang &amp; Ceria (Daylight)</option>
+                <option value="cinematic">🎬 Cinematic &amp; Dramatis</option>
+                <option value="studio">💡 Studio Lighting (Produk)</option>
+                <option value="neon">🟣 Neon &amp; Glowing (Malam)</option>
+                <option value="warm">🔥 Warm &amp; Cozy (Hangat)</option>
+                <option value="soft">☁️ Soft &amp; Pastel (Lembut)</option>
+                <option value="other">💡 Lainnya (Custom Mood)</option>
+              </select>
+              <input type="text" id="lighting-mood-manual" class="input manual-input hidden-input" placeholder="Contoh: Gelap Misterius, Sunset...">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="color-palette">Nuansa Warna Dominan</label>
+            <input type="text" id="color-palette" class="input" placeholder="Contoh: Biru Muda, Kuning, Hijau Cerah">
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <div class="label-row">
+                <label class="field-label" for="price-text">Harga / Penawaran</label>
+                <button id="btn-idea-price" class="btn-ai ai-red" title="Buat penawaran menarik dengan AI">🏷️ Ide Promo</button>
+              </div>
+              <input type="text" id="price-text" class="input" placeholder="Contoh: HANYA Rp 199.000 / Bulan">
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label class="field-label" for="contact-text">Kontak / CTA</label>
+                <button id="btn-idea-cta" class="btn-ai ai-green" title="Buat CTA berdasarkan headline &amp; harga">📢 Ide CTA</button>
+              </div>
+              <input type="text" id="contact-text" class="input" placeholder="Contoh: WA: 0811-XXXX-XXXX">
+            </div>
+          </div>
+
+          <div class="field" style="border-top:1px solid var(--line); padding-top:16px;">
+            <div class="label-row">
+              <label class="field-label" for="product-desc">Deskripsi Visual</label>
+              <button id="btn-enhance-desc" class="btn-ai ai-purple" title="Buat deskripsi visual pro berdasarkan SEMUA data di atas">🪄 RACIK VISUAL DARI DATA</button>
+            </div>
+            <textarea id="product-desc" class="textarea" placeholder="Klik tombol 'Racik Visual' di atas, atau tulis sendiri gambaran visual poster yang diinginkan..."></textarea>
+          </div>
+        </section>
+
+        <button id="generate-btn" class="btn-primary">🧩 BUAT PROMPT</button>
+      </div>
+
+      <div class="col">
+        <section class="card result-card">
+          <div class="result-head">
+            <h2>Prompt Siap Pakai</h2>
+            <span id="model-badge" class="badge">Bantuan AI</span>
+          </div>
+
+          <p class="howto-line">Isi form di kiri → klik <b>Buat Prompt</b> → <b>Salin</b> → tempel di
+            <b>Canva Magic Media</b>, <b>ChatGPT</b>, <b>Gemini</b>, atau AI gambar lainnya untuk membuat gambarnya.</p>
+
+          <div class="result-box json-box">
+            <div id="empty-state" class="empty-state">
+              <div class="big">🧩</div>
+              <p>Lengkapi Formulir di kiri, lalu klik <b>Buat Prompt</b>.</p>
+              <p style="font-size:.82rem; color:var(--faint)">Semakin lengkap infonya, semakin bagus hasil promptnya.</p>
+            </div>
+            <pre id="json-output" class="json-output hidden-input"></pre>
+          </div>
+
+          <div class="prompt-block">
+            <div class="prompt-head">
+              <label class="field-label" style="margin:0">Salin prompt:</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button id="copy-json-btn" class="btn-sm slate" title="Salin seluruh prompt dalam format JSON">📋 Salin JSON</button>
+                <button id="copy-canva-btn" class="btn-sm indigo" title="Salin hanya deskripsi visual (untuk Canva Magic Media)">🖌️ Salin teks visual (Canva)</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="marketing-tips-section" class="tips-block hidden-input">
+            <div class="tips-head">
+              <h3>✨ Strategi Pemasaran AI</h3>
+              <span class="badge info">Gemini AI</span>
+            </div>
+            <div id="marketing-tips-content" class="tips-content"></div>
+            <button id="btn-get-tips" class="btn-tips">💡 Dapatkan Tips Cara Jualan Produk Ini</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="confirm-modal" class="modal hidden-input">
+    <div class="modal-card">
+      <div class="m-icon">⚠️</div>
+      <h3>Hapus Semua Data?</h3>
+      <p>Tindakan ini akan mengosongkan semua kolom input dan menghapus hasil prompt.</p>
+      <div class="modal-actions">
+        <button id="cancel-reset-btn" class="btn-cancel">Batal</button>
+        <button id="confirm-reset-btn" class="btn-danger">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✅ <span id="toast-msg">Success</span></div>
+
+  <script src="/aman-poster-app/app.js"></script>
+</body>
+</html>

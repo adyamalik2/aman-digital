@@ -50,3 +50,28 @@ export async function ratelimitFail(kv: KVNamespace, scope: string, ip: string):
 export async function ratelimitReset(kv: KVNamespace, scope: string, ip: string): Promise<void> {
   await kv.delete(rlKey(scope, ip));
 }
+
+/**
+ * Batas PEMAKAIAN (bukan percobaan gagal) — mis. berapa kali sebuah endpoint
+ * AI boleh dipanggil per IP dalam jendela waktu tertentu. Port dari
+ * ampos_rate_limit() di aman-poster/proxy.php (dulu per-sesi+IP berbasis
+ * file; di sini per-IP lewat KV supaya berlaku lintas-request/edge).
+ * Return null = boleh lanjut. Return angka = detik sisa sebelum boleh coba lagi.
+ */
+export async function checkUsageLimit(
+  kv: KVNamespace,
+  scope: string,
+  ip: string,
+  limit: number,
+  windowSeconds: number
+): Promise<number | null> {
+  const key = `use:${scope}:${ip}`;
+  const now = Math.floor(Date.now() / 1000);
+  const raw = await kv.get(key);
+  let e: { count: number; resetAt: number } = raw ? JSON.parse(raw) : { count: 0, resetAt: now + windowSeconds };
+  if (e.resetAt <= now) e = { count: 0, resetAt: now + windowSeconds };
+  if (e.count >= limit) return e.resetAt - now;
+  e.count++;
+  await kv.put(key, JSON.stringify(e), { expirationTtl: windowSeconds + 5 });
+  return null;
+}

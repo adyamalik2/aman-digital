@@ -13,6 +13,7 @@ const produk = [
   { label: "AMAN Invoice", href: "/invoice" },
   { label: "AMAN Engine", href: "/aman-engine" },
   { label: "AMAN Content Engine", href: "/aman-content-engine" },
+  { label: "AMAN Poster Generator", href: "/aman-poster" },
   { label: "Produk Digital (700+)", href: "/digital-store" },
   { label: "Paket Harga", href: "/harga" },
 ];

@@ -12,11 +12,12 @@ type CodeEntry = {
   email?: string;
 };
 
-type Product = "produk-digital" | "aman-engine";
+type Product = "produk-digital" | "aman-engine" | "aman-content-engine";
 
 const PRODUCTS: { key: Product; label: string }[] = [
   { key: "produk-digital", label: "AMAN Product Digital" },
   { key: "aman-engine", label: "AMAN Engine" },
+  { key: "aman-content-engine", label: "AMAN Content Engine" },
 ];
 
 const MAX_DEVICES = 5;

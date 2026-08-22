@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMAN Content Engine</title>
+  <meta name="description" content="AMAN Content Engine: ubah satu topik jadi paket konten siap produksi untuk TikTok & Instagram Reels.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/images/logo-tab.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/aman-content-engine-app/tool.css">
+  <style>
+    .aman-logout {
+      position: fixed; right: 14px; top: 14px; z-index: 9999;
+      font: 600 12px system-ui, sans-serif; text-decoration: none; color: #6b7280;
+      background: #fff; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+  </style>
+</head>
+<body>
+  <a class="aman-logout" href="/aman-content-engine/logout">Keluar</a>
+  <div class="wrap">
+    <header class="app-head">
+      <img class="logo" src="/images/logo-header.webp" alt="AMAN Digital">
+      <div>
+        <h1>AMAN Content Engine <span class="badge">v2</span></h1>
+        <p class="tag">Satu topik → paket konten siap produksi. TikTok &amp; Instagram Reels.</p>
+      </div>
+    </header>
+
+    <p class="howto">📝 Cara pakai: <b>ketik topik</b> → <b>klik Buat Konten</b> → <b>salin</b> hasilnya. Selesai.</p>
+
+    <section class="card" aria-label="Buat konten">
+      <label class="field-label" for="topic">Topik · ide · masalah · pertanyaan</label>
+      <textarea id="topic" placeholder="mis. stok toko sering selisih" maxlength="600" autofocus></textarea>
+
+      <div class="idea-gen">
+        <div class="idea-row">
+          <input type="text" id="ideaNiche" maxlength="120"
+            placeholder="Belum ada ide? Tulis usaha/niche kamu — mis. toko fotokopi">
+          <button type="button" id="ideaBtn" class="idea-btn">💡 Carikan Ide</button>
+        </div>
+        <div class="starters" id="starters" aria-label="Ide topik — klik untuk pakai">
+          <span class="starters-label">Contoh:</span>
+          <button type="button" class="starter-chip">stok toko sering selisih</button>
+          <button type="button" class="starter-chip">cara promo tanpa terkesan lebay</button>
+          <button type="button" class="starter-chip">uang usaha campur sama uang pribadi</button>
+          <button type="button" class="starter-chip">pelanggan cuma lihat-lihat tapi nggak beli</button>
+        </div>
+      </div>
+
+      <div class="modes" id="modes" role="group" aria-label="Pilih mode">
+        <button type="button" class="mode-chip active" data-mode="cepat">Cepat</button>
+        <button type="button" class="mode-chip" data-mode="lengkap">Lengkap</button>
+        <button type="button" class="mode-chip" data-mode="reels">Reels</button>
+        <button type="button" class="mode-chip" data-mode="carousel">Carousel</button>
+        <button type="button" class="mode-chip" data-mode="faceless">Faceless</button>
+        <button type="button" class="mode-chip" data-mode="jualan">Jualan</button>
+        <button type="button" class="mode-chip" data-mode="edukasi">Edukasi Murni</button>
+        <button type="button" class="mode-chip" data-mode="tujuh_hari">7 Hari</button>
+      </div>
+      <div class="mode-hint" id="modeHint"></div>
+
+      <details class="advanced">
+        <summary>Opsi lanjutan (opsional) — atur audiens &amp; funnel sendiri</summary>
+        <div class="adv-grid">
+          <div>
+            <label for="audience">Audiens utama</label>
+            <select id="audience">
+              <option value="">Biar engine memilih</option>
+              <option>Pemilik UMKM</option>
+              <option>Pemilik toko</option>
+              <option>Penjual online</option>
+              <option>Pelaku usaha makanan</option>
+              <option>Admin usaha</option>
+              <option>Freelancer</option>
+              <option>Pekerja kantor</option>
+              <option>Keluarga</option>
+              <option>Guru</option>
+              <option>Kreator konten</option>
+              <option>Reseller produk digital</option>
+              <option>Pemilik kantor kecil</option>
+            </select>
+          </div>
+          <div>
+            <label for="funnel">Tahap funnel</label>
+            <select id="funnel">
+              <option value="">Biar engine memilih</option>
+              <option>Awareness</option>
+              <option>Consideration</option>
+              <option>Conversion</option>
+              <option>Retention</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <button type="button" id="generate" class="btn-primary">
+        <span id="genLabel">✨ Buat Konten</span>
+      </button>
+    </section>
+
+    <section id="outputSection" hidden aria-live="polite">
+      <div class="output-toolbar">
+        <span class="meta" id="outputMeta"></span>
+        <button type="button" class="btn-sm" id="copyAll">📋 Salin semua</button>
+        <button type="button" class="btn-sm" id="regen">↻ Ulangi</button>
+      </div>
+      <article id="output" class="markdown"></article>
+    </section>
+
+    <section id="historySection" hidden>
+      <div class="history-head">
+        <h3>Riwayat</h3>
+        <button type="button" class="btn-sm" id="clearHistory">Hapus riwayat</button>
+      </div>
+      <ul class="history-list" id="historyList"></ul>
+    </section>
+  </div>
+
+  <script src="/aman-content-engine-app/app.js"></script>
+</body>
+</html>

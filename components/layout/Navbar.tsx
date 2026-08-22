@@ -28,6 +28,7 @@ const dropdowns: { key: DropdownKey; label: string; items: NavItem[] }[] = [
       { label: "AMAN Budget", href: "/budget" },
       { label: "AMAN Invoice", href: "/invoice" },
       { label: "AMAN Engine", href: "/aman-engine" },
+      { label: "AMAN Content Engine", href: "/aman-content-engine" },
       { label: "Produk Digital (700+)", href: "/digital-store" },
     ],
   },

@@ -13,6 +13,7 @@ interface Env {
 const PRODUCTS: Record<string, { prefix: string; label: string }> = {
   "produk-digital": { prefix: "PROD-", label: "AMAN Product Digital" },
   "aman-engine": { prefix: "AMAN-", label: "AMAN Engine" },
+  "aman-content-engine": { prefix: "AMCE-", label: "AMAN Content Engine" },
 };
 
 const jsonError = (status: number, message: string) =>

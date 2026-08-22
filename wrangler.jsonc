@@ -17,5 +17,10 @@
   // supaya terbit tanpa perlu rebuild situs.
   "d1_databases": [
     { "binding": "DB", "database_name": "aman-blog", "database_id": "2cb3d9b6-92f4-44b9-93bb-932f73389a0d" }
+  ],
+
+  // MEDIA: penyimpanan gambar galeri portal berita (upload lewat /admin/blog).
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "aman-blog-media" }
   ]
 }

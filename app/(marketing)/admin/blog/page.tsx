@@ -65,7 +65,7 @@ const inputCls =
 const labelCls = "mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400";
 
 export default function AdminBlogPage() {
-  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "settings">("articles");
+  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "media" | "settings">("articles");
   const [error, setError] = useState("");
 
   return (
@@ -87,6 +87,7 @@ export default function AdminBlogPage() {
             { key: "categories", label: "📂 Kategori" },
             { key: "authors", label: "✍️ Penulis" },
             { key: "comments", label: "💬 Komentar" },
+            { key: "media", label: "🖼️ Media" },
             { key: "settings", label: "⚙️ Pengaturan" },
           ].map((t) => (
             <button
@@ -109,6 +110,7 @@ export default function AdminBlogPage() {
         {tab === "categories" && <CategoriesTab setError={setError} />}
         {tab === "authors" && <AuthorsTab setError={setError} />}
         {tab === "comments" && <CommentsTab setError={setError} />}
+        {tab === "media" && <MediaTab setError={setError} />}
         {tab === "settings" && <SettingsTab setError={setError} />}
       </div>
     </section>
@@ -127,6 +129,26 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
   const [draft, setDraft] = useState(emptyDraft);
   const [preview, setPreview] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
+  const [uploadingThumb, setUploadingThumb] = useState(false);
+
+  const uploadThumbnail = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    setUploadingThumb(true);
+    setError("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/admin/api/media", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || "Gagal upload.");
+      setDraft((d) => ({ ...d, thumbnail: data.url }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal upload.");
+    } finally {
+      setUploadingThumb(false);
+    }
+  };
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -319,7 +341,17 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelCls}>URL Gambar Sampul</label>
-            <input type="text" value={draft.thumbnail} onChange={(e) => setDraft((d) => ({ ...d, thumbnail: e.target.value }))} placeholder="https://…" className={inputCls} />
+            <div className="flex gap-2">
+              <input type="text" value={draft.thumbnail} onChange={(e) => setDraft((d) => ({ ...d, thumbnail: e.target.value }))} placeholder="https://… atau unggah" className={inputCls} />
+              <label className="flex shrink-0 cursor-pointer items-center rounded-lg border border-white/15 px-3 text-xs font-semibold text-slate-300 hover:bg-white/10">
+                {uploadingThumb ? "…" : "📤 Unggah"}
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" disabled={uploadingThumb} onChange={(e) => uploadThumbnail(e.target.files)} />
+              </label>
+            </div>
+            {draft.thumbnail && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={draft.thumbnail} alt="" className="mt-2 h-24 w-40 rounded-lg border border-white/10 object-cover" />
+            )}
           </div>
           <div>
             <label className={labelCls}>URL Video YouTube (opsional)</label>
@@ -631,6 +663,95 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
                 <button disabled={busyId === c.id} onClick={() => act(c.id, "spam")} className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-300 disabled:opacity-50">🚫 Spam</button>
               )}
               <button disabled={busyId === c.id} onClick={() => act(c.id, "delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 disabled:opacity-50">🗑 Hapus</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============================== MEDIA ============================== */
+
+type MediaItem = { key: string; size: number; uploaded: string; url: string };
+
+function formatBytes(n: number): string {
+  if (n < 1024) return n + " B";
+  if (n < 1024 * 1024) return (n / 1024).toFixed(0) + " KB";
+  return (n / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+function MediaTab({ setError }: { setError: (e: string) => void }) {
+  const [items, setItems] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const res = await fetch("/admin/api/media");
+    const data = await res.json();
+    setItems(data.items || []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const upload = async (files: FileList | null) => {
+    if (!files || !files.length) return;
+    setUploading(true);
+    setError("");
+    try {
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/admin/api/media", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error?.message || `Gagal upload ${file.name}.`);
+      }
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal upload.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const remove = async (key: string) => {
+    if (!window.confirm("Hapus gambar ini permanen?")) return;
+    await fetch("/admin/api/media", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", key }) });
+    await load();
+  };
+
+  const copyUrl = (url: string) => {
+    navigator.clipboard.writeText(window.location.origin + url);
+    setCopied(url);
+    setTimeout(() => setCopied(null), 1500);
+  };
+
+  return (
+    <div className="mt-6">
+      <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/20 bg-white/5 p-8 text-center hover:border-emerald/50">
+        <span className="text-2xl">🖼️</span>
+        <span className="text-sm font-semibold">{uploading ? "Mengunggah…" : "Klik untuk pilih gambar (JPG/PNG/WebP/GIF, maks 8MB)"}</span>
+        <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple className="hidden" disabled={uploading} onChange={(e) => upload(e.target.files)} />
+      </label>
+
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        {loading && <p className="col-span-full text-center text-slate-500">Memuat…</p>}
+        {!loading && items.length === 0 && <p className="col-span-full text-center text-slate-500">Belum ada gambar.</p>}
+        {!loading && items.map((it) => (
+          <div key={it.key} className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={it.url} alt="" className="aspect-square w-full object-cover" loading="lazy" />
+            <div className="p-2">
+              <div className="text-[10px] text-slate-500">{formatBytes(it.size)}</div>
+              <div className="mt-1 flex gap-1">
+                <button onClick={() => copyUrl(it.url)} className="flex-1 rounded-full border border-white/10 px-2 py-1 text-[10px] font-semibold hover:bg-white/10">
+                  {copied === it.url ? "✓ Tersalin" : "Salin URL"}
+                </button>
+                <button onClick={() => remove(it.key)} className="rounded-full border border-red-500/30 px-2 py-1 text-[10px] text-red-300 hover:bg-red-500/10">🗑</button>
+              </div>
             </div>
           </div>
         ))}

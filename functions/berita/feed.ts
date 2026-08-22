@@ -43,3 +43,9 @@ ${rssItems}
 
   return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8" } });
 };
+
+// Next.js prefetch link pakai HEAD -- tanpa handler ini rute balas 404 walau GET normal.
+export const onRequestHead: PagesFunction<Env> = async (context) => {
+  const res = await onRequestGet(context);
+  return new Response(null, { status: res.status, statusText: res.statusText, headers: res.headers });
+};

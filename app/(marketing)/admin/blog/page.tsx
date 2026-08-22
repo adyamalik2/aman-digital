@@ -65,7 +65,7 @@ const inputCls =
 const labelCls = "mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400";
 
 export default function AdminBlogPage() {
-  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "settings">("articles");
+  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "settings">("articles");
   const [error, setError] = useState("");
 
   return (
@@ -86,6 +86,7 @@ export default function AdminBlogPage() {
             { key: "articles", label: "📝 Artikel" },
             { key: "categories", label: "📂 Kategori" },
             { key: "authors", label: "✍️ Penulis" },
+            { key: "comments", label: "💬 Komentar" },
             { key: "settings", label: "⚙️ Pengaturan" },
           ].map((t) => (
             <button
@@ -107,6 +108,7 @@ export default function AdminBlogPage() {
         {tab === "articles" && <ArticlesTab setError={setError} />}
         {tab === "categories" && <CategoriesTab setError={setError} />}
         {tab === "authors" && <AuthorsTab setError={setError} />}
+        {tab === "comments" && <CommentsTab setError={setError} />}
         {tab === "settings" && <SettingsTab setError={setError} />}
       </div>
     </section>
@@ -548,6 +550,90 @@ function AuthorsTab({ setError }: { setError: (e: string) => void }) {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+}
+
+/* ============================== KOMENTAR ============================== */
+
+type CommentRow = {
+  id: number;
+  name: string;
+  email: string | null;
+  content: string;
+  created_at: string;
+  article_title: string;
+  article_slug: string;
+};
+
+function CommentsTab({ setError }: { setError: (e: string) => void }) {
+  const [status, setStatus] = useState<"pending" | "approved" | "spam">("pending");
+  const [comments, setComments] = useState<CommentRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState<number | null>(null);
+
+  const load = useCallback(async (s: typeof status) => {
+    setLoading(true);
+    const res = await fetch(`/admin/api/blog?resource=comments&status=${s}`);
+    const data = await res.json();
+    setComments(data.comments || []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(status); }, [status, load]);
+
+  const act = async (id: number, action: "approve" | "spam" | "delete") => {
+    setBusyId(id);
+    try {
+      const res = await fetch("/admin/api/blog", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "comments", action, id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      await load(status);
+    } catch (e) { setError(e instanceof Error ? e.message : "Aksi gagal."); }
+    finally { setBusyId(null); }
+  };
+
+  return (
+    <div className="mt-6">
+      <div className="flex gap-2">
+        {(["pending", "approved", "spam"] as const).map((s) => (
+          <button key={s} onClick={() => setStatus(s)} className={`rounded-full px-4 py-1.5 text-xs font-semibold ${status === s ? "bg-emerald-cta text-white" : "border border-white/10 text-slate-300"}`}>
+            {s === "pending" ? "⏳ Menunggu" : s === "approved" ? "✅ Disetujui" : "🚫 Spam"}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-5 space-y-3">
+        {loading && <p className="text-slate-500">Memuat…</p>}
+        {!loading && comments.length === 0 && <p className="text-slate-500">Tidak ada komentar di status ini.</p>}
+        {!loading && comments.map((c) => (
+          <div key={c.id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <span className="font-bold">{c.name}</span>
+                {c.email && <span className="ml-2 text-xs text-slate-500">{c.email}</span>}
+                <span className="ml-2 text-xs text-slate-500">{c.created_at.slice(0, 16)}</span>
+              </div>
+              <a href={`/blog/${c.article_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-light hover:underline">
+                {c.article_title} ↗
+              </a>
+            </div>
+            <p className="mt-2 whitespace-pre-wrap text-sm text-slate-200">{c.content}</p>
+            <div className="mt-3 flex gap-2">
+              {status !== "approved" && (
+                <button disabled={busyId === c.id} onClick={() => act(c.id, "approve")} className="rounded-full bg-emerald-cta px-3 py-1 text-xs font-bold text-white disabled:opacity-50">✅ Setujui</button>
+              )}
+              {status !== "spam" && (
+                <button disabled={busyId === c.id} onClick={() => act(c.id, "spam")} className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-300 disabled:opacity-50">🚫 Spam</button>
+              )}
+              <button disabled={busyId === c.id} onClick={() => act(c.id, "delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 disabled:opacity-50">🗑 Hapus</button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

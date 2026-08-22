@@ -55,6 +55,18 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     return jsonOk({ settings });
   }
 
+  if (resource === "comments") {
+    const status = url.searchParams.get("status") || "pending";
+    const { results } = await db
+      .prepare(
+        `SELECT c.*, a.title AS article_title, a.slug AS article_slug FROM comments c
+         JOIN articles a ON a.id = c.article_id WHERE c.status = ? ORDER BY c.created_at DESC LIMIT 100`
+      )
+      .bind(status)
+      .all();
+    return jsonOk({ comments: results });
+  }
+
   // resource === "articles"
   const id = url.searchParams.get("id");
   if (id) {
@@ -146,6 +158,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
       const res = await db.prepare("INSERT INTO authors (slug, name, email, role, bio, is_active, created_at, updated_at) VALUES (?,?,?,?,?,1,?,?)").bind(realSlug, name, email, role, bio, now, now).run();
       return jsonOk({ ok: true, id: res.meta.last_row_id });
+    }
+    return jsonError(400, "Aksi tidak dikenal.");
+  }
+
+  // ── Komentar ──
+  if (resource === "comments") {
+    const id = Number(body.id);
+    if (!id) return jsonError(400, "ID tidak valid.");
+    if (action === "delete") {
+      await db.prepare("DELETE FROM comments WHERE id = ?").bind(id).run();
+      return jsonOk({ ok: true });
+    }
+    if (action === "approve" || action === "spam" || action === "pending") {
+      const status = action === "approve" ? "approved" : action;
+      await db.prepare("UPDATE comments SET status = ? WHERE id = ?").bind(status, id).run();
+      return jsonOk({ ok: true });
     }
     return jsonError(400, "Aksi tidak dikenal.");
   }

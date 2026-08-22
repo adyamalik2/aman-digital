@@ -8,6 +8,19 @@ export type Category = { id: number; slug: string; name: string; description: st
 export type Author = { id: number; slug: string; name: string; email: string; role: string; bio: string; avatar: string };
 export type Tag = { id: number; slug: string; name: string };
 
+export type Comment = {
+  id: number;
+  article_id: number;
+  parent_id: number | null;
+  name: string;
+  email: string | null;
+  content: string;
+  status: "pending" | "approved" | "spam";
+  ip_hash: string | null;
+  user_agent: string | null;
+  created_at: string;
+};
+
 export type Article = {
   id: number;
   slug: string;
@@ -259,6 +272,26 @@ export async function ensureUniqueSlug(db: D1Database, table: "articles" | "cate
     n++;
     slug = `${base}-${n}`;
   }
+}
+
+export async function getApprovedComments(db: D1Database, articleId: number): Promise<Comment[]> {
+  const { results } = await db
+    .prepare("SELECT * FROM comments WHERE article_id = ? AND status = 'approved' ORDER BY created_at ASC")
+    .bind(articleId)
+    .all<Comment>();
+  return results || [];
+}
+
+export async function countApprovedComments(db: D1Database, articleId: number): Promise<number> {
+  const row = await db.prepare("SELECT COUNT(*) AS n FROM comments WHERE article_id = ? AND status = 'approved'").bind(articleId).first<{ n: number }>();
+  return row?.n || 0;
+}
+
+export function hashIp(request: Request): Promise<string> {
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  return crypto.subtle.digest("SHA-1", new TextEncoder().encode(ip)).then((d) =>
+    Array.from(new Uint8Array(d)).map((b) => b.toString(16).padStart(2, "0")).join("")
+  );
 }
 
 /** Parse ID video YouTube dari URL biasa (watch?v=, youtu.be/, embed/). */

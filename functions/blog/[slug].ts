@@ -1,5 +1,7 @@
 import { marked } from "marked";
 import {
+  escapeHtml,
+  getApprovedComments,
   getArticleBySlug,
   getBreaking,
   getCategories,
@@ -8,6 +10,7 @@ import {
   hashVisitor,
   recordView,
   youtubeId,
+  type Comment,
 } from "../_lib/news";
 import { renderCard, renderShell } from "../_lib/newsRender";
 
@@ -41,7 +44,11 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     await recordView(db, article.id, hash);
   })());
 
-  const [tags, related] = await Promise.all([getTagsForArticle(db, article.id), getRelated(db, article, 4, [])]);
+  const [tags, related, comments] = await Promise.all([
+    getTagsForArticle(db, article.id),
+    getRelated(db, article, 4, []),
+    getApprovedComments(db, article.id),
+  ]);
   const contentHtml = await marked.parse(article.content || "");
   const ytId = youtubeId(article.video_url);
 
@@ -56,6 +63,57 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const tagsHtml = tags.length
     ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:28px">${tags.map((t) => `<a href="/blog/tag/${t.slug}" class="cat-badge" style="background:#f1f5f9;color:#475569">#${t.name}</a>`).join("")}</div>`
     : "";
+
+  const url = new URL(context.request.url);
+  const komentarStatus = url.searchParams.get("komentar");
+  const komentarMsg =
+    komentarStatus === "terkirim"
+      ? `<div style="background:#ecfdf5;border:1px solid #6ee7b7;color:#047857;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.88rem">✅ Komentar terkirim! Akan tampil setelah disetujui redaksi.</div>`
+      : komentarStatus === "terlalu-sering"
+      ? `<div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.88rem">⚠️ Terlalu banyak percobaan. Coba lagi beberapa menit lagi.</div>`
+      : komentarStatus === "gagal"
+      ? `<div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.88rem">⚠️ Nama dan isi komentar wajib diisi.</div>`
+      : "";
+
+  const renderComment = (c: Comment, replies: Comment[]): string => `
+    <div style="padding:16px 0;border-bottom:1px solid #e2e8f0">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="width:32px;height:32px;border-radius:50%;background:#059669;color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem">${escapeHtml(c.name.slice(0, 1).toUpperCase())}</span>
+        <div>
+          <div style="font-weight:700;font-size:.88rem;color:#0f172a">${escapeHtml(c.name)}</div>
+          <div style="font-size:.72rem;color:#94a3b8">${c.created_at.slice(0, 10)}</div>
+        </div>
+      </div>
+      <p style="margin:0 0 0 40px;color:#334155;font-size:.92rem;line-height:1.6;white-space:pre-wrap">${escapeHtml(c.content)}</p>
+      ${replies.filter((r) => r.parent_id === c.id).map((r) => `<div style="margin-left:40px;margin-top:12px;padding-top:12px;border-top:1px dashed #e2e8f0">${renderComment(r, [])}</div>`).join("")}
+    </div>`;
+
+  const topLevel = comments.filter((c) => !c.parent_id);
+  const commentsHtml = topLevel.length ? topLevel.map((c) => renderComment(c, comments)).join("") : `<p style="color:#94a3b8;font-size:.9rem">Belum ada komentar. Jadilah yang pertama!</p>`;
+
+  const commentSection = `
+  <section class="sect" style="padding-top:0">
+    <div class="wrap" style="max-width:800px">
+      ${`<h2 class="sect-title"><span class="bar"></span>Komentar (${comments.length})</h2>`}
+      ${komentarMsg}
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:24px">
+        <form method="POST" action="/blog/komentar">
+          <input type="hidden" name="article_id" value="${article.id}">
+          <input type="hidden" name="slug" value="${escapeHtml(article.slug)}">
+          <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr">
+            <input type="text" name="name" placeholder="Nama Anda" required maxlength="80" style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+            <input type="email" name="email" placeholder="Email (opsional, tidak ditampilkan)" maxlength="191" style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+          </div>
+          <textarea name="content" placeholder="Tulis komentar…" required maxlength="2000" rows="3" style="width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit;resize:vertical"></textarea>
+          <button type="submit" style="margin-top:10px;background:#059669;color:#fff;border:0;padding:10px 22px;border-radius:999px;font-weight:700;font-size:.88rem;cursor:pointer">Kirim Komentar</button>
+        </form>
+      </div>
+      ${commentsHtml}
+    </div>
+  </section>`;
 
   const body = `
   <article class="sect wrap" style="max-width:800px">
@@ -73,6 +131,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     <div class="article-content">${contentHtml}</div>
     ${tagsHtml}
   </article>
+  ${commentSection}
   ${related.length ? `<section class="sect"><div class="wrap" style="max-width:800px">${`<h2 class="sect-title"><span class="bar"></span>Berita Terkait</h2>`}<div class="grid">${related.map(renderCard).join("")}</div></div></section>` : ""}
   <style>
     .article-content { font-size: 1.05rem; line-height: 1.8; color: #1e293b; }

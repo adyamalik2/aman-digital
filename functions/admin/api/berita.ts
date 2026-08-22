@@ -175,6 +175,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   // ── Komentar ──
   if (resource === "comments") {
+    if (action === "bulk") {
+      const ids = (Array.isArray(body.ids) ? body.ids : []).map(Number).filter((n) => n > 0).slice(0, 500);
+      const verb = String(body.verb || "");
+      if (!ids.length) return jsonError(400, "Tidak ada komentar yang dipilih.");
+      const ph = ids.map(() => "?").join(",");
+      if (verb === "delete") {
+        await db.prepare(`DELETE FROM comments WHERE id IN (${ph})`).bind(...ids).run();
+        return jsonOk({ ok: true, count: ids.length });
+      }
+      if (verb === "approve" || verb === "spam" || verb === "pending") {
+        const status = verb === "approve" ? "approved" : verb;
+        await db.prepare(`UPDATE comments SET status = ? WHERE id IN (${ph})`).bind(status, ...ids).run();
+        return jsonOk({ ok: true, count: ids.length });
+      }
+      return jsonError(400, "Aksi massal tidak dikenal.");
+    }
     const id = Number(body.id);
     if (!id) return jsonError(400, "ID tidak valid.");
     if (action === "delete") {
@@ -282,6 +298,26 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   }
 
   // ── Artikel ──
+  if (action === "bulk") {
+    const ids = (Array.isArray(body.ids) ? body.ids : []).map(Number).filter((n) => n > 0).slice(0, 500);
+    const verb = String(body.verb || "");
+    if (!ids.length) return jsonError(400, "Tidak ada artikel yang dipilih.");
+    const ph = ids.map(() => "?").join(",");
+    if (verb === "delete") {
+      await db.prepare(`DELETE FROM articles WHERE id IN (${ph})`).bind(...ids).run();
+      return jsonOk({ ok: true, count: ids.length });
+    }
+    if (verb === "draft" || verb === "archived") {
+      await db.prepare(`UPDATE articles SET status = ?, updated_at = ? WHERE id IN (${ph})`).bind(verb, now, ...ids).run();
+      return jsonOk({ ok: true, count: ids.length });
+    }
+    if (verb === "published") {
+      await db.prepare(`UPDATE articles SET status = 'published', published_at = COALESCE(published_at, ?), updated_at = ? WHERE id IN (${ph})`).bind(now, now, ...ids).run();
+      return jsonOk({ ok: true, count: ids.length });
+    }
+    return jsonError(400, "Aksi massal tidak dikenal.");
+  }
+
   if (action === "delete") {
     await db.prepare("DELETE FROM articles WHERE id = ?").bind(Number(body.id)).run();
     return jsonOk({ ok: true });

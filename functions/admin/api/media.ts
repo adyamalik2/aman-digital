@@ -36,7 +36,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const contentType = context.request.headers.get("Content-Type") || "";
 
   if (contentType.includes("application/json")) {
-    const body = (await context.request.json()) as { action?: string; key?: string };
+    const body = (await context.request.json()) as { action?: string; key?: string; keys?: string[] };
     if (body.action === "delete" && body.key) {
       await context.env.MEDIA.delete(body.key);
       // Objek ini dilayani dengan Cache-Control immutable 1 tahun (lihat
@@ -47,6 +47,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       const purgeUrl = new URL(`/media/${body.key}`, context.request.url).toString();
       await caches.default.delete(purgeUrl);
       return jsonOk({ ok: true });
+    }
+    if (body.action === "bulk-delete") {
+      const keys = (Array.isArray(body.keys) ? body.keys : []).filter((k) => typeof k === "string" && k).slice(0, 200);
+      if (!keys.length) return jsonError(400, "Tidak ada gambar yang dipilih.");
+      for (const key of keys) {
+        await context.env.MEDIA.delete(key);
+        const purgeUrl = new URL(`/media/${key}`, context.request.url).toString();
+        await caches.default.delete(purgeUrl);
+      }
+      return jsonOk({ ok: true, count: keys.length });
     }
     return jsonError(400, "Aksi tidak dikenal.");
   }

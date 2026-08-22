@@ -132,6 +132,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
   const [preview, setPreview] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [uploadingThumb, setUploadingThumb] = useState(false);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const uploadThumbnail = async (files: FileList | null) => {
     const file = files?.[0];
@@ -250,18 +251,45 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     archived: "bg-red-500/20 text-red-300",
   };
 
+  const toggleSelect = (id: number) => {
+    setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  };
+  const toggleSelectAll = () => {
+    setSelected((s) => (s.size === articles.length ? new Set() : new Set(articles.map((a) => a.id))));
+  };
+  const bulkAction = async (verb: "published" | "draft" | "archived" | "delete") => {
+    if (!selected.size) return;
+    if (verb === "delete" && !window.confirm(`Hapus ${selected.size} artikel terpilih permanen?`)) return;
+    await fetch("/admin/api/berita", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resource: "articles", action: "bulk", verb, ids: Array.from(selected) }),
+    });
+    setSelected(new Set());
+    await loadAll();
+  };
+
   if (view === "list") {
     return (
       <>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <button onClick={openNew} className="rounded-full bg-emerald-cta px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-cta-hover">
             ✏️ Tulis Artikel Baru
           </button>
+          {selected.size > 0 && (
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5">
+              <span className="text-xs text-slate-400">{selected.size} dipilih</span>
+              <button onClick={() => bulkAction("published")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Terbitkan</button>
+              <button onClick={() => bulkAction("draft")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Jadikan Draf</button>
+              <button onClick={() => bulkAction("archived")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Arsipkan</button>
+              <button onClick={() => bulkAction("delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">Hapus</button>
+            </div>
+          )}
         </div>
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+        <div className="mt-3 overflow-x-auto rounded-2xl border border-white/10">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wide text-slate-400">
+                <th className="px-4 py-3"><input type="checkbox" checked={articles.length > 0 && selected.size === articles.length} onChange={toggleSelectAll} /></th>
                 <th className="px-4 py-3">Judul</th>
                 <th className="px-4 py-3">Kategori</th>
                 <th className="px-4 py-3">Status</th>
@@ -270,10 +298,11 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
               </tr>
             </thead>
             <tbody>
-              {loading && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
-              {!loading && articles.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Belum ada artikel.</td></tr>}
+              {loading && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
+              {!loading && articles.length === 0 && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Belum ada artikel.</td></tr>}
               {!loading && articles.map((a) => (
                 <tr key={a.id} className="border-b border-white/5 last:border-0">
+                  <td className="px-4 py-3"><input type="checkbox" checked={selected.has(a.id)} onChange={() => toggleSelect(a.id)} /></td>
                   <td className="px-4 py-3 font-semibold">{a.title}</td>
                   <td className="px-4 py-3 text-slate-400">{a.category_name || "—"}</td>
                   <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs ${statusStyle[a.status]}`}>{statusLabel[a.status]}</span></td>
@@ -606,12 +635,14 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
   const [comments, setComments] = useState<CommentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const load = useCallback(async (s: typeof status) => {
     setLoading(true);
     const res = await fetch(`/admin/api/berita?resource=comments&status=${s}`);
     const data = await res.json();
     setComments(data.comments || []);
+    setSelected(new Set());
     setLoading(false);
   }, []);
 
@@ -631,40 +662,74 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
     finally { setBusyId(null); }
   };
 
+  const toggleSelect = (id: number) => {
+    setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  };
+  const toggleSelectAll = () => {
+    setSelected((s) => (s.size === comments.length ? new Set() : new Set(comments.map((c) => c.id))));
+  };
+  const bulkAct = async (verb: "approve" | "spam" | "delete") => {
+    if (!selected.size) return;
+    if (verb === "delete" && !window.confirm(`Hapus ${selected.size} komentar terpilih permanen?`)) return;
+    await fetch("/admin/api/berita", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resource: "comments", action: "bulk", verb, ids: Array.from(selected) }),
+    });
+    await load(status);
+  };
+
   return (
     <div className="mt-6">
-      <div className="flex gap-2">
-        {(["pending", "approved", "spam"] as const).map((s) => (
-          <button key={s} onClick={() => setStatus(s)} className={`rounded-full px-4 py-1.5 text-xs font-semibold ${status === s ? "bg-emerald-cta text-white" : "border border-white/10 text-slate-300"}`}>
-            {s === "pending" ? "⏳ Menunggu" : s === "approved" ? "✅ Disetujui" : "🚫 Spam"}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex gap-2">
+          {(["pending", "approved", "spam"] as const).map((s) => (
+            <button key={s} onClick={() => setStatus(s)} className={`rounded-full px-4 py-1.5 text-xs font-semibold ${status === s ? "bg-emerald-cta text-white" : "border border-white/10 text-slate-300"}`}>
+              {s === "pending" ? "⏳ Menunggu" : s === "approved" ? "✅ Disetujui" : "🚫 Spam"}
+            </button>
+          ))}
+        </div>
+        {comments.length > 0 && (
+          <label className="flex items-center gap-1.5 text-xs text-slate-400">
+            <input type="checkbox" checked={selected.size === comments.length} onChange={toggleSelectAll} /> Pilih semua
+          </label>
+        )}
+        {selected.size > 0 && (
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5">
+            <span className="text-xs text-slate-400">{selected.size} dipilih</span>
+            {status !== "approved" && <button onClick={() => bulkAct("approve")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Setujui</button>}
+            {status !== "spam" && <button onClick={() => bulkAct("spam")} className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-300">Spam</button>}
+            <button onClick={() => bulkAct("delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">Hapus</button>
+          </div>
+        )}
       </div>
 
       <div className="mt-5 space-y-3">
         {loading && <p className="text-slate-500">Memuat…</p>}
         {!loading && comments.length === 0 && <p className="text-slate-500">Tidak ada komentar di status ini.</p>}
         {!loading && comments.map((c) => (
-          <div key={c.id} className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <span className="font-bold">{c.name}</span>
-                {c.email && <span className="ml-2 text-xs text-slate-500">{c.email}</span>}
-                <span className="ml-2 text-xs text-slate-500">{c.created_at.slice(0, 16)}</span>
+          <div key={c.id} className="flex gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <input type="checkbox" checked={selected.has(c.id)} onChange={() => toggleSelect(c.id)} className="mt-1 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <span className="font-bold">{c.name}</span>
+                  {c.email && <span className="ml-2 text-xs text-slate-500">{c.email}</span>}
+                  <span className="ml-2 text-xs text-slate-500">{c.created_at.slice(0, 16)}</span>
+                </div>
+                <a href={`/berita/${c.article_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-light hover:underline">
+                  {c.article_title} ↗
+                </a>
               </div>
-              <a href={`/berita/${c.article_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-light hover:underline">
-                {c.article_title} ↗
-              </a>
-            </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-slate-200">{c.content}</p>
-            <div className="mt-3 flex gap-2">
-              {status !== "approved" && (
-                <button disabled={busyId === c.id} onClick={() => act(c.id, "approve")} className="rounded-full bg-emerald-cta px-3 py-1 text-xs font-bold text-white disabled:opacity-50">✅ Setujui</button>
-              )}
-              {status !== "spam" && (
-                <button disabled={busyId === c.id} onClick={() => act(c.id, "spam")} className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-300 disabled:opacity-50">🚫 Spam</button>
-              )}
-              <button disabled={busyId === c.id} onClick={() => act(c.id, "delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 disabled:opacity-50">🗑 Hapus</button>
+              <p className="mt-2 whitespace-pre-wrap text-sm text-slate-200">{c.content}</p>
+              <div className="mt-3 flex gap-2">
+                {status !== "approved" && (
+                  <button disabled={busyId === c.id} onClick={() => act(c.id, "approve")} className="rounded-full bg-emerald-cta px-3 py-1 text-xs font-bold text-white disabled:opacity-50">✅ Setujui</button>
+                )}
+                {status !== "spam" && (
+                  <button disabled={busyId === c.id} onClick={() => act(c.id, "spam")} className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-300 disabled:opacity-50">🚫 Spam</button>
+                )}
+                <button disabled={busyId === c.id} onClick={() => act(c.id, "delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 disabled:opacity-50">🗑 Hapus</button>
+              </div>
             </div>
           </div>
         ))}
@@ -688,16 +753,34 @@ function MediaTab({ setError }: { setError: (e: string) => void }) {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     setLoading(true);
     const res = await fetch("/admin/api/media");
     const data = await res.json();
     setItems(data.items || []);
+    setSelected(new Set());
     setLoading(false);
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const toggleSelect = (key: string) => {
+    setSelected((s) => { const n = new Set(s); if (n.has(key)) n.delete(key); else n.add(key); return n; });
+  };
+  const toggleSelectAll = () => {
+    setSelected((s) => (s.size === items.length ? new Set() : new Set(items.map((i) => i.key))));
+  };
+  const bulkDelete = async () => {
+    if (!selected.size) return;
+    if (!window.confirm(`Hapus ${selected.size} gambar terpilih permanen?`)) return;
+    await fetch("/admin/api/media", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "bulk-delete", keys: Array.from(selected) }),
+    });
+    await load();
+  };
 
   const upload = async (files: FileList | null) => {
     if (!files || !files.length) return;
@@ -739,11 +822,31 @@ function MediaTab({ setError }: { setError: (e: string) => void }) {
         <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple className="hidden" disabled={uploading} onChange={(e) => upload(e.target.files)} />
       </label>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+      {items.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-1.5 text-xs text-slate-400">
+            <input type="checkbox" checked={selected.size === items.length} onChange={toggleSelectAll} /> Pilih semua
+          </label>
+          {selected.size > 0 && (
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5">
+              <span className="text-xs text-slate-400">{selected.size} dipilih</span>
+              <button onClick={bulkDelete} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">Hapus</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {loading && <p className="col-span-full text-center text-slate-500">Memuat…</p>}
         {!loading && items.length === 0 && <p className="col-span-full text-center text-slate-500">Belum ada gambar.</p>}
         {!loading && items.map((it) => (
-          <div key={it.key} className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+          <div key={it.key} className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5">
+            <input
+              type="checkbox"
+              checked={selected.has(it.key)}
+              onChange={() => toggleSelect(it.key)}
+              className="absolute left-2 top-2 z-10 h-4 w-4"
+            />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={it.url} alt="" className="aspect-square w-full object-cover" loading="lazy" />
             <div className="p-2">

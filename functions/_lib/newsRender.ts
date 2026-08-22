@@ -1,7 +1,7 @@
 /**
  * newsRender.ts — bungkus HTML & komponen kartu untuk portal berita.
  * Dirender per-permintaan oleh Pages Function (bukan Next.js), sama seperti
- * pola functions/blog.ts sebelumnya -- CSS ditulis inline & mandiri.
+ * pola functions/berita.ts sebelumnya -- CSS ditulis inline & mandiri.
  */
 import { escapeHtml, formatDateID, youtubeId, type Article, type Category } from "./news";
 
@@ -102,10 +102,10 @@ export function renderShell(opts: {
   noindex?: boolean;
 }): string {
   const navLinks = opts.categories
-    .map((c) => `<a href="/blog/kategori/${c.slug}" class="${opts.activeCategory === c.slug ? "active" : ""}">${escapeHtml(c.name)}</a>`)
+    .map((c) => `<a href="/berita/kategori/${c.slug}" class="${opts.activeCategory === c.slug ? "active" : ""}">${escapeHtml(c.name)}</a>`)
     .join("");
 
-  const tickerItems = (opts.breaking || []).map((b) => `<span class="ticker-item"><a href="/blog/${b.slug}">${escapeHtml(b.title)}</a></span>`).join("");
+  const tickerItems = (opts.breaking || []).map((b) => `<span class="ticker-item"><a href="/berita/${b.slug}">${escapeHtml(b.title)}</a></span>`).join("");
   const ticker =
     opts.breaking && opts.breaking.length
       ? `<div class="ticker"><div class="ticker-inner"><span class="ticker-label">🔴 Breaking</span>${tickerItems}${tickerItems}</div></div>`
@@ -120,21 +120,21 @@ export function renderShell(opts: {
 <meta name="description" content="${escapeHtml(opts.description)}">
 ${opts.noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="icon" type="image/png" href="/images/logo-tab.png">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="/blog/feed">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/berita/feed">
 <style>${STYLE}</style>
 </head>
 <body>
 ${ticker}
 <header class="site">
   <div class="wrap topbar">
-    <a class="brand" href="/blog"><img src="/images/logo-header.webp" alt="">AMAN NEWS</a>
-    <form class="search-box" action="/blog/cari" method="get">
+    <a class="brand" href="/berita"><img src="/images/logo-header.webp" alt="">AMAN NEWS</a>
+    <form class="search-box" action="/berita/cari" method="get">
       <input type="text" name="q" placeholder="Cari berita…">
       <button type="submit">🔍</button>
     </form>
   </div>
   <div class="wrap navcats">
-    <a href="/blog" class="${!opts.activeCategory ? "active" : ""}">Beranda</a>
+    <a href="/berita" class="${!opts.activeCategory ? "active" : ""}">Beranda</a>
     ${navLinks}
   </div>
 </header>
@@ -144,10 +144,10 @@ ${opts.body}
     <div class="cols">
       <div><a href="/">← Kembali ke Situs Utama AMAN Digital</a></div>
       <div style="display:flex;gap:18px;flex-wrap:wrap">
-        <a href="/blog/halaman/privacy">Kebijakan Privasi</a>
-        <a href="/blog/halaman/disclaimer">Disclaimer</a>
-        <a href="/blog/halaman/pedoman-media-siber">Pedoman Media Siber</a>
-        <a href="/blog/feed">RSS</a>
+        <a href="/berita/halaman/privacy">Kebijakan Privasi</a>
+        <a href="/berita/halaman/disclaimer">Disclaimer</a>
+        <a href="/berita/halaman/pedoman-media-siber">Pedoman Media Siber</a>
+        <a href="/berita/feed">RSS</a>
       </div>
     </div>
     <div class="bottom">&copy; 2026 AMAN Digital &middot; <a href="https://wa.me/6282210768038" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
@@ -172,7 +172,7 @@ function catStyle(color: string): string {
 }
 
 export function renderCard(a: Article): string {
-  return `<a class="card" href="/blog/${encodeURIComponent(a.slug)}">
+  return `<a class="card" href="/berita/${encodeURIComponent(a.slug)}">
     <div class="thumb">${thumbOr(a)}
       ${a.category_name ? `<span class="cat-badge" style="${catStyle(a.category_color || "")}">${escapeHtml(a.category_name)}</span>` : ""}
     </div>
@@ -185,7 +185,7 @@ export function renderCard(a: Article): string {
 }
 
 export function renderListRow(a: Article, num?: number): string {
-  return `<a class="list-row" href="/blog/${encodeURIComponent(a.slug)}">
+  return `<a class="list-row" href="/berita/${encodeURIComponent(a.slug)}">
     ${num ? `<div class="num">${num}</div>` : ""}
     ${thumbOr(a) === "" ? "" : `<img src="${a.thumbnail ? escapeHtml(a.thumbnail) : "/images/logo-tab.png"}" alt="">`}
     <div>
@@ -200,14 +200,14 @@ export function renderHeroSlide(a: Article, active: boolean): string {
     ${thumbOr(a)}
     <div class="ov">
       ${a.category_name ? `<span class="cat-badge" style="background:${a.category_color || "#059669"};color:#fff">${escapeHtml(a.category_name)}</span>` : ""}
-      <a href="/blog/${encodeURIComponent(a.slug)}"><h2>${escapeHtml(a.title)}</h2></a>
+      <a href="/berita/${encodeURIComponent(a.slug)}"><h2>${escapeHtml(a.title)}</h2></a>
       <div class="meta">📅 ${formatDateID(a.published_at)} &middot; ${a.reading_minutes} menit baca</div>
     </div>
   </div>`;
 }
 
 export function renderHeroMini(a: Article): string {
-  return `<a class="hero-mini" href="/blog/${encodeURIComponent(a.slug)}">
+  return `<a class="hero-mini" href="/berita/${encodeURIComponent(a.slug)}">
     <img src="${a.thumbnail ? escapeHtml(a.thumbnail) : "/images/logo-tab.png"}" alt="">
     <div>
       <h3>${escapeHtml(a.title)}</h3>
@@ -249,7 +249,7 @@ export function renderArchiveBody(opts: {
 export function renderVideoCard(a: Article): string {
   const id = youtubeId(a.video_url);
   const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : a.thumbnail;
-  return `<a class="card" href="/blog/${encodeURIComponent(a.slug)}">
+  return `<a class="card" href="/berita/${encodeURIComponent(a.slug)}">
     <div class="thumb" style="background:#0f172a">
       ${thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(a.title)}" loading="lazy">` : ""}
       <span style="position:absolute;inset:0;display:grid;place-items:center;font-size:2.4rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5)">▶️</span>

@@ -24,7 +24,7 @@ const staticRoutes = [
   "/creative-studio",
   "/digital-store",
   "/aman-engine",
-  "/blog",
+  "/berita",
 ];
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
@@ -52,7 +52,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const blogEntries = (articles || [])
     .map(
       (a) => `  <url>
-    <loc>${SITE_URL}/blog/${encodeURIComponent(a.slug)}</loc>
+    <loc>${SITE_URL}/berita/${encodeURIComponent(a.slug)}</loc>
     <lastmod>${a.updated_at}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -63,7 +63,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const categoryEntries = (categories || [])
     .map(
       (c) => `  <url>
-    <loc>${SITE_URL}/blog/kategori/${encodeURIComponent(c.slug)}</loc>
+    <loc>${SITE_URL}/berita/kategori/${encodeURIComponent(c.slug)}</loc>
     <lastmod>${now}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>

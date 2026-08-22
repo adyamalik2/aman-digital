@@ -28,7 +28,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     items,
     page: curPage,
     totalPages,
-    baseUrl: `/blog/tag/${tag.slug}`,
+    baseUrl: `/berita/tag/${tag.slug}`,
     emptyMessage: "Belum ada artikel dengan topik ini.",
   });
 

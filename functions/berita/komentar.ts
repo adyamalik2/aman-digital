@@ -1,6 +1,6 @@
 /**
- * POST /blog/komentar — kirim komentar pembaca. Masuk status 'pending',
- * baru tampil publik setelah disetujui admin di /admin/blog (tab Komentar).
+ * POST /berita/komentar — kirim komentar pembaca. Masuk status 'pending',
+ * baru tampil publik setelah disetujui admin di /admin/berita (tab Komentar).
  */
 import { hashIp } from "../_lib/news";
 import { clientIp, ratelimitFail, ratelimitWait } from "../_lib/ratelimit";
@@ -17,7 +17,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const form = await context.request.formData();
   const articleId = Number(form.get("article_id") || 0);
   const slug = String(form.get("slug") || "");
-  const redirectBack = (query: string) => Response.redirect(new URL(`/blog/${slug}${query}`, context.request.url).toString(), 303);
+  const redirectBack = (query: string) => Response.redirect(new URL(`/berita/${slug}${query}`, context.request.url).toString(), 303);
 
   if (!articleId || !slug) return new Response("Permintaan tidak valid.", { status: 400 });
 

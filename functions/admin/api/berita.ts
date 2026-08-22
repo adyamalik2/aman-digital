@@ -1,5 +1,5 @@
 /**
- * /admin/api/blog — CRUD portal berita (artikel, kategori, penulis, tag,
+ * /admin/api/berita — CRUD portal berita (artikel, kategori, penulis, tag,
  * pengaturan). Digerbangi oleh functions/admin/api/_middleware.ts.
  */
 import { ensureUniqueSlug, readingMinutes, slugify } from "../../_lib/news";

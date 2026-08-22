@@ -21,8 +21,8 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     .map(
       (a) => `  <item>
     <title>${escXml(a.title)}</title>
-    <link>${SITE_URL}/blog/${a.slug}</link>
-    <guid>${SITE_URL}/blog/${a.slug}</guid>
+    <link>${SITE_URL}/berita/${a.slug}</link>
+    <guid>${SITE_URL}/berita/${a.slug}</guid>
     <description>${escXml(a.excerpt)}</description>
     <pubDate>${a.published_at ? new Date(a.published_at.replace(" ", "T")).toUTCString() : ""}</pubDate>
     ${a.category_name ? `<category>${escXml(a.category_name)}</category>` : ""}
@@ -34,7 +34,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 <rss version="2.0">
 <channel>
   <title>${escXml(settings.site_name || "AMAN News")}</title>
-  <link>${SITE_URL}/blog</link>
+  <link>${SITE_URL}/berita</link>
   <description>${escXml(settings.site_description || "")}</description>
   <language>id-ID</language>
 ${rssItems}

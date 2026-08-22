@@ -1,7 +1,7 @@
 /**
  * GET /media/* — sajikan file dari R2 (galeri media portal berita).
  * Publik (tanpa gerbang admin) -- gambar memang ditujukan tampil di halaman
- * publik /blog/*.
+ * publik /berita/*.
  */
 interface Env {
   MEDIA: R2Bucket;

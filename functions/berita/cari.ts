@@ -29,7 +29,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         items,
         page,
         totalPages,
-        baseUrl: `/blog/cari?q=${encodeURIComponent(q)}`,
+        baseUrl: `/berita/cari?q=${encodeURIComponent(q)}`,
         emptyMessage: "Tidak ada artikel yang cocok. Coba kata kunci lain.",
       })
     : `<section class="sect"><div class="wrap"><p style="color:#94a3b8">Ketik kata kunci di kotak pencarian untuk mulai.</p></div></section>`;

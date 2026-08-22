@@ -33,7 +33,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     items,
     page: curPage,
     totalPages,
-    baseUrl: `/blog/penulis/${author.slug}`,
+    baseUrl: `/berita/penulis/${author.slug}`,
     emptyMessage: "Penulis ini belum menerbitkan artikel.",
   })}`;
 

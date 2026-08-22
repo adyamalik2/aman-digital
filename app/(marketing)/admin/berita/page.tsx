@@ -154,9 +154,9 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     setLoading(true);
     try {
       const [aRes, cRes, auRes] = await Promise.all([
-        fetch("/admin/api/blog?resource=articles"),
-        fetch("/admin/api/blog?resource=categories"),
-        fetch("/admin/api/blog?resource=authors"),
+        fetch("/admin/api/berita?resource=articles"),
+        fetch("/admin/api/berita?resource=categories"),
+        fetch("/admin/api/berita?resource=authors"),
       ]);
       if (aRes.status === 401) { window.location.href = "/admin"; return; }
       const a = await aRes.json();
@@ -184,7 +184,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
   const openEdit = async (id: number) => {
     setError("");
     try {
-      const res = await fetch(`/admin/api/blog?resource=articles&id=${id}`);
+      const res = await fetch(`/admin/api/berita?resource=articles&id=${id}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message || "Gagal memuat artikel.");
       const a: ArticleFull = data.article;
@@ -208,7 +208,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "articles", action: "save", ...draft, status, tags: draft.tags.split(",") }),
@@ -227,7 +227,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
   const remove = async (id: number, title: string) => {
     if (!window.confirm(`Hapus artikel "${title}" permanen?`)) return;
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "articles", action: "delete", id }),
@@ -281,7 +281,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex gap-2">
                       {a.status === "published" && (
-                        <a href={`/blog/${a.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10">Lihat</a>
+                        <a href={`/berita/${a.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10">Lihat</a>
                       )}
                       <button onClick={() => openEdit(a.id)} className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10">Edit</button>
                       <button onClick={() => remove(a.id, a.title)} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 hover:bg-red-500/10">🗑</button>
@@ -408,7 +408,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
             {saving ? "Menerbitkan…" : "🚀 Terbitkan"}
           </button>
           {draft.status === "published" && draft.slug && (
-            <a href={`/blog/${draft.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 px-6 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/10">
+            <a href={`/berita/${draft.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 px-6 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/10">
               Lihat halaman live ↗
             </a>
           )}
@@ -433,7 +433,7 @@ function CategoriesTab({ setError }: { setError: (e: string) => void }) {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/admin/api/blog?resource=categories");
+    const res = await fetch("/admin/api/berita?resource=categories");
     const data = await res.json();
     setCategories(data.categories || []);
     setLoading(false);
@@ -444,7 +444,7 @@ function CategoriesTab({ setError }: { setError: (e: string) => void }) {
   const save = async () => {
     if (!form.name.trim()) { setError("Nama kategori wajib diisi."); return; }
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "categories", action: "save", ...form }),
       });
@@ -457,7 +457,7 @@ function CategoriesTab({ setError }: { setError: (e: string) => void }) {
 
   const remove = async (id: number) => {
     if (!window.confirm("Hapus kategori ini? Artikel di dalamnya tidak ikut terhapus.")) return;
-    await fetch("/admin/api/blog", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resource: "categories", action: "delete", id }) });
+    await fetch("/admin/api/berita", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resource: "categories", action: "delete", id }) });
     await load();
   };
 
@@ -514,7 +514,7 @@ function AuthorsTab({ setError }: { setError: (e: string) => void }) {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/admin/api/blog?resource=authors");
+    const res = await fetch("/admin/api/berita?resource=authors");
     const data = await res.json();
     setAuthors(data.authors || []);
     setLoading(false);
@@ -525,7 +525,7 @@ function AuthorsTab({ setError }: { setError: (e: string) => void }) {
   const save = async () => {
     if (!form.name.trim()) { setError("Nama penulis wajib diisi."); return; }
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "authors", action: "save", ...form }),
       });
@@ -538,7 +538,7 @@ function AuthorsTab({ setError }: { setError: (e: string) => void }) {
 
   const remove = async (id: number) => {
     if (!window.confirm("Hapus penulis ini?")) return;
-    await fetch("/admin/api/blog", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resource: "authors", action: "delete", id }) });
+    await fetch("/admin/api/berita", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resource: "authors", action: "delete", id }) });
     await load();
   };
 
@@ -607,7 +607,7 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
 
   const load = useCallback(async (s: typeof status) => {
     setLoading(true);
-    const res = await fetch(`/admin/api/blog?resource=comments&status=${s}`);
+    const res = await fetch(`/admin/api/berita?resource=comments&status=${s}`);
     const data = await res.json();
     setComments(data.comments || []);
     setLoading(false);
@@ -618,7 +618,7 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
   const act = async (id: number, action: "approve" | "spam" | "delete") => {
     setBusyId(id);
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "comments", action, id }),
       });
@@ -650,7 +650,7 @@ function CommentsTab({ setError }: { setError: (e: string) => void }) {
                 {c.email && <span className="ml-2 text-xs text-slate-500">{c.email}</span>}
                 <span className="ml-2 text-xs text-slate-500">{c.created_at.slice(0, 16)}</span>
               </div>
-              <a href={`/blog/${c.article_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-light hover:underline">
+              <a href={`/berita/${c.article_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-light hover:underline">
                 {c.article_title} ↗
               </a>
             </div>
@@ -770,7 +770,7 @@ function SettingsTab({ setError }: { setError: (e: string) => void }) {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("/admin/api/blog?resource=settings");
+      const res = await fetch("/admin/api/berita?resource=settings");
       const data = await res.json();
       setValues(data.settings || {});
       setLoading(false);
@@ -781,7 +781,7 @@ function SettingsTab({ setError }: { setError: (e: string) => void }) {
     setSaving(true);
     setSaved(false);
     try {
-      const res = await fetch("/admin/api/blog", {
+      const res = await fetch("/admin/api/berita", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resource: "settings", action: "save", values }),
       });

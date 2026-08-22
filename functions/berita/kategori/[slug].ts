@@ -29,7 +29,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     items,
     page: curPage,
     totalPages,
-    baseUrl: `/blog/kategori/${category.slug}`,
+    baseUrl: `/berita/kategori/${category.slug}`,
     emptyMessage: "Belum ada artikel di kategori ini.",
   });
 

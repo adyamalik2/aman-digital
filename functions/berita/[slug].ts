@@ -31,7 +31,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         <div style="font-size:2.5rem;margin-bottom:12px">🔍</div>
         <h1 style="font-size:1.6rem;font-weight:800;margin:0 0 10px">Artikel tidak ditemukan</h1>
         <p style="color:#64748b;margin:0 0 24px">Mungkin sudah dihapus atau tautannya salah.</p>
-        <a href="/blog" style="display:inline-block;background:#059669;color:#fff;padding:12px 24px;border-radius:999px;font-weight:700">← Kembali ke Beranda</a>
+        <a href="/berita" style="display:inline-block;background:#059669;color:#fff;padding:12px 24px;border-radius:999px;font-weight:700">← Kembali ke Beranda</a>
       </section>`,
       categories,
       noindex: true,
@@ -61,7 +61,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     : "";
 
   const tagsHtml = tags.length
-    ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:28px">${tags.map((t) => `<a href="/blog/tag/${t.slug}" class="cat-badge" style="background:#f1f5f9;color:#475569">#${t.name}</a>`).join("")}</div>`
+    ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:28px">${tags.map((t) => `<a href="/berita/tag/${t.slug}" class="cat-badge" style="background:#f1f5f9;color:#475569">#${t.name}</a>`).join("")}</div>`
     : "";
 
   const url = new URL(context.request.url);
@@ -97,7 +97,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       ${`<h2 class="sect-title"><span class="bar"></span>Komentar (${comments.length})</h2>`}
       ${komentarMsg}
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:24px">
-        <form method="POST" action="/blog/komentar">
+        <form method="POST" action="/berita/komentar">
           <input type="hidden" name="article_id" value="${article.id}">
           <input type="hidden" name="slug" value="${escapeHtml(article.slug)}">
           <div style="position:absolute;left:-9999px" aria-hidden="true">
@@ -117,11 +117,11 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const body = `
   <article class="sect wrap" style="max-width:800px">
-    <a href="/blog" style="color:#94a3b8;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
-    ${article.category_name ? `<div style="margin-top:16px"><a href="/blog/kategori/${article.category_slug}" class="cat-badge" style="background:${article.category_color}22;color:${article.category_color}">${article.category_name}</a></div>` : ""}
+    <a href="/berita" style="color:#94a3b8;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
+    ${article.category_name ? `<div style="margin-top:16px"><a href="/berita/kategori/${article.category_slug}" class="cat-badge" style="background:${article.category_color}22;color:${article.category_color}">${article.category_name}</a></div>` : ""}
     <h1 style="font-size:2rem;font-weight:900;line-height:1.3;margin:14px 0 12px">${article.title}</h1>
     <div style="color:#94a3b8;font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap">
-      ${article.author_name ? `<span>✍️ <a href="/blog/penulis/${article.author_slug}" style="color:#475569;font-weight:600">${article.author_name}</a></span>` : ""}
+      ${article.author_name ? `<span>✍️ <a href="/berita/penulis/${article.author_slug}" style="color:#475569;font-weight:600">${article.author_name}</a></span>` : ""}
       <span>📅 ${article.published_at ? article.published_at.slice(0, 10) : ""}</span>
       <span>⏱️ ${article.reading_minutes} menit baca</span>
       <span>👁️ ${article.view_count} views</span>

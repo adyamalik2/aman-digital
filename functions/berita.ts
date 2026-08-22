@@ -70,10 +70,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       <div class="wrap">
         ${sectionTitle("Headline")}
         <article class="headline">
-          <a href="/blog/${headline.slug}">${headline.thumbnail ? `<img src="${headline.thumbnail}" alt="${headline.title}">` : ""}</a>
+          <a href="/berita/${headline.slug}">${headline.thumbnail ? `<img src="${headline.thumbnail}" alt="${headline.title}">` : ""}</a>
           <div class="headline-body">
             ${headline.category_name ? `<span class="cat-badge" style="background:${headline.category_color || "#059669"}22;color:${headline.category_color || "#059669"}">${headline.category_name}</span>` : ""}
-            <h2><a href="/blog/${headline.slug}">${headline.title}</a></h2>
+            <h2><a href="/berita/${headline.slug}">${headline.title}</a></h2>
             ${headline.excerpt ? `<p>${headline.excerpt}</p>` : ""}
             <div class="meta">📅 ${headline.published_at ? headline.published_at.slice(0, 10) : ""} &middot; ${headline.reading_minutes} menit baca</div>
           </div>
@@ -86,9 +86,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const paginationHtml =
     totalPages > 1
       ? `<div class="pagination">
-        ${curPage > 1 ? `<a href="/blog?hal=${curPage - 1}">← Sebelumnya</a>` : ""}
+        ${curPage > 1 ? `<a href="/berita?hal=${curPage - 1}">← Sebelumnya</a>` : ""}
         <span class="active">${curPage} / ${totalPages}</span>
-        ${curPage < totalPages ? `<a href="/blog?hal=${curPage + 1}">Berikutnya →</a>` : ""}
+        ${curPage < totalPages ? `<a href="/berita?hal=${curPage + 1}">Berikutnya →</a>` : ""}
       </div>`
       : "";
 
@@ -101,7 +101,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     <div>
       ${trending.length ? `<div class="side-card"><h3>🔥 Trending Hari Ini</h3>${trending.map((a, i) => renderListRow(a, i + 1)).join("")}</div>` : ""}
       ${popular.length ? `<div class="side-card"><h3>⭐ Populer Minggu Ini</h3>${popular.map((a, i) => renderListRow(a, i + 1)).join("")}</div>` : ""}
-      ${categories.length ? `<div class="side-card"><h3>📂 Kategori</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${categories.map((c) => `<a href="/blog/kategori/${c.slug}" class="cat-badge" style="background:${c.color}22;color:${c.color}">${c.name}</a>`).join("")}</div></div>` : ""}
+      ${categories.length ? `<div class="side-card"><h3>📂 Kategori</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${categories.map((c) => `<a href="/berita/kategori/${c.slug}" class="cat-badge" style="background:${c.color}22;color:${c.color}">${c.name}</a>`).join("")}</div></div>` : ""}
     </div>
   </div>`;
 

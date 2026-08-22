@@ -1,0 +1,13 @@
+{
+  "name": "AMAN Admin",
+  "short_name": "AMAN Admin",
+  "description": "Panel admin AMAN Digital -- kode akses & portal berita.",
+  "start_url": "/admin/dashboard",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "icons": [
+    { "src": "/images/logo-tab.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "/images/logo-tab.png", "sizes": "256x256", "type": "image/png", "purpose": "maskable" }
+  ]
+}

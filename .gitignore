@@ -42,3 +42,6 @@ publish-blog.bat
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local wrangler dev/emulation state (miniflare KV/D1/R2 sqlite)
+.wrangler/

@@ -311,3 +311,9 @@
     animation: none;
   }
 }
+
+/* Sembunyikan FAB WhatsApp saat menu mobile terbuka -- keduanya sama-sama
+   fixed+z-50, tanpa ini FAB melayang di atas panel menu. */
+body.mobile-menu-open .wa-fab {
+  display: none;
+}

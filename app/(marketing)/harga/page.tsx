@@ -87,11 +87,11 @@ const faqs = [
 
 function Mark({ included }: { included: boolean }) {
   return included ? (
-    <span className="font-bold text-emerald" aria-label="Termasuk">
+    <span className="font-bold text-emerald-dark" aria-label="Termasuk">
       ✓
     </span>
   ) : (
-    <span className="text-slate-300" aria-label="Tidak termasuk">
+    <span className="text-slate-500" aria-label="Tidak termasuk">
       —
     </span>
   );
@@ -287,11 +287,12 @@ export default function HargaPage() {
           </div>
 
           {/* Table */}
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse">
+          <div className="relative mt-10">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] border-collapse">
               <thead>
                 <tr className="border-b border-slate-200">
-                  <th className="w-[45%] px-4 py-4 text-left text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                  <th className="sticky left-0 z-10 w-[45%] bg-white px-4 py-4 text-left text-xs font-extrabold uppercase tracking-wider text-slate-500">
                     Fitur
                   </th>
                   <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-slate-500">
@@ -321,7 +322,7 @@ export default function HargaPage() {
                       key={`${row.label}-${i}`}
                       className="border-b border-slate-100"
                     >
-                      <td className="px-4 py-3 text-sm text-slate-700">
+                      <td className="sticky left-0 z-10 bg-white px-4 py-3 text-sm text-slate-700">
                         {row.label}
                       </td>
                       <td className="px-4 py-3 text-center text-sm">
@@ -337,7 +338,13 @@ export default function HargaPage() {
                   )
                 )}
               </tbody>
-            </table>
+              </table>
+            </div>
+            <div
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:hidden"
+              style={{ background: "linear-gradient(to left, rgba(255,255,255,.95), rgba(255,255,255,0))" }}
+              aria-hidden="true"
+            />
           </div>
         </div>
       </section>

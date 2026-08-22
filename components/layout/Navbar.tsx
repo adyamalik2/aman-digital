@@ -56,6 +56,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle("mobile-menu-open", mobileOpen);
+    return () => document.body.classList.remove("mobile-menu-open");
+  }, [mobileOpen]);
+
   const isActive = (href: string) => pathname === href;
   const isGroupActive = (items: NavItem[]) =>
     items.some((item) => pathname === item.href);

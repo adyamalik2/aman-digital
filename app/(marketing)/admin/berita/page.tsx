@@ -798,6 +798,11 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState(emptyAffForm);
   const [uploading, setUploading] = useState(false);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkText, setBulkText] = useState("");
+  const [bulkWithPrice, setBulkWithPrice] = useState(false);
+  const [bulkPreview, setBulkPreview] = useState<{ title: string; url: string; price: string; merchant: string; image: string; error: string; warn: string }[] | null>(null);
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -854,6 +859,65 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
     await load();
   };
 
+  const readBulkFile = (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setBulkText(String(reader.result || ""));
+    reader.readAsText(file);
+  };
+
+  const previewBulk = async () => {
+    if (!bulkText.trim()) { setError("Tempel dulu daftar produknya."); return; }
+    setBulkBusy(true);
+    setError("");
+    try {
+      const res = await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "affiliate", action: "import-preview", bulk: bulkText }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      setBulkPreview(data.rows);
+    } catch (e) { setError(e instanceof Error ? e.message : "Gagal membaca data."); }
+    finally { setBulkBusy(false); }
+  };
+
+  const saveBulk = async () => {
+    setBulkBusy(true);
+    setError("");
+    try {
+      const res = await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "affiliate", action: "import-save", bulk: bulkText, with_price: bulkWithPrice }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      setBulkText("");
+      setBulkPreview(null);
+      await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Gagal menyimpan."); }
+    finally { setBulkBusy(false); }
+  };
+
+  const toggleSelect = (id: number) => {
+    setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  };
+  const toggleSelectAll = () => {
+    setSelected((s) => (s.size === items.length ? new Set() : new Set(items.map((i) => i.id))));
+  };
+
+  const bulkAction = async (verb: "activate" | "deactivate" | "delete") => {
+    if (!selected.size) return;
+    if (verb === "delete" && !window.confirm(`Hapus ${selected.size} produk terpilih? Hitungan kliknya ikut hilang.`)) return;
+    await fetch("/admin/api/berita", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resource: "affiliate", action: "bulk", verb, ids: Array.from(selected) }),
+    });
+    setSelected(new Set());
+    await load();
+  };
+
   return (
     <div className="mt-6">
       <p className="mb-4 text-sm text-slate-400">
@@ -895,14 +959,80 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
         </div>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+      <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <h3 className="mb-2 text-sm font-bold">📥 Impor Massal (Shopee/Tokopedia/dll)</h3>
+        <p className="mb-3 text-xs text-slate-400">
+          Tempel salinan dari tabel Excel/CSV export program afiliasi, atau unggah berkasnya. Kolom dikenali otomatis dari isinya (nama produk, tautan, harga, toko), termasuk memilih tautan pendek yang benar-benar berkomisi.
+        </p>
+        <textarea
+          value={bulkText}
+          onChange={(e) => { setBulkText(e.target.value); setBulkPreview(null); }}
+          rows={6}
+          placeholder="Tempel di sini, satu produk per baris…"
+          className={inputCls + " font-mono text-xs"}
+        />
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10">
+            📎 Unggah CSV/TXT
+            <input type="file" accept=".csv,.txt,text/csv,text/plain" className="hidden" onChange={(e) => readBulkFile(e.target.files)} />
+          </label>
+          <label className="flex items-center gap-2 text-xs text-slate-300">
+            <input type="checkbox" checked={bulkWithPrice} onChange={(e) => setBulkWithPrice(e.target.checked)} /> Sertakan harga dari data
+          </label>
+          <button onClick={previewBulk} disabled={bulkBusy} className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-bold text-white disabled:opacity-50">
+            {bulkBusy ? "Memproses…" : "🔍 Pratinjau"}
+          </button>
+        </div>
+
+        {bulkPreview && (
+          <div className="mt-4">
+            <div className="mb-2 overflow-x-auto rounded-lg border border-white/10">
+              <table className="w-full text-xs">
+                <thead><tr className="border-b border-white/10 text-left uppercase text-slate-400"><th className="px-3 py-2">Nama</th><th className="px-3 py-2">Toko</th><th className="px-3 py-2">Harga</th><th className="px-3 py-2">Status</th></tr></thead>
+                <tbody>
+                  {bulkPreview.map((r, i) => (
+                    <tr key={i} className={`border-b border-white/5 last:border-0 ${r.error ? "bg-red-500/10" : r.warn ? "bg-amber-500/10" : ""}`}>
+                      <td className="px-3 py-2">{r.title || <span className="text-red-300">—</span>}</td>
+                      <td className="px-3 py-2 text-slate-400">{r.merchant || "Shopee"}</td>
+                      <td className="px-3 py-2 text-slate-400">{r.price || "—"}</td>
+                      <td className="px-3 py-2">
+                        {r.error ? <span className="text-red-300">⚠ {r.error}</span> : r.warn ? <span className="text-amber-300">⚠ {r.warn}</span> : <span className="text-emerald-light">✓ siap</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mb-2 text-xs text-slate-400">
+              {bulkPreview.filter((r) => !r.error).length} produk siap diimpor, {bulkPreview.filter((r) => r.error).length} baris dilewati (baris bermasalah bisa diperbaiki di teks di atas lalu pratinjau ulang).
+            </p>
+            <button onClick={saveBulk} disabled={bulkBusy || !bulkPreview.some((r) => !r.error)} className="rounded-full bg-emerald-cta px-5 py-2 text-sm font-bold text-white disabled:opacity-50">
+              {bulkBusy ? "Menyimpan…" : `✅ Simpan ${bulkPreview.filter((r) => !r.error).length} Produk`}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {selected.size > 0 && (
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
+          <span className="text-xs text-slate-400">{selected.size} dipilih</span>
+          <button onClick={() => bulkAction("activate")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Aktifkan</button>
+          <button onClick={() => bulkAction("deactivate")} className="rounded-full border border-white/15 px-3 py-1 text-xs">Nonaktifkan</button>
+          <button onClick={() => bulkAction("delete")} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">Hapus</button>
+        </div>
+      )}
+
+      <div className="mt-3 overflow-x-auto rounded-2xl border border-white/10">
         <table className="w-full text-sm">
-          <thead><tr className="border-b border-white/10 text-left text-xs uppercase text-slate-400"><th className="px-4 py-3">Produk</th><th className="px-4 py-3">Kategori</th><th className="px-4 py-3">Klik</th><th className="px-4 py-3">Status</th><th className="px-4 py-3"></th></tr></thead>
+          <thead><tr className="border-b border-white/10 text-left text-xs uppercase text-slate-400">
+            <th className="px-4 py-3"><input type="checkbox" checked={items.length > 0 && selected.size === items.length} onChange={toggleSelectAll} /></th>
+            <th className="px-4 py-3">Produk</th><th className="px-4 py-3">Kategori</th><th className="px-4 py-3">Klik</th><th className="px-4 py-3">Status</th><th className="px-4 py-3"></th></tr></thead>
           <tbody>
-            {loading && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
-            {!loading && items.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Belum ada produk afiliasi.</td></tr>}
+            {loading && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
+            {!loading && items.length === 0 && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Belum ada produk afiliasi.</td></tr>}
             {!loading && items.map((it) => (
               <tr key={it.id} className="border-b border-white/5 last:border-0">
+                <td className="px-4 py-3"><input type="checkbox" checked={selected.has(it.id)} onChange={() => toggleSelect(it.id)} /></td>
                 <td className="px-4 py-3 font-semibold">{it.title}{it.merchant ? <span className="ml-2 text-xs text-slate-500">({it.merchant})</span> : ""}</td>
                 <td className="px-4 py-3 text-slate-400">{it.category_name || "Semua"}</td>
                 <td className="px-4 py-3 text-slate-400">{it.click_count}</td>

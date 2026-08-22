@@ -3,6 +3,7 @@
  * pengaturan). Digerbangi oleh functions/admin/api/_middleware.ts.
  */
 import { ensureUniqueSlug, readingMinutes, slugify } from "../../_lib/news";
+import { parseAffiliateBulk } from "../../_lib/affiliateImport";
 
 interface Env {
   DB: D1Database;
@@ -193,6 +194,50 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (action === "delete") {
       await db.prepare("DELETE FROM affiliate_items WHERE id = ?").bind(Number(body.id)).run();
       return jsonOk({ ok: true });
+    }
+
+    // Aksi massal atas produk yang dicentang di tabel.
+    if (action === "bulk") {
+      const ids = (Array.isArray(body.ids) ? body.ids : []).map(Number).filter((n) => n > 0).slice(0, 500);
+      const verb = String(body.verb || "");
+      if (!ids.length) return jsonError(400, "Tidak ada produk yang dipilih.");
+      const ph = ids.map(() => "?").join(",");
+      if (verb === "delete") {
+        await db.prepare(`DELETE FROM affiliate_items WHERE id IN (${ph})`).bind(...ids).run();
+        return jsonOk({ ok: true, count: ids.length });
+      }
+      if (verb === "activate" || verb === "deactivate") {
+        await db.prepare(`UPDATE affiliate_items SET is_active = ?, updated_at = ? WHERE id IN (${ph})`).bind(verb === "activate" ? 1 : 0, now, ...ids).run();
+        return jsonOk({ ok: true, count: ids.length });
+      }
+      return jsonError(400, "Aksi massal tidak dikenal.");
+    }
+
+    // Impor massal, dua langkah: pratinjau dulu (tidak menulis DB), baru simpan.
+    if (action === "import-preview" || action === "import-save") {
+      const raw = String(body.bulk || "");
+      const rows = parseAffiliateBulk(raw);
+      if (!rows.length) return jsonError(400, "Tidak ada baris produk yang bisa dibaca. Periksa lagi tempelannya.");
+
+      if (action === "import-preview") {
+        return jsonOk({ rows });
+      }
+
+      const withPrice = !!body.with_price;
+      let ok = 0;
+      let gagal = 0;
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        if (r.error) { gagal++; continue; }
+        const res = await db
+          .prepare(
+            "INSERT INTO affiliate_items (title, url, image, price_text, merchant, note, category_id, sort_order, is_active, click_count, created_at, updated_at) VALUES (?,?,?,?,?,NULL,NULL,?,1,0,?,?)"
+          )
+          .bind(r.title, r.url, r.image ? r.image.slice(0, 250) : "", withPrice && r.price ? r.price.slice(0, 55) : "", r.merchant || "Shopee", i, now, now)
+          .run();
+        if (res.success) ok++; else gagal++;
+      }
+      return jsonOk({ ok: true, imported: ok, skipped: gagal });
     }
     if (action === "save") {
       const title = String(body.title || "").trim();

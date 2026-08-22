@@ -170,7 +170,7 @@ export default function Footer() {
 
         <hr className="my-8 border-white/10" />
 
-        <div className="flex flex-col items-center justify-between gap-3 text-sm text-white/70 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-3 text-center text-sm text-white/70 md:flex-row md:text-left">
           <p>© 2026 AMAN Digital — Partner Digital UMKM Indonesia.</p>
           <p>Sistem oleh Adya Malik · Blangpidie, Aceh</p>
         </div>

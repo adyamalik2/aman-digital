@@ -168,7 +168,7 @@ export default function DataSystemPage() {
           <p className="mt-2 text-center text-slate-600">
             Langkah terstruktur dari konsultasi hingga sistem siap pakai.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-4">
+          <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
             {steps.map((s) => (
               <div
                 key={s.num}

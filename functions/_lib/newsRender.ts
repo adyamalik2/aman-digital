@@ -25,10 +25,12 @@ const STYLE = `
   .topbar { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 10px; }
   .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 900; font-size: 1.1rem; flex-shrink: 0; white-space: nowrap; }
   .brand img { height: 32px; width: auto; border-radius: 7px; flex-shrink: 0; }
-  .navcats { display: flex; gap: 4px; overflow-x: auto; padding: 0 0 12px; scrollbar-width: none; }
+  .navcats-wrap { position: relative; }
+  .navcats { display: flex; gap: 4px; overflow-x: auto; padding: 0 24px 12px 0; scrollbar-width: none; }
   .navcats::-webkit-scrollbar { display: none; }
   .navcats a { color: #cbd5e1; font-size: .84rem; font-weight: 700; padding: 6px 13px; border-radius: 999px; white-space: nowrap; }
   .navcats a:hover, .navcats a.active { background: rgba(16,185,129,.18); color: #6ee7b7; }
+  .navcats-fade { position: absolute; top: 0; right: 16px; bottom: 12px; width: 28px; background: linear-gradient(to right, rgba(7,11,20,0), #070B14 65%); pointer-events: none; }
   .search-box { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
   .search-box input { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 999px; padding: 8px 14px; color: #fff; font-size: .84rem; width: 200px; min-width: 0; flex: 1; }
   .search-box input::placeholder { color: #64748b; }
@@ -59,7 +61,7 @@ const STYLE = `
   .headline-body p { color: #64748b; line-height: 1.7; margin: 0 0 12px; }
   .headline-body .meta { color: #475569; font-size: .8rem; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
   .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
   .card:hover { box-shadow: 0 10px 26px rgba(0,0,0,.08); transform: translateY(-2px); }
   .card .thumb { position: relative; aspect-ratio: 16/10; background: #ecfdf5; }
@@ -96,7 +98,7 @@ const STYLE = `
   .aff-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
   .aff-head h2 { margin: 0; font-size: .95rem; font-weight: 800; color: #92400e; }
   .aff-badge { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; background: #b45309; color: #fff; padding: 3px 10px; border-radius: 999px; }
-  .aff-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+  .aff-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
   .aff-item { background: #fff; border: 1px solid #fde68a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
   .aff-item .thumb { aspect-ratio: 1/1; background: #fef3c7; display: grid; place-items: center; }
   .aff-item .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -152,9 +154,12 @@ ${ticker}
       <a href="/admin/berita" title="Masuk Newsroom (redaksi)" style="display:grid;place-items:center;width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#cbd5e1;flex-shrink:0" aria-label="Masuk Newsroom">📰</a>
     </div>
   </div>
-  <div class="wrap navcats">
-    <a href="/berita" class="${!opts.activeCategory ? "active" : ""}">Beranda</a>
-    ${navLinks}
+  <div class="wrap navcats-wrap">
+    <div class="navcats">
+      <a href="/berita" class="${!opts.activeCategory ? "active" : ""}">Beranda</a>
+      ${navLinks}
+    </div>
+    <div class="navcats-fade" aria-hidden="true"></div>
   </div>
 </header>
 ${opts.body}

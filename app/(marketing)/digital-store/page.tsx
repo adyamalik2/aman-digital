@@ -27,6 +27,7 @@ type Product = {
   icon: LucideIcon;
   title: string;
   desc: string;
+  price?: { now: string; was?: string };
   cta: { label: string; href: string; type: "lynk" | "wa" };
 };
 
@@ -35,9 +36,10 @@ const products: Product[] = [
     icon: Boxes,
     title: "700+ Produk Digital 2026",
     desc: "Koleksi produk digital siap pakai: 44 pilihan terkurasi (tema Islami, edukasi anak, game ringan, plus bonus template & tools) — dan akses folder Google Drive berisi 700+ berkas lengkap. Satu kode akses, langsung buka semua, tinggal klik tanpa unduh satu per satu.",
+    price: { now: "Rp 49.000", was: "Rp 200.000" },
     cta: {
       label: "Beli di Lynk.id",
-      href: "https://lynk.id/adya.malik",
+      href: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
       type: "lynk",
     },
   },
@@ -117,6 +119,14 @@ export default function DigitalStorePage() {
                 <p className="mt-2 flex-1 leading-relaxed text-slate-600">
                   {p.desc}
                 </p>
+                {p.price && (
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-navy">{p.price.now}</span>
+                    {p.price.was && (
+                      <span className="text-sm text-slate-400 line-through">{p.price.was}</span>
+                    )}
+                  </div>
+                )}
                 <a
                   href={p.cta.href}
                   target="_blank"

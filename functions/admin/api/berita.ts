@@ -231,7 +231,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         if (r.error) { gagal++; continue; }
         const res = await db
           .prepare(
-            "INSERT INTO affiliate_items (title, url, image, price_text, merchant, note, category_id, sort_order, is_active, click_count, created_at, updated_at) VALUES (?,?,?,?,?,NULL,NULL,?,1,0,?,?)"
+            "INSERT INTO affiliate_items (title, url, image, price_text, merchant, note, category_id, sort_order, is_active, click_count, created_at, updated_at) VALUES (?,?,?,?,?,'',NULL,?,1,0,?,?)"
           )
           .bind(r.title, r.url, r.image ? r.image.slice(0, 250) : "", withPrice && r.price ? r.price.slice(0, 55) : "", r.merchant || "Shopee", i, now, now)
           .run();

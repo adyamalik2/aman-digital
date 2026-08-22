@@ -143,10 +143,13 @@ ${ticker}
 <header class="site">
   <div class="wrap topbar">
     <a class="brand" href="/berita"><img src="/images/logo-header.webp" alt="">AMAN NEWS</a>
-    <form class="search-box" action="/berita/cari" method="get">
-      <input type="text" name="q" placeholder="Cari berita…">
-      <button type="submit">🔍</button>
-    </form>
+    <div style="display:flex;align-items:center;gap:10px">
+      <form class="search-box" action="/berita/cari" method="get">
+        <input type="text" name="q" placeholder="Cari berita…">
+        <button type="submit">🔍</button>
+      </form>
+      <a href="/admin/berita" title="Masuk Newsroom (redaksi)" style="display:grid;place-items:center;width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#cbd5e1;flex-shrink:0" aria-label="Masuk Newsroom">📰</a>
+    </div>
   </div>
   <div class="wrap navcats">
     <a href="/berita" class="${!opts.activeCategory ? "active" : ""}">Beranda</a>

@@ -906,6 +906,10 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
   const [bulkWithPrice, setBulkWithPrice] = useState(false);
   const [bulkPreview, setBulkPreview] = useState<{ title: string; url: string; price: string; merchant: string; image: string; error: string; warn: string }[] | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [pullBusy, setPullBusy] = useState(false);
+  const [pullResult, setPullResult] = useState<{ moved: number; total: number; failed: string[] } | null>(null);
+  const [deleteAllText, setDeleteAllText] = useState("");
+  const [deleteAllBusy, setDeleteAllBusy] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -1021,6 +1025,41 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
     await load();
   };
 
+  const pullRemoteImages = async () => {
+    setPullBusy(true);
+    setError("");
+    setPullResult(null);
+    try {
+      const res = await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "affiliate", action: "pull-remote-images" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      setPullResult({ moved: data.moved, total: data.total, failed: data.failed || [] });
+      if (data.moved > 0) await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Gagal menarik gambar."); }
+    finally { setPullBusy(false); }
+  };
+
+  const deleteAll = async () => {
+    if (deleteAllText !== "HAPUS SEMUA") return;
+    setDeleteAllBusy(true);
+    setError("");
+    try {
+      const res = await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "affiliate", action: "delete-all", confirm: deleteAllText }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      setDeleteAllText("");
+      setSelected(new Set());
+      await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Gagal menghapus."); }
+    finally { setDeleteAllBusy(false); }
+  };
+
   return (
     <div className="mt-6">
       <p className="mb-4 text-sm text-slate-400">
@@ -1116,6 +1155,32 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
         )}
       </div>
 
+      <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <h3 className="mb-2 text-sm font-bold">🌐 Tarik Gambar dari CDN Toko</h3>
+        <p className="mb-3 text-xs text-slate-400">
+          Produk hasil impor kadang gambarnya masih menumpang di server Shopee/Tokopedia (tautan http/https langsung). Tombol ini mengunduh gambar-gambar itu (maks 50 sekali jalan) dan menyimpannya ke Media Library sendiri, supaya tidak putus kalau CDN toko berubah.
+        </p>
+        <button onClick={pullRemoteImages} disabled={pullBusy} className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-bold text-white disabled:opacity-50">
+          {pullBusy ? "Menarik gambar…" : "🌐 Tarik Gambar Sekarang"}
+        </button>
+        {pullResult && (
+          <div className="mt-3 text-xs">
+            {pullResult.total === 0 ? (
+              <p className="text-slate-400">Tidak ada gambar yang masih menumpang di server luar.</p>
+            ) : (
+              <>
+                <p className="text-emerald-light">{pullResult.moved} dari {pullResult.total} gambar dipindahkan ke Media Library.</p>
+                {pullResult.failed.length > 0 && (
+                  <ul className="mt-1 list-disc pl-4 text-amber-300">
+                    {pullResult.failed.map((f, i) => <li key={i}>{f}</li>)}
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
       {selected.size > 0 && (
         <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
           <span className="text-xs text-slate-400">{selected.size} dipilih</span>
@@ -1153,6 +1218,38 @@ function AffiliateTab({ setError }: { setError: (e: string) => void }) {
           </tbody>
         </table>
       </div>
+
+      {items.length > 0 && (
+        <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/5 p-5">
+          <h3 className="mb-1 text-sm font-bold text-red-300">☠️ Zona Bahaya</h3>
+          <p className="mb-3 text-xs text-slate-400">
+            Hapus permanen SEMUA {items.length} produk afiliasi beserta hitungan kliknya. Tidak bisa dibatalkan.
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <label htmlFor="aff-confirm-hapus-semua" className="text-xs text-slate-300">
+              Ketik <code className="rounded bg-white/10 px-1.5 py-0.5">HAPUS SEMUA</code> untuk mengonfirmasi
+            </label>
+          </div>
+          <div className="mt-2 flex gap-2">
+            <input
+              id="aff-confirm-hapus-semua"
+              type="text"
+              autoComplete="off"
+              value={deleteAllText}
+              onChange={(e) => setDeleteAllText(e.target.value)}
+              placeholder="HAPUS SEMUA"
+              className={inputCls + " max-w-xs"}
+            />
+            <button
+              onClick={deleteAll}
+              disabled={deleteAllText !== "HAPUS SEMUA" || deleteAllBusy}
+              className="shrink-0 rounded-full border border-red-500/40 px-5 py-2 text-sm font-bold text-red-300 disabled:opacity-40"
+            >
+              {deleteAllBusy ? "Menghapus…" : "Hapus Semua Permanen"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

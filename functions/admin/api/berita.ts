@@ -4,9 +4,11 @@
  */
 import { ensureUniqueSlug, readingMinutes, slugify } from "../../_lib/news";
 import { parseAffiliateBulk } from "../../_lib/affiliateImport";
+import { fetchRemoteImage } from "../../_lib/mediaFetch";
 
 interface Env {
   DB: D1Database;
+  MEDIA: R2Bucket;
 }
 
 const jsonError = (status: number, message: string) =>
@@ -255,6 +257,37 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
       return jsonOk({ ok: true, imported: ok, skipped: gagal });
     }
+
+    // Tarik gambar produk yang masih menumpang di CDN toko luar ke Media Library sendiri.
+    if (action === "pull-remote-images") {
+      const { results } = await db
+        .prepare("SELECT id, title, image FROM affiliate_items WHERE image LIKE 'http%' ORDER BY id ASC LIMIT 50")
+        .all<{ id: number; title: string; image: string }>();
+      const rows = results || [];
+      let moved = 0;
+      const failed: string[] = [];
+      for (const r of rows) {
+        const res = await fetchRemoteImage(context.env.MEDIA, r.image);
+        if (res.ok) {
+          await db.prepare("UPDATE affiliate_items SET image=?, updated_at=? WHERE id=?").bind(res.url, now, r.id).run();
+          moved++;
+        } else {
+          failed.push(`${r.title.slice(0, 28)}: ${res.error}`);
+        }
+      }
+      return jsonOk({ ok: true, moved, total: rows.length, failed });
+    }
+
+    // Hapus SEMUA produk afiliasi -- butuh ketik ulang teks konfirmasi, bukan cuma window.confirm.
+    if (action === "delete-all") {
+      if (String(body.confirm || "") !== "HAPUS SEMUA") {
+        return jsonError(400, "Teks konfirmasi tidak cocok. Ketik persis HAPUS SEMUA.");
+      }
+      const countRow = await db.prepare("SELECT COUNT(*) AS n FROM affiliate_items").first<{ n: number }>();
+      await db.prepare("DELETE FROM affiliate_items").run();
+      return jsonOk({ ok: true, count: countRow?.n || 0 });
+    }
+
     if (action === "save") {
       const title = String(body.title || "").trim();
       const itemUrl = String(body.url || "").trim();

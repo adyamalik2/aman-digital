@@ -39,6 +39,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const body = (await context.request.json()) as { action?: string; key?: string };
     if (body.action === "delete" && body.key) {
       await context.env.MEDIA.delete(body.key);
+      // Objek ini dilayani dengan Cache-Control immutable 1 tahun (lihat
+      // functions/media/[[path]].ts) supaya CDN edge Cloudflare menyimpannya
+      // -- begitu dihapus dari R2, salinan di edge cache HARUS ikut dibuang
+      // di sini, kalau tidak URL yang sudah dihapus tetap menyajikan 200
+      // (HIT dari cache) sampai TTL habis.
+      const purgeUrl = new URL(`/media/${body.key}`, context.request.url).toString();
+      await caches.default.delete(purgeUrl);
       return jsonOk({ ok: true });
     }
     return jsonError(400, "Aksi tidak dikenal.");

@@ -14,7 +14,7 @@ import {
   youtubeId,
   type Comment,
 } from "../_lib/news";
-import { renderAffiliateWidget, renderCard, renderShell } from "../_lib/newsRender";
+import { catStyle, renderAffiliateWidget, renderCard, renderShell } from "../_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -122,7 +122,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const body = `
   <article class="sect wrap" style="max-width:800px">
     <a href="/berita" style="color:#94a3b8;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
-    ${article.category_name ? `<div style="margin-top:16px"><a href="/berita/kategori/${article.category_slug}" class="cat-badge" style="background:${article.category_color}22;color:${article.category_color}">${article.category_name}</a></div>` : ""}
+    ${article.category_name ? `<div style="margin-top:16px"><a href="/berita/kategori/${article.category_slug}" class="cat-badge" style="${catStyle(article.category_color || "")}">${article.category_name}</a></div>` : ""}
     <h1 style="font-size:2rem;font-weight:900;line-height:1.3;margin:14px 0 12px">${article.title}</h1>
     <div style="color:#94a3b8;font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap">
       ${article.author_name ? `<span>✍️ <a href="/berita/penulis/${article.author_slug}" style="color:#475569;font-weight:600">${article.author_name}</a></span>` : ""}

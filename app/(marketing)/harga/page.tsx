@@ -85,13 +85,31 @@ const faqs = [
 
 /* ---------------- Helpers ---------------- */
 
-function Mark({ included }: { included: boolean }) {
+/**
+ * Dipakai di DUA latar sekaligus: tabel perbandingan (latar putih) dan kartu
+ * paket (latar navy gelap). Satu pasang warna tidak pernah bisa lolos di
+ * keduanya -- menggelapkan untuk tabel justru mematahkan yang di kartu gelap.
+ * Karena itu warnanya dipilih per-latar lewat `onDark`.
+ */
+function Mark({
+  included,
+  onDark = false,
+}: {
+  included: boolean;
+  onDark?: boolean;
+}) {
   return included ? (
-    <span className="font-bold text-emerald-dark" aria-label="Termasuk">
+    <span
+      className={`font-bold ${onDark ? "text-emerald" : "text-emerald-dark"}`}
+      aria-label="Termasuk"
+    >
       ✓
     </span>
   ) : (
-    <span className="text-slate-500" aria-label="Tidak termasuk">
+    <span
+      className={onDark ? "text-slate-300" : "text-slate-500"}
+      aria-label="Tidak termasuk"
+    >
       —
     </span>
   );
@@ -224,7 +242,7 @@ export default function HargaPage() {
                       }`}
                     >
                       <span className="mt-0.5 shrink-0">
-                        <Mark included={f.included} />
+                        <Mark included={f.included} onDark />
                       </span>
                       <span>{f.label}</span>
                     </li>
@@ -292,7 +310,11 @@ export default function HargaPage() {
               <table className="w-full min-w-[640px] border-collapse">
               <thead>
                 <tr className="border-b border-slate-200">
-                  <th className="sticky left-0 z-10 w-[45%] bg-white px-4 py-4 text-left text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                  {/* Di HP kolom ini melebar sampai 288px dari 343px yang tersedia,
+                      sehingga kolom harga justru tertutup olehnya saat digeser.
+                      Lebar tetap yang jauh lebih sempit menyisakan ~190px untuk
+                      kolom nilai -- cukup menampilkan satu paket penuh sekaligus. */}
+                  <th className="sticky left-0 z-10 w-[132px] bg-white px-3 py-4 text-left text-xs font-extrabold uppercase tracking-wider text-slate-500 sm:w-[45%] sm:px-4">
                     Fitur
                   </th>
                   <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-slate-500">
@@ -322,7 +344,7 @@ export default function HargaPage() {
                       key={`${row.label}-${i}`}
                       className="border-b border-slate-100"
                     >
-                      <td className="sticky left-0 z-10 bg-white px-4 py-3 text-sm text-slate-700">
+                      <td className="sticky left-0 z-10 bg-white px-3 py-3 text-sm text-slate-700 sm:px-4">
                         {row.label}
                       </td>
                       <td className="px-4 py-3 text-center text-sm">

@@ -398,7 +398,7 @@ export default function BudgetPage() {
 
           {/* Phone mockup */}
           <div className="flex justify-center lg:justify-end">
-            <div className="w-[280px] max-w-[88vw] rounded-[2.4rem] bg-navy p-2 shadow-2xl">
+            <div className="mock-scale-lg w-[280px] max-w-[88vw] rounded-[2.4rem] bg-navy p-2 shadow-2xl">
               <div className="overflow-hidden rounded-[2rem] bg-slate-100">
                 <div className="bg-gradient-to-b from-emerald-light via-emerald to-emerald-dark p-4 text-white">
                   <div className="flex items-center justify-between">

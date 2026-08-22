@@ -184,7 +184,10 @@ export default function Navbar() {
           type="button"
           aria-label="Buka menu"
           aria-expanded={mobileOpen}
-          className="text-white md:hidden"
+          // p-2.5 menaikkan area sentuh dari 24x24 ke 44x44 (panduan minimum);
+          // -m-2.5 membatalkan pertambahan ukurannya supaya posisi ikon di
+          // navbar tidak bergeser sama sekali.
+          className="-m-2.5 p-2.5 text-white md:hidden"
           onClick={() => setMobileOpen((v) => !v)}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}

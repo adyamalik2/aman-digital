@@ -30,7 +30,14 @@ const STYLE = `
   .navcats::-webkit-scrollbar { display: none; }
   .navcats a { color: #cbd5e1; font-size: .84rem; font-weight: 700; padding: 6px 13px; border-radius: 999px; white-space: nowrap; }
   .navcats a:hover, .navcats a.active { background: rgba(16,185,129,.18); color: #6ee7b7; }
-  .navcats-fade { position: absolute; top: 0; right: 16px; bottom: 12px; width: 28px; background: linear-gradient(to right, rgba(7,11,20,0), #070B14 65%); pointer-events: none; }
+  /* Versi pertama memakai stop warna PEKAT di 65% (#070B14 solid), jadi ~10px
+     terakhir bukan memudar tapi padam total -- kategori di ujung hilang sama
+     sekali dan justru lebih tidak informatif daripada terpotong tengah kata.
+     Sekarang alfanya tidak pernah mencapai 1 di area yang masih ada teksnya,
+     jadi kategori berikutnya tetap terbaca samar. Sisi kanannya sengaja 2px
+     lewat tepi konten untuk menutup seam 1px di batasnya. */
+  .navcats-fade { position: absolute; top: 0; right: 14px; bottom: 12px; width: 36px; background: linear-gradient(to right, rgba(7,11,20,0), rgba(7,11,20,.85)); pointer-events: none; transition: opacity .18s ease; }
+  .navcats-wrap.at-end .navcats-fade { opacity: 0; }
   .search-box { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
   .search-box input { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 999px; padding: 8px 14px; color: #fff; font-size: .84rem; width: 200px; min-width: 0; flex: 1; }
   .search-box input::placeholder { color: #64748b; }
@@ -161,6 +168,22 @@ ${ticker}
     </div>
     <div class="navcats-fade" aria-hidden="true"></div>
   </div>
+  <script>
+    (function(){
+      var wrap = document.querySelector('.navcats-wrap');
+      var bar = wrap && wrap.querySelector('.navcats');
+      if (!wrap || !bar) return;
+      // Sembunyikan gradien saat sudah mentok kanan ATAU saat semua kategori
+      // memang muat (desktop) -- isyarat "masih ada lagi" harus jujur.
+      function sync(){
+        var atEnd = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 2;
+        wrap.classList.toggle('at-end', atEnd);
+      }
+      sync();
+      bar.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+    })();
+  </script>
 </header>
 ${opts.body}
 <footer class="site">
@@ -191,8 +214,59 @@ function thumbOr(article: Article, fallback = "📰"): string {
     : `<div style="width:100%;height:100%;display:grid;place-items:center;font-size:2rem;background:#ecfdf5">${fallback}</div>`;
 }
 
-function catStyle(color: string): string {
-  return `background:${color || "#059669"}22;color:${color || "#059669"}`;
+/**
+ * Badge kategori dulu memakai warna kategori sebagai teks di atas latar warna
+ * yang sama pada 13% opasitas (`${color}22`). Kombinasi itu tidak pernah lolos
+ * WCAG AA untuk teks kecil: rasionya jatuh di 2,58-4,67 (terburuk OLAHRAGA
+ * #ca8a04 = 2,58) padahal teks 10,9px butuh 4,5.
+ *
+ * Sekarang latarnya memakai warna kategori itu sendiri -- digelapkan bertahap
+ * hanya bila perlu -- dengan teks putih. Hue kategori tetap terjaga sehingga
+ * badge masih mudah dibedakan, tapi semua kategori sekarang >= 4,6:1.
+ */
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  let h = hex.replace("#", "").trim();
+  if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) h = "059669";
+  return {
+    r: parseInt(h.slice(0, 2), 16),
+    g: parseInt(h.slice(2, 4), 16),
+    b: parseInt(h.slice(4, 6), 16),
+  };
+}
+
+function rgbToHex({ r, g, b }: { r: number; g: number; b: number }): string {
+  const c = (v: number) =>
+    Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0");
+  return `#${c(r)}${c(g)}${c(b)}`;
+}
+
+function relLuminance({ r, g, b }: { r: number; g: number; b: number }): number {
+  const f = (v: number) => {
+    const x = v / 255;
+    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+}
+
+/** Rasio kontras warna ini terhadap teks putih. */
+function contrastWithWhite(c: { r: number; g: number; b: number }): number {
+  return 1.05 / (relLuminance(c) + 0.05);
+}
+
+/** Gelapkan warna bertahap sampai teks putih di atasnya lolos ambang AA. */
+function darkenUntilAA(hex: string, target = 4.6): string {
+  let c = hexToRgb(hex);
+  let guard = 0;
+  while (contrastWithWhite(c) < target && guard++ < 40) {
+    c = { r: c.r * 0.93, g: c.g * 0.93, b: c.b * 0.93 };
+  }
+  return rgbToHex(c);
+}
+
+export function catStyle(color: string): string {
+  const base = color && color.trim() ? color : "#059669";
+  return `background:${darkenUntilAA(base)};color:#fff`;
 }
 
 export function renderCard(a: Article): string {
@@ -223,7 +297,7 @@ export function renderHeroSlide(a: Article, active: boolean): string {
   return `<div class="hero-slide" ${active ? "" : 'style="display:none"'} data-slide>
     ${thumbOr(a)}
     <div class="ov">
-      ${a.category_name ? `<span class="cat-badge" style="background:${a.category_color || "#059669"};color:#fff">${escapeHtml(a.category_name)}</span>` : ""}
+      ${a.category_name ? `<span class="cat-badge" style="${catStyle(a.category_color || "")}">${escapeHtml(a.category_name)}</span>` : ""}
       <a href="/berita/${encodeURIComponent(a.slug)}"><h2>${escapeHtml(a.title)}</h2></a>
       <div class="meta">📅 ${formatDateID(a.published_at)} &middot; ${a.reading_minutes} menit baca</div>
     </div>

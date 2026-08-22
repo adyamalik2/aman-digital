@@ -165,10 +165,12 @@ export default function TentangPage() {
           <div className="flex flex-col items-center rounded-3xl border border-emerald/15 bg-emerald/5 p-10 text-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/Photo.png"
+              src="/images/photo-adya-malik.webp"
               alt="Adya Malik — Founder AMAN Digital"
               width={112}
               height={112}
+              loading="lazy"
+              decoding="async"
               className="h-28 w-28 rounded-full object-cover shadow-lg ring-4 ring-emerald/20"
             />
             <p className="mt-4 text-xl font-bold text-navy">Adya Malik</p>

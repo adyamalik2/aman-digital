@@ -82,7 +82,11 @@ function FooterCol({
 export default function Footer() {
   return (
     <footer className="bg-navy text-white">
-      <div className="mx-auto max-w-6xl px-4 py-14">
+      {/* pb ekstra hanya di HP: tombol mengambang (WhatsApp bottom-6 tinggi 56px,
+          "Kembali ke atas" bottom-24 tinggi 48px -> tepi atasnya 144px dari dasar
+          layar) mendarat tepat di atas dua baris teks penutup saat digulir mentok.
+          Di desktop tombolnya jatuh di luar kontainer max-w-6xl, jadi tidak perlu. */}
+      <div className="mx-auto max-w-6xl px-4 py-14 pb-40 md:pb-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">

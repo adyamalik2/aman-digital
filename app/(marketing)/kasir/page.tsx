@@ -449,7 +449,7 @@ export default function KasirPage() {
 
           {/* Phone mockup */}
           <div className="flex justify-center lg:col-span-5 lg:justify-end">
-            <div className="w-[260px] rounded-[2.2rem] bg-navy p-2 shadow-2xl">
+            <div className="mock-scale-lg w-[260px] rounded-[2.2rem] bg-navy p-2 shadow-2xl">
               <div className="overflow-hidden rounded-[1.8rem] bg-slate-100">
                 <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 pb-3 pt-4">
                   <div className="flex items-center gap-2">

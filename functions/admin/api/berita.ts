@@ -67,6 +67,16 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     return jsonOk({ comments: results });
   }
 
+  if (resource === "affiliate") {
+    const { results } = await db
+      .prepare(
+        `SELECT ai.*, c.name AS category_name FROM affiliate_items ai
+         LEFT JOIN categories c ON c.id = ai.category_id ORDER BY ai.sort_order ASC, ai.id DESC`
+      )
+      .all();
+    return jsonOk({ items: results });
+  }
+
   // resource === "articles"
   const id = url.searchParams.get("id");
   if (id) {
@@ -174,6 +184,45 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       const status = action === "approve" ? "approved" : action;
       await db.prepare("UPDATE comments SET status = ? WHERE id = ?").bind(status, id).run();
       return jsonOk({ ok: true });
+    }
+    return jsonError(400, "Aksi tidak dikenal.");
+  }
+
+  // ── Produk afiliasi ──
+  if (resource === "affiliate") {
+    if (action === "delete") {
+      await db.prepare("DELETE FROM affiliate_items WHERE id = ?").bind(Number(body.id)).run();
+      return jsonOk({ ok: true });
+    }
+    if (action === "save") {
+      const title = String(body.title || "").trim();
+      const itemUrl = String(body.url || "").trim();
+      if (!title) return jsonError(400, "Nama produk wajib diisi.");
+      if (!/^https?:\/\//i.test(itemUrl)) return jsonError(400, "Tautan produk harus diawali http:// atau https://.");
+      const id = body.id ? Number(body.id) : null;
+      const image = String(body.image || "");
+      const priceText = String(body.price_text || "");
+      const merchant = String(body.merchant || "");
+      const note = String(body.note || "");
+      const categoryId = body.category_id ? Number(body.category_id) : null;
+      const sortOrder = Number(body.sort_order || 0);
+      const isActive = body.is_active === false ? 0 : 1;
+      if (id) {
+        await db
+          .prepare(
+            "UPDATE affiliate_items SET title=?, url=?, image=?, price_text=?, merchant=?, note=?, category_id=?, sort_order=?, is_active=?, updated_at=? WHERE id=?"
+          )
+          .bind(title, itemUrl, image, priceText, merchant, note, categoryId, sortOrder, isActive, now, id)
+          .run();
+        return jsonOk({ ok: true, id });
+      }
+      const res = await db
+        .prepare(
+          "INSERT INTO affiliate_items (title, url, image, price_text, merchant, note, category_id, sort_order, is_active, click_count, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,0,?,?)"
+        )
+        .bind(title, itemUrl, image, priceText, merchant, note, categoryId, sortOrder, isActive, now, now)
+        .run();
+      return jsonOk({ ok: true, id: res.meta.last_row_id });
     }
     return jsonError(400, "Aksi tidak dikenal.");
   }

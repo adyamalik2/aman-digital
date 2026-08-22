@@ -3,7 +3,7 @@
  * Dirender per-permintaan oleh Pages Function (bukan Next.js), sama seperti
  * pola functions/berita.ts sebelumnya -- CSS ditulis inline & mandiri.
  */
-import { escapeHtml, formatDateID, youtubeId, type Article, type Category } from "./news";
+import { escapeHtml, formatDateID, youtubeId, type AffiliateItem, type Article, type Category } from "./news";
 
 const STYLE = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -90,6 +90,21 @@ const STYLE = `
   footer.site a { color: #94a3b8; text-decoration: none; font-size: .85rem; }
   footer.site a:hover { color: #34d399; }
   footer.site .bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 18px; font-size: .8rem; text-align: center; }
+
+  .aff-sect { background: #fffbeb; border: 1px solid #fde68a; border-radius: 16px; padding: 20px; }
+  .aff-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  .aff-head h2 { margin: 0; font-size: .95rem; font-weight: 800; color: #92400e; }
+  .aff-badge { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; background: #f59e0b; color: #fff; padding: 3px 10px; border-radius: 999px; }
+  .aff-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+  .aff-item { background: #fff; border: 1px solid #fde68a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .aff-item .thumb { aspect-ratio: 1/1; background: #fef3c7; display: grid; place-items: center; }
+  .aff-item .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .aff-item .body { padding: 10px; }
+  .aff-item .merchant { display: block; font-size: .68rem; color: #b45309; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+  .aff-item .aff-title { display: block; font-size: .82rem; font-weight: 600; color: #1e293b; line-height: 1.3; margin-bottom: 4px; }
+  .aff-item .price { display: block; font-size: .85rem; font-weight: 800; color: #b45309; }
+  .aff-item .note { display: block; font-size: .7rem; color: #94a3b8; margin-top: 2px; }
+  .aff-disc { margin: 14px 0 0; font-size: .72rem; color: #92400e; opacity: .8; }
 `;
 
 export function renderShell(opts: {
@@ -243,6 +258,37 @@ export function renderArchiveBody(opts: {
       ${opts.items.length ? `<div class="grid">${opts.items.map(renderCard).join("")}</div>` : `<p style="color:#94a3b8">${escapeHtml(opts.emptyMessage || "Belum ada artikel.")}</p>`}
       ${pagination}
     </div>
+  </section>`;
+}
+
+/**
+ * Widget "Belanja Pilihan" -- produk afiliasi. Port dari news_affiliate_widget()
+ * (berita/inc/layout.php): badge "Bersponsor" wajib tampil, tautan lewat
+ * /berita/go (penghitung klik) dengan rel="nofollow sponsored", label
+ * pengungkapan opsional dari pengaturan. Kosong = tidak dirender sama sekali
+ * (dipanggil hanya kalau items.length > 0 -- lihat pemanggil).
+ */
+export function renderAffiliateWidget(items: AffiliateItem[], title: string, disclosure: string): string {
+  if (!items.length) return "";
+  const cards = items
+    .map((it) => {
+      const merchant = /^(rp\s*)?[\d][\d.,]*\s*(rb|jt|k)?$/i.test(it.merchant.trim()) ? "" : it.merchant;
+      return `<a class="aff-item" href="/berita/go?id=${it.id}" target="_blank" rel="nofollow sponsored noopener">
+        <div class="thumb">${it.image ? `<img src="${escapeHtml(it.image)}" alt="" loading="lazy">` : `<span style="font-size:1.6rem">🏷️</span>`}</div>
+        <div class="body">
+          ${merchant ? `<span class="merchant">${escapeHtml(merchant)}</span>` : ""}
+          <span class="aff-title">${escapeHtml(it.title)}</span>
+          ${it.price_text ? `<span class="price">${escapeHtml(it.price_text)}</span>` : ""}
+          ${it.note ? `<span class="note">${escapeHtml(it.note)}</span>` : ""}
+        </div>
+      </a>`;
+    })
+    .join("");
+
+  return `<section class="aff-sect">
+    <div class="aff-head"><h2>🏷️ ${escapeHtml(title)}</h2><span class="aff-badge">Bersponsor</span></div>
+    <div class="aff-list">${cards}</div>
+    ${disclosure ? `<p class="aff-disc">${escapeHtml(disclosure)}</p>` : ""}
   </section>`;
 }
 

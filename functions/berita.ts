@@ -1,4 +1,5 @@
 import {
+  getAffiliateItems,
   getArticlesCount,
   getBreaking,
   getCategories,
@@ -11,7 +12,7 @@ import {
   getTrending,
   getVideos,
 } from "./_lib/news";
-import { renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle } from "./_lib/newsRender";
+import { renderAffiliateWidget, renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle } from "./_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -38,6 +39,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const trending = await getTrending(db, 6);
   const popular = await getPopularWeek(db, 6);
   const videos = await getVideos(db, 3);
+  const affItems = await getAffiliateItems(db, 4);
 
   let heroHtml = "";
   if (slider.length) {
@@ -114,10 +116,15 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     </section>`
     : "";
 
+  const affHtml = affItems.length
+    ? `<section class="sect" style="padding-top:0"><div class="wrap">${renderAffiliateWidget(affItems, settings.affiliate_title || "Belanja Pilihan", settings.affiliate_disclosure || "")}</div></section>`
+    : "";
+
   const body = `
   ${heroHtml}
   ${headlineHtml}
   <section class="sect"><div class="wrap">${latestSection}</div></section>
+  ${affHtml}
   ${videoSection}`;
 
   const html = renderShell({

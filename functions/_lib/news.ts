@@ -274,6 +274,56 @@ export async function ensureUniqueSlug(db: D1Database, table: "articles" | "cate
   }
 }
 
+export type AffiliateItem = {
+  id: number;
+  title: string;
+  url: string;
+  image: string;
+  price_text: string;
+  merchant: string;
+  note: string;
+  category_id: number | null;
+  sort_order: number;
+  is_active: number;
+  click_count: number;
+};
+
+/** Produk kategori yang cocok diutamakan, sisanya (umum) mengisi slot yang tersisa. */
+export async function getAffiliateItems(db: D1Database, limit: number, categoryId?: number): Promise<AffiliateItem[]> {
+  const settings = await getSettings(db);
+  if (settings.affiliate_enabled === "0") return [];
+
+  if (categoryId) {
+    const { results: matched } = await db
+      .prepare("SELECT * FROM affiliate_items WHERE is_active = 1 AND category_id = ? ORDER BY sort_order ASC LIMIT ?")
+      .bind(categoryId, limit)
+      .all<AffiliateItem>();
+    const items = matched || [];
+    if (items.length >= limit) return items;
+    const usedIds = items.map((i) => i.id);
+    const ex = usedIds.length ? `AND id NOT IN (${usedIds.map(() => "?").join(",")})` : "";
+    const { results: rest } = await db
+      .prepare(`SELECT * FROM affiliate_items WHERE is_active = 1 ${ex} ORDER BY sort_order ASC LIMIT ?`)
+      .bind(...usedIds, limit - items.length)
+      .all<AffiliateItem>();
+    return [...items, ...(rest || [])];
+  }
+
+  const { results } = await db
+    .prepare("SELECT * FROM affiliate_items WHERE is_active = 1 ORDER BY sort_order ASC LIMIT ?")
+    .bind(limit)
+    .all<AffiliateItem>();
+  return results || [];
+}
+
+/** Catat 1 klik & kembalikan URL tujuan (null = tidak ditemukan/nonaktif). */
+export async function recordAffiliateClick(db: D1Database, id: number): Promise<string | null> {
+  const item = await db.prepare("SELECT url FROM affiliate_items WHERE id = ? AND is_active = 1").bind(id).first<{ url: string }>();
+  if (!item) return null;
+  await db.prepare("UPDATE affiliate_items SET click_count = click_count + 1 WHERE id = ?").bind(id).run();
+  return item.url;
+}
+
 export async function getApprovedComments(db: D1Database, articleId: number): Promise<Comment[]> {
   const { results } = await db
     .prepare("SELECT * FROM comments WHERE article_id = ? AND status = 'approved' ORDER BY created_at ASC")

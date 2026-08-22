@@ -1,18 +1,20 @@
 import { marked } from "marked";
 import {
   escapeHtml,
+  getAffiliateItems,
   getApprovedComments,
   getArticleBySlug,
   getBreaking,
   getCategories,
   getRelated,
+  getSettings,
   getTagsForArticle,
   hashVisitor,
   recordView,
   youtubeId,
   type Comment,
 } from "../_lib/news";
-import { renderCard, renderShell } from "../_lib/newsRender";
+import { renderAffiliateWidget, renderCard, renderShell } from "../_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -44,10 +46,12 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     await recordView(db, article.id, hash);
   })());
 
-  const [tags, related, comments] = await Promise.all([
+  const [tags, related, comments, settings, affItems] = await Promise.all([
     getTagsForArticle(db, article.id),
     getRelated(db, article, 4, []),
     getApprovedComments(db, article.id),
+    getSettings(db),
+    getAffiliateItems(db, 4, article.category_id || undefined),
   ]);
   const contentHtml = await marked.parse(article.content || "");
   const ytId = youtubeId(article.video_url);
@@ -131,6 +135,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     <div class="article-content">${contentHtml}</div>
     ${tagsHtml}
   </article>
+  ${affItems.length ? `<section class="sect" style="padding-top:0"><div class="wrap" style="max-width:800px">${renderAffiliateWidget(affItems, settings.affiliate_title || "Belanja Pilihan", settings.affiliate_disclosure || "")}</div></section>` : ""}
   ${commentSection}
   ${related.length ? `<section class="sect"><div class="wrap" style="max-width:800px">${`<h2 class="sect-title"><span class="bar"></span>Berita Terkait</h2>`}<div class="grid">${related.map(renderCard).join("")}</div></div></section>` : ""}
   <style>

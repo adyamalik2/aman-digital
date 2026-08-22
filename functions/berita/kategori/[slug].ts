@@ -1,5 +1,5 @@
-import { getArticlesCount, getBreaking, getCategories, getCategoryBySlug, getLatest } from "../../_lib/news";
-import { renderArchiveBody, renderShell } from "../../_lib/newsRender";
+import { getAffiliateItems, getArticlesCount, getBreaking, getCategories, getCategoryBySlug, getLatest, getSettings } from "../../_lib/news";
+import { renderAffiliateWidget, renderArchiveBody, renderShell } from "../../_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -22,16 +22,19 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const curPage = Math.min(page, totalPages);
   const items = await getLatest(db, perPage, (curPage - 1) * perPage, category.id);
+  const [settings, affItems] = await Promise.all([getSettings(db), getAffiliateItems(db, 4, category.id)]);
 
-  const body = renderArchiveBody({
-    heading: `📂 ${category.name}`,
-    subheading: category.description,
-    items,
-    page: curPage,
-    totalPages,
-    baseUrl: `/berita/kategori/${category.slug}`,
-    emptyMessage: "Belum ada artikel di kategori ini.",
-  });
+  const body =
+    renderArchiveBody({
+      heading: `📂 ${category.name}`,
+      subheading: category.description,
+      items,
+      page: curPage,
+      totalPages,
+      baseUrl: `/berita/kategori/${category.slug}`,
+      emptyMessage: "Belum ada artikel di kategori ini.",
+    }) +
+    (affItems.length ? `<section class="sect" style="padding-top:0"><div class="wrap">${renderAffiliateWidget(affItems, settings.affiliate_title || "Belanja Pilihan", settings.affiliate_disclosure || "")}</div></section>` : "");
 
   const html = renderShell({
     title: `${category.name} — AMAN News`,

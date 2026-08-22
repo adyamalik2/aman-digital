@@ -65,7 +65,7 @@ const inputCls =
 const labelCls = "mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400";
 
 export default function AdminBlogPage() {
-  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "media" | "settings">("articles");
+  const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "media" | "affiliate" | "settings">("articles");
   const [error, setError] = useState("");
 
   return (
@@ -88,6 +88,7 @@ export default function AdminBlogPage() {
             { key: "authors", label: "✍️ Penulis" },
             { key: "comments", label: "💬 Komentar" },
             { key: "media", label: "🖼️ Media" },
+            { key: "affiliate", label: "🏷️ Afiliasi" },
             { key: "settings", label: "⚙️ Pengaturan" },
           ].map((t) => (
             <button
@@ -111,6 +112,7 @@ export default function AdminBlogPage() {
         {tab === "authors" && <AuthorsTab setError={setError} />}
         {tab === "comments" && <CommentsTab setError={setError} />}
         {tab === "media" && <MediaTab setError={setError} />}
+        {tab === "affiliate" && <AffiliateTab setError={setError} />}
         {tab === "settings" && <SettingsTab setError={setError} />}
       </div>
     </section>
@@ -760,6 +762,168 @@ function MediaTab({ setError }: { setError: (e: string) => void }) {
   );
 }
 
+/* ============================== AFILIASI ============================== */
+
+type AffiliateItemRow = {
+  id: number;
+  title: string;
+  url: string;
+  image: string;
+  price_text: string;
+  merchant: string;
+  note: string;
+  category_id: number | null;
+  category_name: string | null;
+  sort_order: number;
+  is_active: number;
+  click_count: number;
+};
+
+const emptyAffForm = {
+  id: undefined as number | undefined,
+  title: "",
+  url: "",
+  image: "",
+  price_text: "",
+  merchant: "",
+  note: "",
+  category_id: "" as string | number,
+  sort_order: 0,
+  is_active: true,
+};
+
+function AffiliateTab({ setError }: { setError: (e: string) => void }) {
+  const [items, setItems] = useState<AffiliateItemRow[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState(emptyAffForm);
+  const [uploading, setUploading] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const [iRes, cRes] = await Promise.all([
+      fetch("/admin/api/berita?resource=affiliate"),
+      fetch("/admin/api/berita?resource=categories"),
+    ]);
+    const iData = await iRes.json();
+    const cData = await cRes.json();
+    setItems(iData.items || []);
+    setCategories(cData.categories || []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const uploadImage = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/admin/api/media", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || "Gagal unggah.");
+      setForm((f) => ({ ...f, image: data.url }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal unggah.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const save = async () => {
+    if (!form.title.trim()) { setError("Nama produk wajib diisi."); return; }
+    if (!/^https?:\/\//i.test(form.url.trim())) { setError("Tautan produk harus diawali http:// atau https://."); return; }
+    try {
+      const res = await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "affiliate", action: "save", ...form }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message);
+      setForm(emptyAffForm);
+      await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Gagal menyimpan."); }
+  };
+
+  const remove = async (id: number) => {
+    if (!window.confirm("Hapus produk afiliasi ini?")) return;
+    await fetch("/admin/api/berita", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resource: "affiliate", action: "delete", id }) });
+    await load();
+  };
+
+  return (
+    <div className="mt-6">
+      <p className="mb-4 text-sm text-slate-400">
+        Widget &quot;Belanja Pilihan&quot; tampil di beranda, bawah artikel, dan halaman kategori/pencarian — otomatis tersembunyi kalau belum ada produk aktif.
+      </p>
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <h3 className="mb-3 text-sm font-bold">{form.id ? "Edit Produk" : "Tambah Produk Afiliasi"}</h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input type="text" placeholder="Nama produk" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} className={inputCls} />
+          <input type="text" placeholder="Toko/merchant (mis. Shopee)" value={form.merchant} onChange={(e) => setForm((f) => ({ ...f, merchant: e.target.value }))} className={inputCls} />
+          <input type="text" placeholder="https://tautan-afiliasi..." value={form.url} onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))} className={inputCls + " sm:col-span-2"} />
+          <input type="text" placeholder="Harga (mis. Rp99.000)" value={form.price_text} onChange={(e) => setForm((f) => ({ ...f, price_text: e.target.value }))} className={inputCls} />
+          <select value={form.category_id} onChange={(e) => setForm((f) => ({ ...f, category_id: e.target.value }))} className={inputCls}>
+            <option value="">— Semua kategori —</option>
+            {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+          <input type="text" placeholder="Catatan singkat (opsional)" value={form.note} onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))} className={inputCls} />
+          <input type="number" placeholder="Urutan" value={form.sort_order} onChange={(e) => setForm((f) => ({ ...f, sort_order: Number(e.target.value) }))} className={inputCls} />
+          <div className="sm:col-span-2">
+            <div className="flex gap-2">
+              <input type="text" placeholder="URL gambar produk" value={form.image} onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))} className={inputCls} />
+              <label className="flex shrink-0 cursor-pointer items-center rounded-lg border border-white/15 px-3 text-xs font-semibold text-slate-300 hover:bg-white/10">
+                {uploading ? "…" : "📤 Unggah"}
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" disabled={uploading} onChange={(e) => uploadImage(e.target.files)} />
+              </label>
+            </div>
+            {form.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={form.image} alt="" className="mt-2 h-20 w-20 rounded-lg border border-white/10 object-cover" />
+            )}
+          </div>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input type="checkbox" checked={form.is_active} onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))} /> Aktif (tampil di situs)
+          </label>
+        </div>
+        <div className="mt-3 flex gap-2">
+          <button onClick={save} className="rounded-full bg-emerald-cta px-5 py-2 text-sm font-bold text-white">{form.id ? "Simpan Perubahan" : "➕ Tambah"}</button>
+          {form.id && <button onClick={() => setForm(emptyAffForm)} className="rounded-full border border-white/15 px-5 py-2 text-sm">Batal</button>}
+        </div>
+      </div>
+
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+        <table className="w-full text-sm">
+          <thead><tr className="border-b border-white/10 text-left text-xs uppercase text-slate-400"><th className="px-4 py-3">Produk</th><th className="px-4 py-3">Kategori</th><th className="px-4 py-3">Klik</th><th className="px-4 py-3">Status</th><th className="px-4 py-3"></th></tr></thead>
+          <tbody>
+            {loading && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
+            {!loading && items.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-500">Belum ada produk afiliasi.</td></tr>}
+            {!loading && items.map((it) => (
+              <tr key={it.id} className="border-b border-white/5 last:border-0">
+                <td className="px-4 py-3 font-semibold">{it.title}{it.merchant ? <span className="ml-2 text-xs text-slate-500">({it.merchant})</span> : ""}</td>
+                <td className="px-4 py-3 text-slate-400">{it.category_name || "Semua"}</td>
+                <td className="px-4 py-3 text-slate-400">{it.click_count}</td>
+                <td className="px-4 py-3">
+                  <span className={`rounded-full px-2.5 py-1 text-xs ${it.is_active ? "bg-emerald/20 text-emerald-light" : "bg-slate-500/20 text-slate-300"}`}>{it.is_active ? "Aktif" : "Nonaktif"}</span>
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <div className="flex gap-2">
+                    <button onClick={() => setForm({ id: it.id, title: it.title, url: it.url, image: it.image, price_text: it.price_text, merchant: it.merchant, note: it.note, category_id: it.category_id ?? "", sort_order: it.sort_order, is_active: !!it.is_active })} className="rounded-full border border-white/15 px-3 py-1 text-xs">Edit</button>
+                    <button onClick={() => remove(it.id)} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300">🗑</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 /* ============================== PENGATURAN ============================== */
 
 function SettingsTab({ setError }: { setError: (e: string) => void }) {
@@ -800,6 +964,9 @@ function SettingsTab({ setError }: { setError: (e: string) => void }) {
     { key: "site_description", label: "Deskripsi (untuk SEO)" },
     { key: "per_page", label: "Artikel per halaman" },
     { key: "trending_limit", label: "Jumlah artikel trending" },
+    { key: "affiliate_title", label: "Judul widget afiliasi" },
+    { key: "affiliate_disclosure", label: "Kalimat pengungkapan afiliasi (opsional)" },
+    { key: "affiliate_enabled", label: "Widget afiliasi aktif? (1 = ya, 0 = tidak)" },
   ];
 
   return (

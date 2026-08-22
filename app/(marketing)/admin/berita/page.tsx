@@ -28,6 +28,7 @@ type ArticleFull = {
   category_id: number | null;
   author_id: number | null;
   status: string;
+  published_at: string | null;
   is_breaking: number;
   is_headline: number;
   is_slider: number;
@@ -36,6 +37,15 @@ type ArticleFull = {
   meta_description: string;
   tags: string[];
 };
+
+/** ISO UTC -> nilai untuk <input type="datetime-local"> di jam LOKAL browser admin. */
+function isoToLocalInput(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 type Category = { id: number; slug: string; name: string; description: string; color: string; sort_order: number };
 type AuthorRow = { id: number; slug: string; name: string; email: string; role: string; bio: string };
@@ -51,6 +61,7 @@ const emptyDraft = {
   category_id: "" as string | number,
   author_id: "" as string | number,
   status: "draft" as string,
+  published_at: "" as string,
   is_breaking: false,
   is_headline: false,
   is_slider: false,
@@ -195,6 +206,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
         id: a.id, title: a.title, slug: a.slug, excerpt: a.excerpt, content: a.content,
         thumbnail: a.thumbnail, thumbnail_alt: a.thumbnail_alt,
         category_id: a.category_id ?? "", author_id: a.author_id ?? "", status: a.status,
+        published_at: isoToLocalInput(a.published_at),
         is_breaking: !!a.is_breaking, is_headline: !!a.is_headline, is_slider: !!a.is_slider,
         video_url: a.video_url, meta_title: a.meta_title, meta_description: a.meta_description,
         tags: (a.tags || []).join(", "),
@@ -208,13 +220,15 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
 
   const save = async (status: string) => {
     if (!draft.title.trim()) { setError("Judul wajib diisi."); return; }
+    if (status === "scheduled" && !draft.published_at) { setError("Pilih tanggal & jam jadwal terbit dulu."); return; }
     setSaving(true);
     setError("");
     try {
+      const scheduledAt = draft.published_at ? new Date(draft.published_at).toISOString() : "";
       const res = await fetch("/admin/api/berita", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resource: "articles", action: "save", ...draft, status, tags: draft.tags.split(",") }),
+        body: JSON.stringify({ resource: "articles", action: "save", ...draft, status, scheduled_at: scheduledAt, tags: draft.tags.split(",") }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message || "Gagal menyimpan.");
@@ -305,7 +319,14 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
                   <td className="px-4 py-3"><input type="checkbox" checked={selected.has(a.id)} onChange={() => toggleSelect(a.id)} /></td>
                   <td className="px-4 py-3 font-semibold">{a.title}</td>
                   <td className="px-4 py-3 text-slate-400">{a.category_name || "—"}</td>
-                  <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs ${statusStyle[a.status]}`}>{statusLabel[a.status]}</span></td>
+                  <td className="px-4 py-3">
+                    <span className={`rounded-full px-2.5 py-1 text-xs ${statusStyle[a.status]}`}>{statusLabel[a.status]}</span>
+                    {a.status === "scheduled" && a.published_at && (
+                      <div className="mt-1 text-[10px] text-slate-500">
+                        {new Date(a.published_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
+                      </div>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-xs text-slate-400">
                     {a.is_slider ? "🎞️" : ""}{a.is_headline ? "⭐" : ""}{a.is_breaking ? "🔴" : ""}
                   </td>
@@ -431,12 +452,32 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
           </div>
         </details>
 
+        <div>
+          <label className={labelCls}>Jadwalkan terbit (opsional)</label>
+          <div className="flex flex-wrap items-center gap-2">
+            <input
+              type="datetime-local"
+              value={draft.published_at}
+              onChange={(e) => setDraft((d) => ({ ...d, published_at: e.target.value }))}
+              className={inputCls + " w-auto"}
+            />
+            <button onClick={() => save("scheduled")} disabled={saving} className="rounded-full border border-amber-500/40 px-5 py-2.5 text-sm font-bold text-amber-300 hover:bg-amber-500/10 disabled:opacity-50">
+              {saving ? "Menjadwalkan…" : "🗓️ Jadwalkan"}
+            </button>
+            {draft.status === "scheduled" && draft.published_at && (
+              <span className="text-xs text-slate-400">
+                Terjadwal tayang {new Date(draft.published_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
+              </span>
+            )}
+          </div>
+        </div>
+
         <div className="flex flex-wrap gap-3 pt-2">
           <button onClick={() => save("draft")} disabled={saving} className="rounded-full border border-white/20 px-6 py-2.5 text-sm font-bold text-white hover:bg-white/10 disabled:opacity-50">
             {saving ? "Menyimpan…" : "💾 Simpan sebagai Draf"}
           </button>
           <button onClick={() => save("published")} disabled={saving} className="rounded-full bg-emerald-cta px-6 py-2.5 text-sm font-bold text-white hover:bg-emerald-cta-hover disabled:opacity-50">
-            {saving ? "Menerbitkan…" : "🚀 Terbitkan"}
+            {saving ? "Menerbitkan…" : "🚀 Terbitkan Sekarang"}
           </button>
           {draft.status === "published" && draft.slug && (
             <a href={`/berita/${draft.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 px-6 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/10">

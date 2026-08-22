@@ -11,15 +11,22 @@ import {
   getSlider,
   getTrending,
   getVideos,
+  promoteScheduledArticles,
 } from "./_lib/news";
 import { renderAffiliateWidget, renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle } from "./_lib/newsRender";
 
 interface Env {
   DB: D1Database;
+  AMAN_LEDGER: KVNamespace;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   const db = context.env.DB;
+  try {
+    await promoteScheduledArticles(db, context.env.AMAN_LEDGER);
+  } catch {
+    // best-effort
+  }
   const url = new URL(context.request.url);
   const page = Math.max(1, parseInt(url.searchParams.get("hal") || "1", 10) || 1);
   const perPage = 10;

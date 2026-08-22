@@ -345,7 +345,18 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       return jsonOk({ ok: true, count: ids.length });
     }
     if (verb === "published") {
-      await db.prepare(`UPDATE articles SET status = 'published', published_at = COALESCE(published_at, ?), updated_at = ? WHERE id IN (${ph})`).bind(now, now, ...ids).run();
+      // "Terbitkan sekarang" berarti live MULAI SEKARANG: timpa published_at
+      // kalau kosong atau masih di masa depan (artikel yang tadinya
+      // 'scheduled'). Tanggal lama yang sudah lewat TETAP dipertahankan
+      // (mis. artikel arsip yang diterbitkan ulang).
+      await db
+        .prepare(
+          `UPDATE articles SET status = 'published',
+           published_at = CASE WHEN published_at IS NULL OR published_at > ? THEN ? ELSE published_at END,
+           updated_at = ? WHERE id IN (${ph})`
+        )
+        .bind(now, now, now, ...ids)
+        .run();
       return jsonOk({ ok: true, count: ids.length });
     }
     return jsonError(400, "Aksi massal tidak dikenal.");
@@ -375,6 +386,15 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const minutes = readingMinutes(content);
     const id = body.id ? Number(body.id) : null;
 
+    let scheduledIso: string | null = null;
+    if (status === "scheduled") {
+      const raw = String(body.scheduled_at || "").trim();
+      if (!raw) return jsonError(400, "Tanggal & jam jadwal terbit wajib diisi.");
+      const d = new Date(raw);
+      if (isNaN(d.getTime())) return jsonError(400, "Tanggal & jam jadwal terbit tidak valid.");
+      scheduledIso = d.toISOString();
+    }
+
     let slugInput = String(body.slug || "").trim();
     slugInput = slugify(slugInput || title);
     const slug = await ensureUniqueSlug(db, "articles", slugInput || "artikel", id || undefined);
@@ -383,7 +403,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (id) {
       const existing = await db.prepare("SELECT published_at FROM articles WHERE id = ?").bind(id).first<{ published_at: string | null }>();
       if (!existing) return jsonError(404, "Artikel tidak ditemukan.");
-      const publishedAt = status === "published" ? existing.published_at || now : existing.published_at;
+      // "Terbitkan sekarang" menimpa published_at kalau kosong atau masih di
+      // masa depan (artikel yang tadinya 'scheduled'); tanggal lama yang
+      // sudah lewat tetap dipertahankan (artikel arsip yang diterbitkan ulang).
+      const publishedAt =
+        status === "published" ? (!existing.published_at || existing.published_at > now ? now : existing.published_at)
+        : status === "scheduled" ? scheduledIso
+        : existing.published_at;
       await db
         .prepare(
           `UPDATE articles SET slug=?, title=?, excerpt=?, content=?, thumbnail=?, thumbnail_alt=?, category_id=?, author_id=?, status=?, published_at=?,
@@ -393,7 +419,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         .run();
       articleId = id;
     } else {
-      const publishedAt = status === "published" ? now : null;
+      const publishedAt = status === "published" ? now : status === "scheduled" ? scheduledIso : null;
       const res = await db
         .prepare(
           `INSERT INTO articles (slug, title, excerpt, content, thumbnail, thumbnail_alt, category_id, author_id, status, published_at,

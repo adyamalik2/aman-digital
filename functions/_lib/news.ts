@@ -224,6 +224,29 @@ export async function recordView(db: D1Database, articleId: number, visitorHash:
   }
 }
 
+/**
+ * promoteScheduledArticles — naikkan artikel 'scheduled' yang jadwalnya
+ * sudah lewat jadi 'published'. Port dari news_promote_scheduled() di
+ * berita/inc/repo.php: di PHP dipanggil dari bootstrap.php di SETIAP
+ * request publik (dibatasi sekali per menit lewat file penanda). Di sini
+ * dipanggil dari functions/berita/_middleware.ts + functions/berita.ts,
+ * dibatasi sekali per menit lewat KV supaya tidak query D1 di tiap request.
+ */
+export async function promoteScheduledArticles(db: D1Database, kv: KVNamespace): Promise<number> {
+  const THROTTLE_KEY = "sched:last-promote";
+  const last = await kv.get(THROTTLE_KEY);
+  const nowMs = Date.now();
+  if (last && nowMs - Number(last) < 60_000) return 0;
+  await kv.put(THROTTLE_KEY, String(nowMs), { expirationTtl: 120 });
+
+  const nowIso = new Date().toISOString();
+  const res = await db
+    .prepare("UPDATE articles SET status='published', updated_at=? WHERE status='scheduled' AND published_at IS NOT NULL AND published_at <= ?")
+    .bind(nowIso, nowIso)
+    .run();
+  return res.meta.changes || 0;
+}
+
 export async function hashVisitor(request: Request): Promise<string> {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
   const ua = request.headers.get("User-Agent") || "";

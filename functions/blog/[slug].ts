@@ -1,72 +1,98 @@
 import { marked } from "marked";
-import { escapeHtml, formatDateID, type Article } from "../_lib/blog";
-import { renderPage } from "../_lib/blogRender";
+import {
+  getArticleBySlug,
+  getBreaking,
+  getCategories,
+  getRelated,
+  getTagsForArticle,
+  hashVisitor,
+  recordView,
+  youtubeId,
+} from "../_lib/news";
+import { renderCard, renderShell } from "../_lib/newsRender";
 
 interface Env {
   DB: D1Database;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
+  const db = context.env.DB;
   const slug = String(context.params.slug || "");
-  const article = await context.env.DB.prepare(
-    "SELECT * FROM articles WHERE slug = ? AND status = 'published'"
-  )
-    .bind(slug)
-    .first<Article>();
+  const [article, categories, breaking] = await Promise.all([getArticleBySlug(db, slug), getCategories(db), getBreaking(db, 8)]);
 
   if (!article) {
-    const html = renderPage({
-      title: "Artikel Tidak Ditemukan — AMAN Digital",
+    const html = renderShell({
+      title: "Artikel Tidak Ditemukan — AMAN News",
       description: "Artikel yang Anda cari tidak ditemukan.",
-      noindex: true,
-      body: `<section class="wrap" style="padding:100px 16px;text-align:center">
+      body: `<section class="sect wrap" style="text-align:center;padding:100px 16px">
         <div style="font-size:2.5rem;margin-bottom:12px">🔍</div>
         <h1 style="font-size:1.6rem;font-weight:800;margin:0 0 10px">Artikel tidak ditemukan</h1>
         <p style="color:#64748b;margin:0 0 24px">Mungkin sudah dihapus atau tautannya salah.</p>
-        <a href="/blog" style="display:inline-block;background:#059669;color:#fff;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:700">← Kembali ke Blog</a>
+        <a href="/blog" style="display:inline-block;background:#059669;color:#fff;padding:12px 24px;border-radius:999px;font-weight:700">← Kembali ke Beranda</a>
       </section>`,
+      categories,
+      noindex: true,
     });
     return new Response(html, { status: 404, headers: { "Content-Type": "text/html; charset=utf-8" } });
   }
 
-  const contentHtml = await marked.parse(article.content || "");
+  context.waitUntil((async () => {
+    const hash = await hashVisitor(context.request);
+    await recordView(db, article.id, hash);
+  })());
 
-  const cover = article.cover_image
-    ? `<img src="${escapeHtml(article.cover_image)}" alt="${escapeHtml(article.title)}" style="width:100%;max-height:420px;object-fit:cover;border-radius:16px;margin-bottom:32px">`
+  const [tags, related] = await Promise.all([getTagsForArticle(db, article.id), getRelated(db, article, 4, [])]);
+  const contentHtml = await marked.parse(article.content || "");
+  const ytId = youtubeId(article.video_url);
+
+  const videoEmbed = ytId
+    ? `<div style="position:relative;padding-bottom:56.25%;height:0;border-radius:14px;overflow:hidden;margin:24px 0"><iframe src="https://www.youtube-nocookie.com/embed/${ytId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen loading="lazy"></iframe></div>`
+    : "";
+
+  const cover = !ytId && article.thumbnail
+    ? `<img src="${article.thumbnail}" alt="${article.thumbnail_alt || article.title}" style="width:100%;max-height:460px;object-fit:cover;border-radius:16px;margin:20px 0">`
+    : "";
+
+  const tagsHtml = tags.length
+    ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:28px">${tags.map((t) => `<a href="/blog/tag/${t.slug}" class="cat-badge" style="background:#f1f5f9;color:#475569">#${t.name}</a>`).join("")}</div>`
     : "";
 
   const body = `
-  <section style="background:#070B14;color:#fff;padding:60px 16px 44px">
-    <div class="wrap" style="max-width:760px">
-      <a href="/blog" style="color:#94a3b8;text-decoration:none;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
-      <span style="display:inline-block;margin-top:18px;background:rgba(16,185,129,.15);color:#6ee7b7;padding:5px 14px;border-radius:999px;font-size:.78rem;font-weight:700">${escapeHtml(article.category)}</span>
-      <h1 style="margin:16px 0 12px;font-size:2.1rem;font-weight:900;line-height:1.3">${escapeHtml(article.title)}</h1>
-      <div style="color:#94a3b8;font-size:.88rem">📅 ${formatDateID(article.published_at)}</div>
+  <article class="sect wrap" style="max-width:800px">
+    <a href="/blog" style="color:#94a3b8;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
+    ${article.category_name ? `<div style="margin-top:16px"><a href="/blog/kategori/${article.category_slug}" class="cat-badge" style="background:${article.category_color}22;color:${article.category_color}">${article.category_name}</a></div>` : ""}
+    <h1 style="font-size:2rem;font-weight:900;line-height:1.3;margin:14px 0 12px">${article.title}</h1>
+    <div style="color:#94a3b8;font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap">
+      ${article.author_name ? `<span>✍️ <a href="/blog/penulis/${article.author_slug}" style="color:#475569;font-weight:600">${article.author_name}</a></span>` : ""}
+      <span>📅 ${article.published_at ? article.published_at.slice(0, 10) : ""}</span>
+      <span>⏱️ ${article.reading_minutes} menit baca</span>
+      <span>👁️ ${article.view_count} views</span>
     </div>
-  </section>
-  <article class="wrap" style="max-width:760px;padding:40px 16px 80px">
+    ${videoEmbed}
     ${cover}
     <div class="article-content">${contentHtml}</div>
+    ${tagsHtml}
   </article>
+  ${related.length ? `<section class="sect"><div class="wrap" style="max-width:800px">${`<h2 class="sect-title"><span class="bar"></span>Berita Terkait</h2>`}<div class="grid">${related.map(renderCard).join("")}</div></div></section>` : ""}
   <style>
     .article-content { font-size: 1.05rem; line-height: 1.8; color: #1e293b; }
     .article-content h1, .article-content h2, .article-content h3 { font-weight: 800; color: #0f172a; margin: 1.6em 0 .6em; }
-    .article-content h1 { font-size: 1.6rem; } .article-content h2 { font-size: 1.4rem; } .article-content h3 { font-size: 1.2rem; }
     .article-content p { margin: 0 0 1.2em; }
     .article-content a { color: #059669; text-decoration: underline; }
     .article-content img { max-width: 100%; border-radius: 12px; margin: 1.2em 0; }
     .article-content ul, .article-content ol { margin: 0 0 1.2em; padding-left: 1.4em; }
-    .article-content li { margin-bottom: .4em; }
     .article-content blockquote { border-left: 4px solid #10b981; margin: 1.4em 0; padding: .4em 1.2em; color: #475569; background: #f0fdf4; border-radius: 0 10px 10px 0; }
     .article-content code { background: #f1f5f9; padding: .15em .4em; border-radius: 5px; font-size: .9em; }
     .article-content pre { background: #0f172a; color: #e2e8f0; padding: 1.1em; border-radius: 12px; overflow-x: auto; }
-    .article-content pre code { background: none; padding: 0; }
   </style>`;
 
-  const html = renderPage({
-    title: `${article.title} — AMAN Digital`,
-    description: article.excerpt || article.title,
+  const html = renderShell({
+    title: `${article.meta_title || article.title} — AMAN News`,
+    description: article.meta_description || article.excerpt || article.title,
     body,
+    categories,
+    activeCategory: article.category_slug,
+    breaking,
   });
 
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });

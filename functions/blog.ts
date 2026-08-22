@@ -1,64 +1,131 @@
-import { escapeHtml, formatDateID, type Article } from "./_lib/blog";
-import { renderPage } from "./_lib/blogRender";
+import {
+  getArticlesCount,
+  getBreaking,
+  getCategories,
+  getHeadline,
+  getLatest,
+  getPopularWeek,
+  getRelated,
+  getSettings,
+  getSlider,
+  getTrending,
+  getVideos,
+} from "./_lib/news";
+import { renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle } from "./_lib/newsRender";
 
 interface Env {
   DB: D1Database;
 }
 
-const CATEGORY_STYLE: Record<string, string> = {
-  "Tips UMKM": "background:#d1fae5;color:#047857",
-  Tutorial: "background:#dbeafe;color:#1d4ed8",
-  "Update Produk": "background:#ede9fe;color:#6d28d9",
-  Berita: "background:#ffedd5;color:#c2410c",
-  Umum: "background:#f1f5f9;color:#475569",
-};
-
 export const onRequestGet: PagesFunction<Env> = async (context) => {
-  const { results } = await context.env.DB.prepare(
-    "SELECT id, slug, title, excerpt, cover_image, category, published_at FROM articles WHERE status = 'published' ORDER BY published_at DESC"
-  ).all<Article>();
-  const posts = results || [];
+  const db = context.env.DB;
+  const url = new URL(context.request.url);
+  const page = Math.max(1, parseInt(url.searchParams.get("hal") || "1", 10) || 1);
+  const perPage = 10;
 
-  const cards = posts
-    .map((p) => {
-      const catStyle = CATEGORY_STYLE[p.category] || CATEGORY_STYLE.Umum;
-      const cover = p.cover_image
-        ? `<img src="${escapeHtml(p.cover_image)}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover">`
-        : `<div style="width:100%;height:100%;display:grid;place-items:center;color:#a7f3d0;font-size:2.5rem">📰</div>`;
-      return `
-      <a href="/blog/${encodeURIComponent(p.slug)}" style="display:flex;flex-direction:column;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:box-shadow .2s,transform .2s" onmouseover="this.style.boxShadow='0 12px 30px rgba(0,0,0,.08)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-        <div style="position:relative;height:180px;background:#ecfdf5">
-          ${cover}
-          <span style="position:absolute;top:12px;left:12px;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px;${catStyle}">${escapeHtml(p.category)}</span>
-        </div>
-        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
-          <div style="color:#94a3b8;font-size:.78rem;margin-bottom:10px">📅 ${formatDateID(p.published_at)}</div>
-          <h2 style="margin:0 0 8px;font-size:1.15rem;font-weight:800;line-height:1.35;color:#0f172a">${escapeHtml(p.title)}</h2>
-          ${p.excerpt ? `<p style="margin:0;color:#64748b;font-size:.9rem;line-height:1.6;flex:1">${escapeHtml(p.excerpt)}</p>` : ""}
-          <div style="margin-top:14px;color:#059669;font-size:.88rem;font-weight:700">Baca selengkapnya →</div>
-        </div>
-      </a>`;
-    })
-    .join("");
+  const [settings, categories, breaking] = await Promise.all([getSettings(db), getCategories(db), getBreaking(db, 8)]);
 
-  const empty = `<div style="text-align:center;padding:80px 16px;color:#94a3b8"><div style="font-size:2.5rem;margin-bottom:12px">📖</div><p style="font-size:1.1rem">Belum ada artikel. Nantikan konten terbaru!</p></div>`;
+  const slider = await getSlider(db, 5);
+  const sliderIds = slider.map((s) => s.id);
+  const headline = await getHeadline(db, sliderIds);
+  const related = headline ? await getRelated(db, headline, 4, sliderIds) : [];
+
+  const totalLatest = await getArticlesCount(db);
+  const totalPages = Math.max(1, Math.ceil(totalLatest / perPage));
+  const curPage = Math.min(page, totalPages);
+  const latest = await getLatest(db, perPage, (curPage - 1) * perPage);
+
+  const trending = await getTrending(db, 6);
+  const popular = await getPopularWeek(db, 6);
+  const videos = await getVideos(db, 3);
+
+  let heroHtml = "";
+  if (slider.length) {
+    const slides = slider.map((s, i) => renderHeroSlide(s, i === 0)).join("");
+    const sideItems = slider.slice(1, 5).map(renderHeroMini).join("");
+    heroHtml = `<section class="sect">
+      <div class="wrap hero">
+        <div style="position:relative">${slides}
+          ${slider.length > 1 ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:10px" data-dots>${slider.map((_, i) => `<button data-dot="${i}" style="width:${i === 0 ? "22px" : "8px"};height:8px;border-radius:4px;border:0;background:${i === 0 ? "#059669" : "#cbd5e1"};cursor:pointer"></button>`).join("")}</div>` : ""}
+        </div>
+        <div class="hero-side">${sideItems}</div>
+      </div>
+    </section>
+    <script>
+      (function(){
+        var slides = document.querySelectorAll('[data-slide]');
+        var dots = document.querySelectorAll('[data-dot]');
+        if (slides.length < 2) return;
+        var i = 0;
+        function show(n){ slides.forEach(function(s,idx){ s.style.display = idx===n ? '' : 'none'; }); dots.forEach(function(d,idx){ d.style.width = idx===n?'22px':'8px'; d.style.background = idx===n?'#059669':'#cbd5e1'; }); i = n; }
+        dots.forEach(function(d,idx){ d.addEventListener('click', function(){ show(idx); }); });
+        setInterval(function(){ show((i+1) % slides.length); }, 6000);
+      })();
+    </script>`;
+  }
+
+  let headlineHtml = "";
+  if (headline) {
+    headlineHtml = `<section class="sect">
+      <div class="wrap">
+        ${sectionTitle("Headline")}
+        <article class="headline">
+          <a href="/blog/${headline.slug}">${headline.thumbnail ? `<img src="${headline.thumbnail}" alt="${headline.title}">` : ""}</a>
+          <div class="headline-body">
+            ${headline.category_name ? `<span class="cat-badge" style="background:${headline.category_color || "#059669"}22;color:${headline.category_color || "#059669"}">${headline.category_name}</span>` : ""}
+            <h2><a href="/blog/${headline.slug}">${headline.title}</a></h2>
+            ${headline.excerpt ? `<p>${headline.excerpt}</p>` : ""}
+            <div class="meta">📅 ${headline.published_at ? headline.published_at.slice(0, 10) : ""} &middot; ${headline.reading_minutes} menit baca</div>
+          </div>
+        </article>
+        ${related.length ? `<div class="grid" style="margin-top:20px">${related.map(renderCard).join("")}</div>` : ""}
+      </div>
+    </section>`;
+  }
+
+  const paginationHtml =
+    totalPages > 1
+      ? `<div class="pagination">
+        ${curPage > 1 ? `<a href="/blog?hal=${curPage - 1}">← Sebelumnya</a>` : ""}
+        <span class="active">${curPage} / ${totalPages}</span>
+        ${curPage < totalPages ? `<a href="/blog?hal=${curPage + 1}">Berikutnya →</a>` : ""}
+      </div>`
+      : "";
+
+  const latestSection = `<div class="layout2">
+    <div>
+      ${sectionTitle("Berita Terbaru")}
+      ${latest.length ? `<div class="grid">${latest.map(renderCard).join("")}</div>` : `<p style="color:#94a3b8">Belum ada artikel.</p>`}
+      ${paginationHtml}
+    </div>
+    <div>
+      ${trending.length ? `<div class="side-card"><h3>🔥 Trending Hari Ini</h3>${trending.map((a, i) => renderListRow(a, i + 1)).join("")}</div>` : ""}
+      ${popular.length ? `<div class="side-card"><h3>⭐ Populer Minggu Ini</h3>${popular.map((a, i) => renderListRow(a, i + 1)).join("")}</div>` : ""}
+      ${categories.length ? `<div class="side-card"><h3>📂 Kategori</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${categories.map((c) => `<a href="/blog/kategori/${c.slug}" class="cat-badge" style="background:${c.color}22;color:${c.color}">${c.name}</a>`).join("")}</div></div>` : ""}
+    </div>
+  </div>`;
+
+  const videoSection = videos.length
+    ? `<section class="sect">
+      <div class="wrap">
+        ${sectionTitle("Video")}
+        <div class="grid">${videos.map(renderVideoCard).join("")}</div>
+      </div>
+    </section>`
+    : "";
 
   const body = `
-  <section style="background:#070B14;color:#fff;padding:80px 16px 60px;text-align:center">
-    <div class="wrap">
-      <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,.15);color:#6ee7b7;padding:7px 16px;border-radius:999px;font-size:.85rem;font-weight:600">📖 Blog AMAN Digital</span>
-      <h1 style="margin:22px 0 14px;font-size:2.4rem;font-weight:900;line-height:1.2">Tips &amp; Inspirasi untuk <span style="color:#34d399">UMKM Indonesia</span></h1>
-      <p style="margin:0 auto;max-width:640px;color:#cbd5e1;font-size:1.05rem">Tutorial produk, tips bisnis, dan update terbaru untuk membantu usaha Anda tumbuh.</p>
-    </div>
-  </section>
-  <section class="wrap" style="padding:56px 16px">
-    ${posts.length === 0 ? empty : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:26px">${cards}</div>`}
-  </section>`;
+  ${heroHtml}
+  ${headlineHtml}
+  <section class="sect"><div class="wrap">${latestSection}</div></section>
+  ${videoSection}`;
 
-  const html = renderPage({
-    title: "Blog — AMAN Digital",
-    description: "Tips bisnis UMKM, tutorial produk, dan berita terbaru dari AMAN Digital.",
+  const html = renderShell({
+    title: curPage > 1 ? `${settings.site_name || "AMAN News"} — Halaman ${curPage}` : `${settings.site_name || "AMAN News"} — ${settings.site_tagline || "Berita & Informasi Terkini"}`,
+    description: settings.site_description || "",
     body,
+    categories,
+    breaking,
   });
 
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });

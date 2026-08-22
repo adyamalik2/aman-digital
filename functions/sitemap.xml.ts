@@ -41,11 +41,15 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     )
     .join("\n");
 
-  const { results } = await context.env.DB.prepare(
-    "SELECT slug, updated_at FROM articles WHERE status = 'published' ORDER BY published_at DESC"
-  ).all<{ slug: string; updated_at: string }>();
+  const [{ results: articles }, { results: categories }] = await Promise.all([
+    context.env.DB.prepare("SELECT slug, updated_at FROM articles WHERE status = 'published' ORDER BY published_at DESC").all<{
+      slug: string;
+      updated_at: string;
+    }>(),
+    context.env.DB.prepare("SELECT slug FROM categories").all<{ slug: string }>(),
+  ]);
 
-  const blogEntries = (results || [])
+  const blogEntries = (articles || [])
     .map(
       (a) => `  <url>
     <loc>${SITE_URL}/blog/${encodeURIComponent(a.slug)}</loc>
@@ -56,9 +60,21 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     )
     .join("\n");
 
+  const categoryEntries = (categories || [])
+    .map(
+      (c) => `  <url>
+    <loc>${SITE_URL}/blog/kategori/${encodeURIComponent(c.slug)}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>`
+    )
+    .join("\n");
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticEntries}
+${categoryEntries}
 ${blogEntries}
 </urlset>`;
 

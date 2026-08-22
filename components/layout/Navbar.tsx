@@ -188,7 +188,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="menu-anim border-t border-white/10 bg-[#070B14] md:hidden">
+        <div className="menu-anim max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-white/10 bg-[#070B14] md:hidden">
           <div className="flex flex-col gap-1 px-4 py-3">
             {dropdowns.map((dd) => {
               const open = mobileSection === dd.key;

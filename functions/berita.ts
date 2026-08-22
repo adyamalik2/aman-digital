@@ -144,3 +144,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 };
+
+// Next.js prefetch link pakai HEAD -- tanpa ini rute ini balas 404 untuk HEAD
+// walau GET normal, jadi error merah di console tiap halaman yang punya nav ke /berita.
+export const onRequestHead: PagesFunction<Env> = async (context) => {
+  const res = await onRequestGet(context);
+  return new Response(null, { status: res.status, statusText: res.statusText, headers: res.headers });
+};

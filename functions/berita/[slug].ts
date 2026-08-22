@@ -107,9 +107,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
           <div style="position:absolute;left:-9999px" aria-hidden="true">
             <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
           </div>
-          <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr">
-            <input type="text" name="name" placeholder="Nama Anda" required maxlength="80" style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
-            <input type="email" name="email" placeholder="Email (opsional, tidak ditampilkan)" maxlength="191" style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+          <div style="display:grid;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+            <input type="text" name="name" placeholder="Nama Anda" required maxlength="80" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+            <input type="email" name="email" placeholder="Email (opsional, tidak ditampilkan)" maxlength="191" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
           </div>
           <textarea name="content" placeholder="Tulis komentar…" required maxlength="2000" rows="3" style="width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit;resize:vertical"></textarea>
           <button type="submit" style="margin-top:10px;background:#059669;color:#fff;border:0;padding:10px 22px;border-radius:999px;font-weight:700;font-size:.88rem;cursor:pointer">Kirim Komentar</button>

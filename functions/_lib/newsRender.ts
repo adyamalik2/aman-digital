@@ -22,17 +22,18 @@ const STYLE = `
   .ticker-label { background: #991b1b; padding: 4px 12px; border-radius: 4px; font-size: .72rem; font-weight: 800; text-transform: uppercase; margin-right: 14px; flex-shrink: 0; }
   .ticker-item { margin-right: 40px; font-size: .85rem; font-weight: 600; }
   @keyframes tick { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-  .topbar { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-  .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 900; font-size: 1.1rem; }
-  .brand img { height: 32px; width: auto; border-radius: 7px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 10px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 900; font-size: 1.1rem; flex-shrink: 0; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; border-radius: 7px; flex-shrink: 0; }
   .navcats { display: flex; gap: 4px; overflow-x: auto; padding: 0 0 12px; scrollbar-width: none; }
   .navcats::-webkit-scrollbar { display: none; }
   .navcats a { color: #cbd5e1; font-size: .84rem; font-weight: 700; padding: 6px 13px; border-radius: 999px; white-space: nowrap; }
   .navcats a:hover, .navcats a.active { background: rgba(16,185,129,.18); color: #6ee7b7; }
-  .search-box { display: flex; align-items: center; gap: 8px; }
-  .search-box input { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 999px; padding: 8px 14px; color: #fff; font-size: .84rem; width: 200px; }
+  .search-box { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+  .search-box input { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 999px; padding: 8px 14px; color: #fff; font-size: .84rem; width: 200px; min-width: 0; flex: 1; }
   .search-box input::placeholder { color: #64748b; }
-  .search-box button { background: #059669; border: 0; color: #fff; border-radius: 999px; padding: 8px 14px; font-size: .8rem; font-weight: 700; cursor: pointer; }
+  .search-box button { background: #059669; border: 0; color: #fff; border-radius: 999px; padding: 8px 14px; font-size: .8rem; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+  @media (max-width: 480px) { .brand .brand-text { display: none; } }
 
   .cat-badge { display: inline-block; font-size: .68rem; font-weight: 800; padding: 4px 11px; border-radius: 999px; text-transform: uppercase; letter-spacing: .02em; }
 
@@ -142,8 +143,8 @@ ${opts.noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 ${ticker}
 <header class="site">
   <div class="wrap topbar">
-    <a class="brand" href="/berita"><img src="/images/logo-header.webp" alt="">AMAN NEWS</a>
-    <div style="display:flex;align-items:center;gap:10px">
+    <a class="brand" href="/berita"><img src="/images/logo-header.webp" alt=""><span class="brand-text">AMAN NEWS</span></a>
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;justify-content:flex-end">
       <form class="search-box" action="/berita/cari" method="get">
         <input type="text" name="q" placeholder="Cari berita…">
         <button type="submit">🔍</button>

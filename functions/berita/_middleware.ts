@@ -19,5 +19,14 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   } catch {
     // best-effort, jangan sampai halaman publik ikut gagal
   }
+
+  // Rute-rute /berita/* cuma mengekspor onRequestGet, jadi HEAD (dipakai
+  // Next.js untuk prefetch link, plus crawler/uptime monitor) balas 404.
+  // Jalankan sebagai GET lalu buang body-nya.
+  if (context.request.method === "HEAD") {
+    const res = await context.next(context.request.url, { method: "GET" });
+    return new Response(null, { status: res.status, statusText: res.statusText, headers: res.headers });
+  }
+
   return context.next();
 };

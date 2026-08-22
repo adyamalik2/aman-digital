@@ -51,6 +51,9 @@ const STYLE = `
   .hero-slide { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 16/10; background: #0f172a; }
   .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
   .hero-slide .ov { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.88), rgba(0,0,0,.18) 85%), linear-gradient(rgba(0,0,0,.22), rgba(0,0,0,.22)); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
+  /* .ov adalah flex column: tanpa ini badge ikut di-stretch selebar slide
+     (295px dari 375px) -- baru kelihatan mencolok sejak latarnya jadi pekat. */
+  .hero-slide .ov .cat-badge { align-self: flex-start; }
   .hero-slide h2 { color: #fff; font-size: 1.4rem; font-weight: 800; line-height: 1.3; margin: 10px 0 6px; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
   .hero-slide .meta { color: #e2e8f0; font-size: .78rem; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
   .hero-side { display: flex; flex-direction: column; gap: 14px; }

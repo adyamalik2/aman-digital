@@ -11,6 +11,7 @@ const produk = [
   { label: "AMAN Kasir", href: "/kasir" },
   { label: "AMAN Budget", href: "/budget" },
   { label: "AMAN Invoice", href: "/invoice" },
+  { label: "AMAN-in", href: "/amanin" },
   { label: "AMAN Engine", href: "/aman-engine" },
   { label: "AMAN Content Engine", href: "/aman-content-engine" },
   { label: "AMAN Poster Generator", href: "/aman-poster" },

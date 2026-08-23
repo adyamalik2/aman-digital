@@ -15,11 +15,11 @@ import {
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-// APP_URL DISENGAJA mengarah ke WhatsApp, bukan amandigital.web.id — hosting
-// domain itu sedang dinonaktifkan (~14 hari) untuk pindah paket promo, jadi
-// aplikasinya sendiri tidak bisa diakses sampai migrasi selesai. Kembalikan
-// ke "https://amandigital.web.id/aman-kasir/" setelah hosting baru aktif.
-const APP_URL = wa("Halo, saya ingin coba AMAN Kasir.");
+// Aplikasinya kini live sebagai PWA di subdomain sendiri (Cloudflare Pages),
+// jadi tombol "Coba Gratis" mengarah langsung ke aplikasi. Sebelumnya sempat
+// dialihkan ke WhatsApp karena hosting web.id lama mati dan aplikasinya belum
+// bisa diakses di mana pun — kondisi itu sudah tidak berlaku.
+const APP_URL = "https://kasir.amandigital.my.id";
 const DEMO_WA = wa(
   "Halo, saya ingin minta demo AMAN Kasir untuk warung/toko saya."
 );

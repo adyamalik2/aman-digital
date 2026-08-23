@@ -16,10 +16,9 @@ import {
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
-// APP_URL DISENGAJA mengarah ke WhatsApp — lihat catatan di kasir/page.tsx.
-// Kembalikan ke "https://amandigital.web.id/aman-budget/" setelah hosting
-// baru aktif.
-const APP_URL = wa("Halo, saya ingin coba AMAN Budget.");
+// Aplikasinya kini live sebagai PWA di subdomain sendiri — lihat catatan di
+// kasir/page.tsx.
+const APP_URL = "https://budget.amandigital.my.id";
 const TANYA_WA = wa("Halo AMAN Digital, saya ingin tanya tentang AMAN Budget.");
 
 /* ---------------- Data ---------------- */

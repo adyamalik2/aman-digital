@@ -138,7 +138,7 @@ export default function AmanContentEnginePage() {
       {/* ===== MASALAH ===== */}
       <section className="bg-white py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
             Kenapa Bikin Konten Terasa Berat
           </span>
           <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -164,7 +164,7 @@ export default function AmanContentEnginePage() {
       {/* ===== FITUR ===== */}
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-5xl px-4 text-center">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
             Yang Kamu Dapat
           </span>
           <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -190,7 +190,7 @@ export default function AmanContentEnginePage() {
       {/* ===== 8 MODE ===== */}
       <section className="bg-white py-20 text-center">
         <div className="mx-auto max-w-3xl px-4">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
             8 Mode Konten
           </span>
           <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">

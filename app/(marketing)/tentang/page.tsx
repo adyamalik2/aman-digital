@@ -184,7 +184,7 @@ export default function TentangPage() {
               {certs.map((c) => (
                 <span
                   key={c}
-                  className="rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald"
+                  className="rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald-dark"
                 >
                   {c}
                 </span>
@@ -192,7 +192,7 @@ export default function TentangPage() {
             </div>
           </div>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald">
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-dark">
               Pendiri
             </p>
             <h2 className="mt-3 text-3xl font-bold text-navy">
@@ -211,7 +211,7 @@ export default function TentangPage() {
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-5xl px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald">
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-dark">
               Nilai yang Kami Pegang
             </p>
             <h2 className="mt-3 text-3xl font-bold text-navy sm:text-4xl">
@@ -276,7 +276,7 @@ export default function TentangPage() {
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-3xl px-4">
           <div className="mb-14 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald">
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-dark">
               Perjalanan
             </p>
             <h2 className="mt-3 text-3xl font-bold text-navy sm:text-4xl">
@@ -287,7 +287,7 @@ export default function TentangPage() {
             {timeline.map((t) => (
               <li key={t.year} className="relative pb-10 pl-8 last:pb-0">
                 <span className="absolute -left-[0.55rem] top-1 h-4 w-4 rounded-full bg-emerald ring-4 ring-emerald/15" />
-                <div className="text-xs font-extrabold uppercase tracking-wider text-emerald">
+                <div className="text-xs font-extrabold uppercase tracking-wider text-emerald-dark">
                   {t.year}
                 </div>
                 <div className="mt-1 text-base font-bold text-navy">

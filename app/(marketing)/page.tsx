@@ -384,7 +384,7 @@ function SectionHeading({
   return (
     <div className="mx-auto max-w-2xl text-center">
       {label && (
-        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-dark">
           {label}
         </p>
       )}
@@ -551,7 +551,7 @@ export default function HomePage() {
                 key={app.badge}
                 className="flex flex-col rounded-xl border border-t-4 border-slate-200 border-t-emerald bg-white p-6 shadow-sm"
               >
-                <span className="self-start rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald">
+                <span className="self-start rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald-dark">
                   {app.badge}
                 </span>
                 <h3 className="mt-4 text-lg font-bold text-navy">{app.title}</h3>
@@ -611,7 +611,7 @@ export default function HomePage() {
                 href={e.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-white px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-emerald"
+                className="rounded-full border border-white px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-emerald-dark"
               >
                 {e.label}
               </a>
@@ -669,7 +669,7 @@ export default function HomePage() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
-                  <span className="self-start rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald">
+                  <span className="self-start rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald-dark">
                     {item.category}
                   </span>
                   <h3 className="mt-3 font-bold text-navy">{item.judul}</h3>

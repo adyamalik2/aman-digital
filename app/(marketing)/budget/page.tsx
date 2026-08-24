@@ -501,7 +501,7 @@ export default function BudgetPage() {
       {/* ===== MASALAH ===== */}
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald">
+          <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
             Kenapa Ini Penting?
           </span>
           <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -538,7 +538,7 @@ export default function BudgetPage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
               Fitur Utama
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -573,7 +573,7 @@ export default function BudgetPage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
               Tampilan Aplikasi
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -608,7 +608,7 @@ export default function BudgetPage() {
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-3xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
               Cara Pakai
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -645,7 +645,7 @@ export default function BudgetPage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
               Paket Harga
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">

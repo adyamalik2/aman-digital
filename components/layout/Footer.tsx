@@ -64,12 +64,17 @@ function FooterCol({
       <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-white/80">
         {title}
       </h3>
-      <ul className="space-y-2">
+      {/* Tautan dibuat inline-block + padding vertikal supaya area sentuhnya
+          naik dari ~17px (setinggi teks saja) ke ~33px. Belum 44px penuh
+          karena tiap kolom punya sampai 8 tautan — memaksakan 44px akan
+          membuat footer di HP hampir dua kali lebih panjang. space-y
+          dikecilkan agar jarak antar barisnya tetap seperti semula. */}
+      <ul className="space-y-1">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-white/70 transition-colors hover:text-emerald"
+              className="inline-block py-2 text-sm text-white/70 transition-colors hover:text-emerald"
             >
               {link.label}
             </Link>
@@ -117,7 +122,9 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-emerald/40 hover:bg-emerald/10 hover:text-emerald-light"
+                    // h-11/w-11 = 44px, ukuran sentuh minimum yang dianjurkan
+                    // (sebelumnya 40px — ikonnya sendiri tetap h-5).
+                    className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-emerald/40 hover:bg-emerald/10 hover:text-emerald-light"
                   >
                     <Icon className="h-5 w-5" />
                   </a>

@@ -320,7 +320,7 @@ export default function HargaPage() {
                   <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-slate-500">
                     Gratis
                   </th>
-                  <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-emerald">
+                  <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-emerald-dark">
                     Dasar
                   </th>
                   <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wider text-slate-500">
@@ -334,7 +334,7 @@ export default function HargaPage() {
                     <tr key={`g-${row.group}-${i}`}>
                       <td
                         colSpan={4}
-                        className="bg-emerald/5 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-emerald"
+                        className="bg-emerald/5 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-emerald-dark"
                       >
                         {row.group}
                       </td>

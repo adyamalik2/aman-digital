@@ -116,7 +116,7 @@ export default function CreativeStudioPage() {
                 </div>
                 <div>
                   <div className="text-base font-bold text-navy">{p.name}</div>
-                  <div className="text-sm font-medium text-emerald">
+                  <div className="text-sm font-medium text-emerald-dark">
                     {p.handle}
                   </div>
                   <div className="mt-0.5 text-sm leading-relaxed text-slate-600">

@@ -552,7 +552,7 @@ export default function KasirPage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Tantangan Nyata
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -583,7 +583,7 @@ export default function KasirPage() {
       <section id="fitur" className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Apa yang Berbeda
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -598,7 +598,7 @@ export default function KasirPage() {
                 <div className="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-white">
                   <WifiOff size={24} />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-widest text-emerald">
+                <span className="text-xs font-bold uppercase tracking-widest text-emerald-dark">
                   Offline-First Sejati
                 </span>
               </div>
@@ -667,7 +667,7 @@ export default function KasirPage() {
       <section id="demo" className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Demo Visual
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -704,7 +704,7 @@ export default function KasirPage() {
       <section id="cara-kerja" className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Cara Kerja
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -732,7 +732,7 @@ export default function KasirPage() {
       <section id="cocok" className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Cocok untuk Toko Kecil
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -861,7 +861,7 @@ export default function KasirPage() {
       {/* ===== WAITING LIST ===== */}
       <section id="waiting-list" className="bg-white py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
             Program Beta
           </span>
           <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
@@ -902,7 +902,7 @@ export default function KasirPage() {
       <section id="faq" className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-4xl px-4">
           <div className="mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-dark">
               Pertanyaan Umum
             </span>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">

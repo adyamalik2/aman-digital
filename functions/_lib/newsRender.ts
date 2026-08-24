@@ -28,7 +28,9 @@ const STYLE = `
   .navcats-wrap { position: relative; }
   .navcats { display: flex; gap: 4px; overflow-x: auto; padding: 0 24px 12px 0; scrollbar-width: none; }
   .navcats::-webkit-scrollbar { display: none; }
-  .navcats a { color: #cbd5e1; font-size: .84rem; font-weight: 700; padding: 6px 13px; border-radius: 999px; white-space: nowrap; }
+  /* padding vertikal 10px (bukan 6px) menaikkan tinggi pill dari ~29px ke
+     ~37px — lebih dekat ke ukuran sentuh nyaman di HP. */
+  .navcats a { color: #cbd5e1; font-size: .84rem; font-weight: 700; padding: 10px 13px; border-radius: 999px; white-space: nowrap; }
   .navcats a:hover, .navcats a.active { background: rgba(16,185,129,.18); color: #6ee7b7; }
   /* Versi pertama memakai stop warna PEKAT di 65% (#070B14 solid), jadi ~10px
      terakhir bukan memudar tapi padam total -- kategori di ujung hilang sama

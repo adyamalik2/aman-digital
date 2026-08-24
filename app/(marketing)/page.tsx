@@ -12,7 +12,6 @@ import {
   LayoutDashboard,
   MonitorCog,
   Printer,
-  Store,
   BadgeCheck,
   MessageCircle,
   Settings,
@@ -81,12 +80,10 @@ const services: { icon: LucideIcon; title: string; desc: string; href: string }[
     desc: "Membantu kebutuhan cetak promosi, dokumen, banner, dan merchandise agar hasilnya rapi, cepat dipakai, dan sesuai identitas bisnis.",
     href: "/print-center",
   },
-  {
-    icon: Store,
-    title: "Digital Store",
-    desc: "Menyediakan template, aset digital, dan kebutuhan pendukung kerja agar bisnis tidak perlu mulai dari nol untuk sistem dan promosi sederhana.",
-    href: "/digital-store",
-  },
+  // "Digital Store" dipindah ke daftar produk di bawah: isinya barang jadi
+  // yang tinggal dibeli, bukan layanan yang dikerjakan untuk klien. Deskripsi
+  // lamanya juga sudah tidak akurat (menyebut template & aset digital yang
+  // produknya belum tersedia).
   {
     icon: Palette,
     title: "Creative Studio",
@@ -151,6 +148,21 @@ const apps = [
     appUrl: "https://amanin.amandigital.my.id",
     detail: "/amanin",
   },
+  {
+    badge: "Produk Digital (700+)",
+    title: "44 Produk Terkurasi + 700 Berkas",
+    desc: "Bahan ibadah, edukasi anak, game ringan, sampai template konten. Satu kode akses membuka semuanya, langsung dari browser.",
+    features: [
+      "39.000 printable anak",
+      "10.000 template Canva",
+      "Buka tanpa unduh satu per satu",
+      "Bayar sekali, akses selamanya",
+    ],
+    // Beda dari yang lain: ini produk yang dibeli, bukan aplikasi yang dibuka.
+    appUrl: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
+    ctaLabel: "Beli Sekarang",
+    detail: "/digital-store",
+  },
 ];
 
 const entryPoints = [
@@ -178,7 +190,10 @@ const portfolioCategories = [
   "Print Center",
   "Creative Studio",
   "IT Advisor",
-  "Digital Store",
+  // Dinamai ulang mengikuti penamaan di menu — "Digital Store" sudah tidak
+  // dipakai di mana pun lagi. Harus sama persis dengan `category` di bawah,
+  // karena string inilah yang dipakai penyaringnya.
+  "Produk Digital",
 ];
 
 const portfolio = [
@@ -243,7 +258,7 @@ const portfolio = [
     link: "/it-advisor",
   },
   {
-    category: "Digital Store",
+    category: "Produk Digital",
     emoji: "🛒",
     image: "/images/dashboard-card.webp",
     judul: "Template Sistem Manajemen & Dashboard",
@@ -526,9 +541,9 @@ export default function HomePage() {
       <section id="produk" className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-6xl px-4">
           <SectionHeading
-            label="Aplikasi AMAN Digital"
-            title="3 Aplikasi untuk Bisnis yang Lebih Rapi"
-            subtitle="Dari kasir harian, pencatatan keuangan, hingga pembuatan invoice profesional — semuanya dalam satu ekosistem AMAN Digital."
+            label="Produk AMAN Digital"
+            title="5 Produk untuk Bisnis yang Lebih Rapi"
+            subtitle="Dari kasir harian, pencatatan keuangan lewat suara, invoice profesional, sampai koleksi produk digital siap pakai — semuanya dalam satu ekosistem AMAN Digital."
           />
           <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
             {apps.map((app) => (
@@ -559,7 +574,8 @@ export default function HomePage() {
                     rel="noopener noreferrer"
                     className="flex-1 rounded-lg bg-emerald-cta px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
                   >
-                    Buka Aplikasi
+                    {/* Produk Digital dibeli, bukan dibuka — labelnya menyesuaikan. */}
+                    {app.ctaLabel ?? "Buka Aplikasi"}
                   </a>
                   <Link
                     href={app.detail}

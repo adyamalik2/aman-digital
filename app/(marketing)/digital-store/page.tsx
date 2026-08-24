@@ -155,8 +155,11 @@ export default function DigitalStorePage() {
                 {p.title === "700+ Produk Digital 2026" && (
                   <p className="mt-3 text-xs leading-relaxed text-slate-500">
                     Sudah beli?{" "}
+                    {/* Ke /katalog, bukan halaman kode: middleware katalog sudah
+                        melempar balik ke sini kalau sesi belum ada, jadi yang
+                        sudah masuk tidak diminta kode berulang kali. */}
                     <Link
-                      href="/produk-digital"
+                      href="/produk-digital/katalog"
                       className="font-semibold text-emerald hover:text-emerald-dark"
                     >
                       Masuk pakai kode akses →

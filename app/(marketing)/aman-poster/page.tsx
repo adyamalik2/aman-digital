@@ -97,7 +97,8 @@ function CtaButtons() {
         🛒 Beli Kode Akses
       </a>
       <Link
-        href="/aman-poster/masuk"
+        // Ke /app/, bukan /masuk — lihat catatan di aman-engine/page.tsx.
+        href="/aman-poster/app/"
         className="rounded-full border border-white/30 px-7 py-3.5 text-center font-semibold text-white transition-colors hover:border-emerald hover:text-emerald-light"
       >
         Sudah punya kode? Masuk →

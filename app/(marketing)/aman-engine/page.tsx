@@ -129,8 +129,12 @@ function CtaButtons() {
       >
         🛒 Beli Kode Akses
       </a>
+      {/* Mengarah ke /app/, BUKAN /masuk: middleware di functions/aman-engine/
+          app/_middleware.ts sudah melempar ke /masuk kalau sesi perangkat belum
+          ada. Jadi yang sudah pernah masuk langsung terbuka aplikasinya tanpa
+          diminta kode lagi, sementara yang belum tetap diminta kode. */}
       <Link
-        href="/aman-engine/masuk"
+        href="/aman-engine/app/"
         className="rounded-full border border-white/30 px-7 py-3.5 text-center font-semibold text-white transition-colors hover:border-emerald hover:text-emerald-light"
       >
         Sudah punya kode? Masuk →

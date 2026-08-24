@@ -16,8 +16,10 @@ const dropdowns: { key: DropdownKey; label: string; items: NavItem[] }[] = [
       { label: "Data & System", href: "/data-system" },
       { label: "IT Advisor", href: "/it-advisor" },
       { label: "Print Center", href: "/print-center" },
+      // "Digital Store" sengaja TIDAK di sini: isinya produk siap beli, bukan
+      // layanan yang dikerjakan untuk klien. Tetap ada di menu Produk sebagai
+      // "Produk Digital (700+)" — sebelumnya dua menu menuju halaman yang sama.
       { label: "Creative Studio", href: "/creative-studio" },
-      { label: "Digital Store", href: "/digital-store" },
     ],
   },
   {

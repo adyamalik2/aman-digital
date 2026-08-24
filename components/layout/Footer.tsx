@@ -23,7 +23,7 @@ const layanan = [
   { label: "Data & System", href: "/data-system" },
   { label: "IT Advisor", href: "/it-advisor" },
   { label: "Print Center", href: "/print-center" },
-  { label: "Digital Store", href: "/digital-store" },
+  // Dipindah ke daftar produk saja — lihat catatan di Navbar.tsx.
   { label: "Creative Studio", href: "/creative-studio" },
 ];
 

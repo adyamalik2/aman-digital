@@ -19,6 +19,8 @@ Baca juga:
 - `KEPUTUSAN.md` — keputusan bisnis & teknis beserta alasannya
 - `STATUS.md` — apa yang sudah live, apa yang masih menunggu keputusan Malik
 
+**Ketiga berkas ini wajib dirawat.** Lihat bagian terakhir dokumen ini.
+
 ---
 
 ## 1. Peta sistem
@@ -221,3 +223,48 @@ Yang wajib dipahami:
 
 Tiap repo aplikasi punya `AGENTS.md` sendiri. **Baca dulu** — terutama
 AMAN Budget.
+
+---
+
+## 8. Merawat dokumen ini — WAJIB
+
+Dokumen yang basi lebih berbahaya daripada tidak ada dokumen, karena orang
+telanjur memercayainya. Karena itu memperbarui ketiga berkas ini **bagian dari
+pekerjaan**, bukan tambahan opsional — sama wajibnya dengan menjalankan lint.
+
+Kalau Anda mengubah sesuatu yang masuk salah satu pemicu di bawah, perbarui
+berkasnya **dalam commit yang sama**. Jangan ditunda "nanti".
+
+### Kapan memperbarui yang mana
+
+| Berkas | Perbarui ketika |
+|---|---|
+| **`STATUS.md`** | Sesuatu naik ke produksi · sesuatu selesai · muncul/selesai hal yang menunggu keputusan Malik · ditemukan utang teknis baru · ada temuan pre-existing yang perlu diketahui orang lain |
+| **`KEPUTUSAN.md`** | Malik memutuskan sesuatu yang **tidak terlihat dari kode** · sebuah usulan ditolak beserta alasannya · keputusan lama berubah (jangan hapus yang lama — tandai dan tulis penggantinya) |
+| **`AGENTS.md`** | Ditemukan jebakan/gotcha baru · arsitektur berubah · ada hal yang tampak seperti bug padahal disengaja · perintah atau alur kerja berubah |
+
+### Cara menulis yang benar
+
+- **Alasan lebih penting daripada keputusannya.** "Digital Store itu produk"
+  akan diperdebatkan lagi; "Digital Store itu produk karena layanan
+  dikerjakan untuk klien sedangkan ini barang jadi" tidak.
+- **Verifikasi angkanya**, jangan mengarang. Jumlah rute dihitung dari berkas,
+  jumlah artikel dari query D1, jumlah URL dari sitemap. Klaim "19 halaman"
+  pernah ditulis di sini dan ternyata salah — yang benar 22.
+- **Catat juga yang pre-existing**, supaya orang berikutnya tidak mengira
+  dialah yang merusaknya.
+- **Jangan hapus keputusan lama** yang sudah tidak berlaku. Tandai bahwa itu
+  sudah digantikan, dan tulis kenapa berubah. Riwayat itu berguna.
+- Perbarui tanggal "Diperbarui" di `STATUS.md`.
+
+### Yang paling cepat basi
+
+`STATUS.md`. Kalau isinya tidak cocok dengan kenyataan: **percayai produksi**,
+lalu perbaiki berkasnya. Jangan diamkan.
+
+### Kalau Anda AI yang baru masuk
+
+Setelah membaca ketiganya, **konfirmasi dulu ke Malik** kalau ada yang terasa
+sudah tidak akurat. Jangan langsung memperbaiki kode berdasarkan dokumen yang
+mungkin sudah usang — dan jangan pula langsung mengubah dokumen berdasarkan
+tebakan.

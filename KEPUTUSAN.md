@@ -201,6 +201,32 @@ resmi** — Malik memilih membiarkannya tayang setelah diberi tahu.
 
 ---
 
+## K-11 · Dokumentasi proyek wajib dirawat, bukan opsional
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** `AGENTS.md`, `KEPUTUSAN.md`, dan `STATUS.md` **wajib ikut
+diperbarui dalam commit yang sama** dengan perubahan yang memicunya. Bukan
+pekerjaan tambahan yang bisa ditunda.
+
+**Kenapa.** Sebelum 24-08-2026, seluruh konteks proyek hanya hidup di kepala
+Malik dan di riwayat percakapan — tidak bisa dibaca siapa pun yang baru masuk.
+Akibatnya sudah pernah nyaris fatal: sebuah audit mengusulkan menghapus akses
+Pro pemilik di AMAN Budget, kesimpulan yang wajar dari sisi kode tapi salah
+(lihat K-01). Usulan itu batal hanya karena Malik kebetulan hadir menjelaskan.
+
+Dokumen yang basi lebih berbahaya daripada tidak ada dokumen, karena orang
+telanjur memercayainya. Jadi merawatnya bagian dari pekerjaan itu sendiri.
+
+**Cara menerapkan.** Aturan lengkap beserta tabel pemicunya ada di bagian 8
+`AGENTS.md`. Empat repo aplikasi punya versi ringkasnya masing-masing.
+
+**Kalau dilanggar.** Dokumen pelan-pelan menyimpang dari kenyataan, lalu orang
+berikutnya mengambil keputusan berdasarkan informasi yang salah — persis
+masalah yang dokumen ini diciptakan untuk mencegahnya.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

@@ -249,7 +249,7 @@ export default function KontakPage() {
             href={wa("Halo AMAN Digital")}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-block rounded-full bg-white px-8 py-3.5 font-bold text-emerald transition-opacity hover:opacity-90"
+            className="mt-8 inline-block rounded-full bg-white px-8 py-3.5 font-bold text-emerald-dark transition-opacity hover:opacity-90"
           >
             Mulai Chat WhatsApp
           </a>

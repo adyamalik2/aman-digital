@@ -229,7 +229,7 @@ export default function DigitalStorePage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
               Isi Katalog
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -265,7 +265,7 @@ export default function DigitalStorePage() {
                       {c}
                     </span>
                   ))}
-                  <span className="rounded-full bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
+                  <span className="rounded-full bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
                     +{k.jumlah - k.contoh.length} lainnya
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export default function DigitalStorePage() {
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
               Kenapa Ini Praktis
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -325,7 +325,7 @@ export default function DigitalStorePage() {
       <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
               Cocok Untuk
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -355,7 +355,7 @@ export default function DigitalStorePage() {
       <section className="py-20" style={{ backgroundColor: "#F8FAFC" }}>
         <div className="mx-auto max-w-3xl px-4">
           <div className="mb-14 text-center">
-            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-dark">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
               Cara Pakai
             </span>
             <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
@@ -420,7 +420,7 @@ export default function DigitalStorePage() {
                   >
                     {item.q}
                     <span
-                      className={`text-emerald transition-transform ${
+                      className={`text-emerald-dark transition-transform ${
                         open ? "rotate-45" : ""
                       }`}
                     >
@@ -460,7 +460,7 @@ export default function DigitalStorePage() {
                   href={CHECKOUT}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-white px-8 py-3.5 font-bold text-emerald transition-colors hover:bg-slate-100"
+                  className="rounded-full bg-white px-8 py-3.5 font-bold text-emerald-dark transition-colors hover:bg-slate-100"
                 >
                   🛒 Beli Sekarang
                 </a>

@@ -397,7 +397,7 @@ export default function HargaPage() {
                   >
                     {item.q}
                     <span
-                      className={`text-emerald transition-transform ${
+                      className={`text-emerald-dark transition-transform ${
                         open ? "rotate-45" : ""
                       }`}
                     >

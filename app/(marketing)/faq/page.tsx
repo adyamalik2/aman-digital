@@ -275,7 +275,7 @@ export default function FaqPage() {
                         {f.q}
                       </span>
                       <span
-                        className={`shrink-0 text-emerald transition-transform ${
+                        className={`shrink-0 text-emerald-dark transition-transform ${
                           open ? "rotate-180" : ""
                         }`}
                       >
@@ -318,7 +318,7 @@ export default function FaqPage() {
               href={wa("Halo AMAN Digital, saya punya pertanyaan")}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-block rounded-full bg-white px-8 py-3.5 font-bold text-emerald transition-colors hover:bg-slate-100"
+              className="mt-8 inline-block rounded-full bg-white px-8 py-3.5 font-bold text-emerald-dark transition-colors hover:bg-slate-100"
             >
               Chat WhatsApp Sekarang
             </a>

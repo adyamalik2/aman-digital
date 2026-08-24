@@ -927,7 +927,7 @@ export default function KasirPage() {
                   >
                     {item.q}
                     <span
-                      className={`grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald/10 text-emerald transition-transform ${
+                      className={`grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald/10 text-emerald-dark transition-transform ${
                         open ? "rotate-45" : ""
                       }`}
                     >

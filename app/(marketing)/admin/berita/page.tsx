@@ -13,6 +13,7 @@ type ArticleListItem = {
   is_breaking: number;
   is_headline: number;
   is_slider: number;
+  pinned_order: number | null;
   category_name: string | null;
   author_name: string | null;
 };
@@ -74,6 +75,12 @@ const emptyDraft = {
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-emerald focus:outline-none";
 const labelCls = "mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400";
+
+// Kunci localStorage untuk penyimpanan draf otomatis -- per artikel (id) atau
+// "new" untuk tulisan baru yang belum pernah disimpan ke server.
+const AUTOSAVE_PREFIX = "aman_berita_autosave_";
+const autosaveKey = (id?: number) => AUTOSAVE_PREFIX + (id ?? "new");
+const fmtWaktu = (iso: string) => new Date(iso).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" });
 
 export default function AdminBlogPage() {
   const [tab, setTab] = useState<"articles" | "categories" | "authors" | "comments" | "media" | "affiliate" | "settings">("articles");
@@ -144,6 +151,8 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
   const [previewHtml, setPreviewHtml] = useState("");
   const [uploadingThumb, setUploadingThumb] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [query, setQuery] = useState("");
+  const [pinBusy, setPinBusy] = useState<number | null>(null);
 
   const uploadThumbnail = async (files: FileList | null) => {
     const file = files?.[0];
@@ -193,7 +202,38 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     (async () => setPreviewHtml(await marked.parse(draft.content || "")))();
   }, [preview, draft.content]);
 
-  const openNew = () => { setDraft(emptyDraft); setView("editor"); setPreview(false); };
+  // Penyimpanan draf otomatis: simpan ke localStorage 1,5 detik setelah
+  // berhenti mengetik, supaya tulisan tidak hilang kalau tab tertutup tanpa
+  // sengaja sebelum sempat klik Simpan. Draf kosong tidak disimpan.
+  useEffect(() => {
+    if (view !== "editor") return;
+    const t = setTimeout(() => {
+      if (!draft.title.trim() && !draft.content.trim()) return;
+      try {
+        localStorage.setItem(autosaveKey(draft.id), JSON.stringify({ savedAt: new Date().toISOString(), draft }));
+      } catch { /* localStorage penuh/nonaktif -- abaikan, bukan fitur kritis */ }
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [draft, view]);
+
+  const openNew = () => {
+    try {
+      const raw = localStorage.getItem(autosaveKey(undefined));
+      if (raw) {
+        const saved = JSON.parse(raw) as { savedAt: string; draft: typeof emptyDraft };
+        if (window.confirm(`Ditemukan draf tulisan baru yang belum disimpan (${fmtWaktu(saved.savedAt)}). Pulihkan?`)) {
+          setDraft(saved.draft);
+          setView("editor");
+          setPreview(false);
+          return;
+        }
+        localStorage.removeItem(autosaveKey(undefined));
+      }
+    } catch { /* abaikan draf tersimpan yang rusak/tidak terbaca */ }
+    setDraft(emptyDraft);
+    setView("editor");
+    setPreview(false);
+  };
 
   const openEdit = async (id: number) => {
     setError("");
@@ -202,7 +242,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message || "Gagal memuat artikel.");
       const a: ArticleFull = data.article;
-      setDraft({
+      const fromServer = {
         id: a.id, title: a.title, slug: a.slug, excerpt: a.excerpt, content: a.content,
         thumbnail: a.thumbnail, thumbnail_alt: a.thumbnail_alt,
         category_id: a.category_id ?? "", author_id: a.author_id ?? "", status: a.status,
@@ -210,7 +250,26 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
         is_breaking: !!a.is_breaking, is_headline: !!a.is_headline, is_slider: !!a.is_slider,
         video_url: a.video_url, meta_title: a.meta_title, meta_description: a.meta_description,
         tags: (a.tags || []).join(", "),
-      });
+      };
+      let restored = false;
+      try {
+        const raw = localStorage.getItem(autosaveKey(id));
+        if (raw) {
+          const saved = JSON.parse(raw) as { savedAt: string; draft: typeof emptyDraft };
+          const updatedAt = (a as unknown as { updated_at?: string }).updated_at;
+          if (!updatedAt || new Date(saved.savedAt) > new Date(updatedAt)) {
+            if (window.confirm(`Ditemukan draf belum tersimpan dari ${fmtWaktu(saved.savedAt)} untuk artikel ini. Pulihkan?`)) {
+              setDraft(saved.draft);
+              restored = true;
+            } else {
+              localStorage.removeItem(autosaveKey(id));
+            }
+          } else {
+            localStorage.removeItem(autosaveKey(id)); // sudah basi, kalah dari versi server
+          }
+        }
+      } catch { /* abaikan draf tersimpan yang rusak/tidak terbaca */ }
+      if (!restored) setDraft(fromServer);
       setView("editor");
       setPreview(false);
     } catch (e) {
@@ -232,6 +291,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message || "Gagal menyimpan.");
+      try { localStorage.removeItem(autosaveKey(draft.id)); } catch { /* abaikan */ }
       await loadAll();
       setView("list");
     } catch (e) {
@@ -269,7 +329,7 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   };
   const toggleSelectAll = () => {
-    setSelected((s) => (s.size === articles.length ? new Set() : new Set(articles.map((a) => a.id))));
+    setSelected((s) => (s.size === filteredArticles.length ? new Set() : new Set(filteredArticles.map((a) => a.id))));
   };
   const bulkAction = async (verb: "published" | "draft" | "archived" | "delete") => {
     if (!selected.size) return;
@@ -282,6 +342,50 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
     await loadAll();
   };
 
+  const pinArticle = async (id: number) => {
+    setPinBusy(id);
+    try {
+      await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "articles", action: "pin", id }),
+      });
+      await loadAll();
+    } finally { setPinBusy(null); }
+  };
+
+  const unpinArticle = async (id: number) => {
+    setPinBusy(id);
+    try {
+      await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "articles", action: "unpin", id }),
+      });
+      await loadAll();
+    } finally { setPinBusy(null); }
+  };
+
+  const movePin = async (id: number, dir: "up" | "down") => {
+    const pinned = articles.filter((a) => a.pinned_order != null).sort((a, b) => (a.pinned_order! - b.pinned_order!));
+    const idx = pinned.findIndex((a) => a.id === id);
+    const swapWith = dir === "up" ? idx - 1 : idx + 1;
+    if (idx < 0 || swapWith < 0 || swapWith >= pinned.length) return;
+    const ids = pinned.map((a) => a.id);
+    [ids[idx], ids[swapWith]] = [ids[swapWith], ids[idx]];
+    setPinBusy(id);
+    try {
+      await fetch("/admin/api/berita", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resource: "articles", action: "reorder_pins", ids }),
+      });
+      await loadAll();
+    } finally { setPinBusy(null); }
+  };
+
+  const filteredArticles = query.trim()
+    ? articles.filter((a) => a.title.toLowerCase().includes(query.trim().toLowerCase()))
+    : articles;
+  const pinnedArticles = articles.filter((a) => a.pinned_order != null).sort((a, b) => (a.pinned_order! - b.pinned_order!));
+
   if (view === "list") {
     return (
       <>
@@ -289,6 +393,13 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
           <button onClick={openNew} className="rounded-full bg-emerald-cta px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-cta-hover">
             ✏️ Tulis Artikel Baru
           </button>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="🔎 Cari judul artikel…"
+            className="w-full max-w-xs rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:border-emerald focus:outline-none"
+          />
           {selected.size > 0 && (
             <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5">
               <span className="text-xs text-slate-400">{selected.size} dipilih</span>
@@ -299,11 +410,33 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
             </div>
           )}
         </div>
+
+        {/* Kurasi beranda: artikel yang disematkan tampil paling atas di
+            slider/headline/listing beranda, LEPAS dari tanggal terbit.
+            Urutan diatur dengan ↑/↓ (bukan drag-and-drop) supaya tetap
+            enak dipakai di HP juga. */}
+        {pinnedArticles.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-emerald/20 bg-emerald/5 p-4">
+            <p className="text-xs font-bold uppercase tracking-wide text-emerald-light">📌 Urutan Beranda ({pinnedArticles.length} disematkan)</p>
+            <ul className="mt-3 space-y-2">
+              {pinnedArticles.map((a, i) => (
+                <li key={a.id} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm">
+                  <span className="w-5 text-center font-mono text-xs text-slate-400">{i + 1}</span>
+                  <span className="flex-1 truncate">{a.title}</span>
+                  <button disabled={i === 0 || pinBusy === a.id} onClick={() => movePin(a.id, "up")} className="rounded-full border border-white/15 px-2 py-1 text-xs disabled:opacity-30">↑</button>
+                  <button disabled={i === pinnedArticles.length - 1 || pinBusy === a.id} onClick={() => movePin(a.id, "down")} className="rounded-full border border-white/15 px-2 py-1 text-xs disabled:opacity-30">↓</button>
+                  <button disabled={pinBusy === a.id} onClick={() => unpinArticle(a.id)} className="rounded-full border border-red-500/30 px-2 py-1 text-xs text-red-300 disabled:opacity-30">Lepas</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="mt-3 overflow-x-auto rounded-2xl border border-white/10">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wide text-slate-400">
-                <th className="px-4 py-3"><input type="checkbox" checked={articles.length > 0 && selected.size === articles.length} onChange={toggleSelectAll} /></th>
+                <th className="px-4 py-3"><input type="checkbox" checked={filteredArticles.length > 0 && selected.size === filteredArticles.length} onChange={toggleSelectAll} /></th>
                 <th className="px-4 py-3">Judul</th>
                 <th className="px-4 py-3">Kategori</th>
                 <th className="px-4 py-3">Status</th>
@@ -313,8 +446,8 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
             </thead>
             <tbody>
               {loading && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Memuat…</td></tr>}
-              {!loading && articles.length === 0 && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">Belum ada artikel.</td></tr>}
-              {!loading && articles.map((a) => (
+              {!loading && filteredArticles.length === 0 && <tr><td colSpan={6} className="px-4 py-6 text-center text-slate-500">{query ? "Tidak ada artikel yang cocok." : "Belum ada artikel."}</td></tr>}
+              {!loading && filteredArticles.map((a) => (
                 <tr key={a.id} className="border-b border-white/5 last:border-0">
                   <td className="px-4 py-3"><input type="checkbox" checked={selected.has(a.id)} onChange={() => toggleSelect(a.id)} /></td>
                   <td className="px-4 py-3 font-semibold">{a.title}</td>
@@ -334,6 +467,13 @@ function ArticlesTab({ setError }: { setError: (e: string) => void }) {
                     <div className="flex gap-2">
                       {a.status === "published" && (
                         <a href={`/berita/${a.slug}`} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10">Lihat</a>
+                      )}
+                      {a.status === "published" && (
+                        a.pinned_order != null ? (
+                          <button disabled={pinBusy === a.id} onClick={() => unpinArticle(a.id)} className="rounded-full border border-emerald/40 bg-emerald/10 px-3 py-1 text-xs text-emerald-light disabled:opacity-30">📌 #{a.pinned_order}</button>
+                        ) : (
+                          <button disabled={pinBusy === a.id} onClick={() => pinArticle(a.id)} className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10 disabled:opacity-30">📌 Sematkan</button>
+                        )
                       )}
                       <button onClick={() => openEdit(a.id)} className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 hover:bg-white/10">Edit</button>
                       <button onClick={() => remove(a.id, a.title)} className="rounded-full border border-red-500/30 px-3 py-1 text-xs text-red-300 hover:bg-red-500/10">🗑</button>

@@ -36,6 +36,7 @@ export type Article = {
   is_breaking: number;
   is_headline: number;
   is_slider: number;
+  pinned_order: number | null;
   video_url: string;
   meta_title: string;
   meta_description: string;
@@ -53,6 +54,15 @@ export type Article = {
 
 const ARTICLE_COLS = `a.*, c.name AS category_name, c.slug AS category_slug, c.color AS category_color, au.name AS author_name, au.slug AS author_slug`;
 const ARTICLE_FROM = `FROM articles a LEFT JOIN categories c ON c.id = a.category_id LEFT JOIN authors au ON au.id = a.author_id`;
+
+/**
+ * Urutan "kurasi": artikel yang disematkan lewat panel admin (pinned_order
+ * terisi) tampil dulu sesuai urutan semat, sisanya jatuh ke kronologis
+ * seperti biasa. Dipakai di spot editorial (slider, headline, listing
+ * beranda/kategori) -- BUKAN di trending/populer/breaking yang memang harus
+ * murni data (klik/waktu), atau di hasil pencarian.
+ */
+const CURATED_ORDER = `CASE WHEN a.pinned_order IS NULL THEN 1 ELSE 0 END ASC, a.pinned_order ASC, a.published_at DESC`;
 
 export async function getSettings(db: D1Database): Promise<Record<string, string>> {
   const { results } = await db.prepare("SELECT skey, svalue FROM settings").all<{ skey: string; svalue: string }>();
@@ -80,7 +90,7 @@ export async function getAuthorBySlug(db: D1Database, slug: string): Promise<Aut
 
 export async function getSlider(db: D1Database, limit = 5): Promise<Article[]> {
   const { results } = await db
-    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} WHERE a.status='published' AND a.is_slider=1 ORDER BY a.published_at DESC LIMIT ?`)
+    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} WHERE a.status='published' AND a.is_slider=1 ORDER BY ${CURATED_ORDER} LIMIT ?`)
     .bind(limit)
     .all<Article>();
   return results || [];
@@ -89,7 +99,7 @@ export async function getSlider(db: D1Database, limit = 5): Promise<Article[]> {
 export async function getHeadline(db: D1Database, excludeIds: number[]): Promise<Article | null> {
   const ex = excludeIds.length ? `AND a.id NOT IN (${excludeIds.map(() => "?").join(",")})` : "";
   const row = await db
-    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} WHERE a.status='published' AND a.is_headline=1 ${ex} ORDER BY a.published_at DESC LIMIT 1`)
+    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} WHERE a.status='published' AND a.is_headline=1 ${ex} ORDER BY ${CURATED_ORDER} LIMIT 1`)
     .bind(...excludeIds)
     .first<Article>();
   if (row) return row;
@@ -120,7 +130,7 @@ export async function getLatest(db: D1Database, limit: number, offset: number, c
   if (tagId) { join = "JOIN article_tag at2 ON at2.article_id = a.id"; where += " AND at2.tag_id = ?"; binds.push(tagId); }
   binds.push(limit, offset);
   const { results } = await db
-    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} ${join} WHERE ${where} ORDER BY a.published_at DESC LIMIT ? OFFSET ?`)
+    .prepare(`SELECT ${ARTICLE_COLS} ${ARTICLE_FROM} ${join} WHERE ${where} ORDER BY ${CURATED_ORDER} LIMIT ? OFFSET ?`)
     .bind(...binds)
     .all<Article>();
   return results || [];

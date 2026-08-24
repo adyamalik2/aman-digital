@@ -94,7 +94,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const { results } = await db
     .prepare(
-      `SELECT a.id, a.slug, a.title, a.status, a.published_at, a.updated_at, a.is_breaking, a.is_headline, a.is_slider,
+      `SELECT a.id, a.slug, a.title, a.status, a.published_at, a.updated_at, a.is_breaking, a.is_headline, a.is_slider, a.pinned_order,
               c.name AS category_name, au.name AS author_name
        FROM articles a LEFT JOIN categories c ON c.id=a.category_id LEFT JOIN authors au ON au.id=a.author_id
        ORDER BY a.updated_at DESC`
@@ -360,6 +360,39 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       return jsonOk({ ok: true, count: ids.length });
     }
     return jsonError(400, "Aksi massal tidak dikenal.");
+  }
+
+  // ── Sematkan ke beranda (kurasi manual, lepas dari tanggal terbit) ──
+  if (action === "pin") {
+    const id = Number(body.id);
+    if (!id) return jsonError(400, "ID artikel tidak valid.");
+    const row = await db
+      .prepare("SELECT COALESCE(MAX(pinned_order), 0) AS maxOrder FROM articles WHERE pinned_order IS NOT NULL")
+      .first<{ maxOrder: number }>();
+    const next = (row?.maxOrder || 0) + 1;
+    await db.prepare("UPDATE articles SET pinned_order = ? WHERE id = ?").bind(next, id).run();
+    return jsonOk({ ok: true, pinned_order: next });
+  }
+
+  if (action === "unpin") {
+    const id = Number(body.id);
+    if (!id) return jsonError(400, "ID artikel tidak valid.");
+    await db.prepare("UPDATE articles SET pinned_order = NULL WHERE id = ?").bind(id).run();
+    // Rapikan celah nomor urut supaya sisanya tetap 1..N berurutan.
+    const { results } = await db
+      .prepare("SELECT id FROM articles WHERE pinned_order IS NOT NULL ORDER BY pinned_order ASC")
+      .all<{ id: number }>();
+    const stmts = (results || []).map((r, i) => db.prepare("UPDATE articles SET pinned_order = ? WHERE id = ?").bind(i + 1, r.id));
+    if (stmts.length) await db.batch(stmts);
+    return jsonOk({ ok: true });
+  }
+
+  if (action === "reorder_pins") {
+    const ids = (Array.isArray(body.ids) ? body.ids : []).map(Number).filter((n) => n > 0);
+    if (!ids.length) return jsonError(400, "Tidak ada urutan yang dikirim.");
+    const stmts = ids.map((id, i) => db.prepare("UPDATE articles SET pinned_order = ? WHERE id = ?").bind(i + 1, id));
+    await db.batch(stmts);
+    return jsonOk({ ok: true });
   }
 
   if (action === "delete") {

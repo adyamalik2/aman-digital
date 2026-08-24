@@ -1,0 +1,206 @@
+# Catatan Keputusan — AMAN Digital
+
+Keputusan yang **tidak terlihat dari kode**, beserta alasannya. Tujuannya
+supaya tidak diperdebatkan atau "diperbaiki" ulang oleh orang/AI berikutnya.
+
+Format: apa yang diputuskan → kenapa → apa yang terjadi kalau dilanggar.
+
+Diurutkan dari yang paling berisiko kalau dilanggar.
+
+---
+
+## K-01 · Akses Pro pemilik di AMAN Budget dipertahankan
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** Jalur aktivasi Pro di AMAN Budget **tidak dihapus**, tapi
+dipisahkan lewat build mode: hanya ikut ter-bundle pada
+`npm run build:android:owner`.
+
+**Kenapa.** Malik memakai APK Budget sendiri sehari-hari dan memang butuh
+fitur Pro. Menghapus tombolnya begitu saja terlihat benar dari sisi keamanan,
+tapi menghilangkan **jalur pemulihan** — begitu Malik ganti HP, install
+ulang, atau menghapus data aplikasi, Pro-nya hilang permanen tanpa cara
+mengembalikan.
+
+**Riwayat.** Audit awal menandai ini sebagai celah dan mengusulkan
+penghapusan. Usulan itu **ditarik** setelah Malik menjelaskan konteksnya:
+APK belum pernah dibagikan ke pelanggan, belum ada di Play Store.
+
+**Kalau dilanggar.** Malik kehilangan akses Pro di aplikasinya sendiri, tanpa
+cara memulihkan selain mengembalikan kode ini.
+
+**Batasnya.** Ini pemisahan **distribusi**, bukan sistem lisensi. `isPro`
+tetap nilai localStorage sisi klien. Sebelum APK diberikan ke pelanggan atau
+naik Play Store, entitlement wajib diganti Google Play Billing atau validasi
+lisensi resmi. Lihat `AGENTS.md` repo AMAN Budget.
+
+---
+
+## K-02 · Jangan pernah mengarang isi
+
+**Tanggal:** berlaku sejak awal proyek
+
+**Keputusan.** Dilarang membuat harga, statistik, testimoni, nama klien,
+metrik hasil, identitas badan usaha, atau klaim fitur yang belum
+dikonfirmasi Malik.
+
+**Kenapa.** Ini situs bisnis nyata dengan pelanggan nyata. Angka atau klaim
+karangan bukan cuma salah — bisa jadi masalah hukum dan menghancurkan
+kepercayaan.
+
+**Contoh nyata.** Paragraf metode pembayaran di `/harga` pernah menyebut
+transfer bank BCA/Mandiri/BRI/BNI dengan aktivasi 1×24 jam. Ternyata jalur
+itu tidak pernah ada. Sekarang dihapus dan ditandai `TODO(pemilik)` sampai
+Malik mengonfirmasi cara bayar yang sebenarnya.
+
+**Contoh kedua.** Waktu diminta menyalin "database artikel web.id lama",
+ternyata isinya 12 artikel contoh bawaan installer yang **menyatakan dirinya
+sendiri** sebagai contoh ("Bukan berita sungguhan"). Menyalinnya berarti
+menerbitkan konten yang mengaku palsu. Yang dilakukan: topiknya dipakai,
+isinya ditulis ulang dari nol sebagai artikel asli.
+
+**Kalau ragu:** tanya Malik, atau kosongkan. Jangan tebak.
+
+---
+
+## K-03 · Digital Store adalah produk, bukan layanan
+
+**Tanggal:** 24-08-2026 (final)
+
+**Keputusan.** AMAN Digital punya **4 layanan** — Data & System, IT Advisor,
+Print Center, Creative Studio. Digital Store / "Produk Digital (700+)" adalah
+**produk**, dan tampil di menu Produk.
+
+**Kenapa.** Layanan itu dikerjakan untuk klien; Digital Store adalah barang
+jadi yang tinggal dibeli. Beda sifat, beda alur pembelian.
+
+**Kalau dilanggar.** Muncul lagi kontradiksi antara beranda, FAQ, dan menu
+navigasi — persis masalah yang sudah diperbaiki 24-08-2026.
+
+**Catatan.** Beranda menampilkan **5 produk pilihan** dengan judul "5 Produk
+Unggulan", sementara menu Produk memuat 8 produk. Ini disengaja: beranda
+kurasi, menu lengkap.
+
+---
+
+## K-04 · AMAN News tetap portal berita umum
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** AMAN News memuat topik luas — politik, olahraga, lifestyle,
+pendidikan, teknologi, ekonomi, nasional, daerah. **Bukan** blog khusus UMKM.
+
+**Kenapa.** Ini keputusan editorial Malik. Audit sempat mempertanyakan apakah
+topik luas "mencampur intent bisnis" — dijawab: pertahankan.
+
+**Kalau dilanggar.** Jangan menghapus kategori, menyempitkan topik, atau
+menghapus artikel karena dianggap tidak relevan dengan UMKM.
+
+**Cara menaikkan SEO-nya:** kualitas SEO teknis, struktur halaman, metadata,
+internal link, dan mutu konten — **bukan** dengan mengubah fokus editorial.
+
+---
+
+## K-05 · Link "Masuk Newsroom" tetap terlihat publik
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** Link `/admin/berita` di header portal berita tetap tampil ke
+semua pengunjung.
+
+**Kenapa.** Supaya Malik gampang masuk dari mana saja. Halaman tujuannya
+tetap digerbangi autentikasi, jadi ini bukan celah keamanan — hanya soal
+kerapian tampilan.
+
+**Kalau dilanggar.** Jangan menyembunyikan atau memindahkannya. Yang **tidak
+boleh** dikurangi adalah pengamanan login-nya.
+
+---
+
+## K-06 · Identitas warna AMAN-in tetap ungu
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** AMAN-in memakai ungu `#7C3AED`, berbeda dari emerald/navy
+situs utama. Dipertahankan.
+
+**Kenapa.** Identitas produk tersendiri. Emerald di dalam aplikasi itu hanya
+warna semantik untuk "pemasukan/positif", bukan warna brand.
+
+---
+
+## K-07 · Login opsional di AMAN Kasir
+
+**Tanggal:** keputusan desain awal (terdokumentasi di source)
+
+**Keputusan.** Dashboard dan layar transaksi AMAN Kasir bisa dibuka tanpa
+login. Tidak ada route guard.
+
+**Kenapa.** Positioning aplikasi ini offline-first — "kasir yang jalan terus
+walau sinyal pergi". Login (Google) hanya dipakai untuk cloud backup.
+Tertulis eksplisit di `src/services/auth/AuthService.ts`.
+
+**Kalau dilanggar.** Menambahkan gerbang login akan merusak alasan utama
+aplikasi ini ada.
+
+---
+
+## K-08 · Paket berbayar jujur "Segera Hadir"
+
+**Tanggal:** sebelum 24-08-2026
+
+**Keputusan.** Paket Dasar & Pro di `/harga` diberi badge "Segera Hadir" dan
+tombolnya "Daftar Minat" (ke WhatsApp), bukan "Beli".
+
+**Kenapa.** Jalur pembelian otomatis memang belum ada — akun Duitku masih
+menunggu approval. Menampilkan tombol beli yang tidak berfungsi = menipu
+pelanggan.
+
+**Catatan.** Hero halaman masih berbunyi "Mulai gratis, bayar saat bisnis
+berkembang", padahal jalur upgrade-nya belum ada. **Belum diputuskan** apakah
+copy-nya diubah atau menunggu paket berbayar aktif.
+
+---
+
+## K-09 · Redirect `/blog` → `/berita`
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** `public/_redirects` memetakan URL blog lama ke portal berita,
+dengan 2 slug spesifik di atas aturan wildcard.
+
+**Kenapa.** Situs dulu memakai `/blog` sebelum pindah ke `/berita`. Rutenya
+sudah lama hilang dari source, **tapi cache edge Cloudflare masih menyajikan
+HTTP 200 berisi tampilan situs versi lama** — nav dan footer usang — bukan
+404 seperti yang diperkirakan. Pengunjung dari Google melihat situs lama.
+
+**Penting.** Baris spesifik harus **di atas** wildcard; Cloudflare Pages
+memakai aturan pertama yang cocok.
+
+---
+
+## K-10 · Penulis artikel = "Tim AMAN Digital"
+
+**Tanggal:** 24-08-2026
+
+**Keputusan.** Penulis semua artikel diubah dari "Redaksi" menjadi "Tim AMAN
+Digital" (slug `tim-aman-digital`).
+
+**Kenapa.** 18 artikel yang ada ditulis dengan bantuan AI, bukan tim redaksi
+manusia. "Redaksi" menyiratkan hal yang tidak benar.
+
+**Efek samping yang diketahui.** `/berita/penulis/redaksi` sekarang 404.
+Tidak ada tautan keras ke slug lama di dalam kode (sudah dicek).
+
+**Sifat artikel.** Kedelapan belas artikel adalah **konten panduan
+evergreen**, bukan liputan berita. Tidak memuat nama orang, statistik,
+peristiwa, atau kutipan karangan. Satu artikel ("Keterbukaan Informasi
+Publik") memuat gambaran umum aturan yang **belum diverifikasi ke sumber
+resmi** — Malik memilih membiarkannya tayang setelah diberi tahu.
+
+---
+
+## Keputusan yang masih terbuka
+
+Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

@@ -167,6 +167,7 @@ export default function HargaPage() {
             <div className="inline-flex gap-1 rounded-full border border-white/10 bg-white/5 p-1">
               <button
                 type="button"
+                aria-pressed={!annual}
                 onClick={() => setAnnual(false)}
                 className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${
                   !annual ? "bg-emerald-cta text-white" : "text-slate-300"
@@ -176,6 +177,7 @@ export default function HargaPage() {
               </button>
               <button
                 type="button"
+                aria-pressed={annual}
                 onClick={() => setAnnual(true)}
                 className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${
                   annual ? "bg-emerald-cta text-white" : "text-slate-300"

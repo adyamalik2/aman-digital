@@ -16,6 +16,10 @@ const STYLE = `
   .sect-title { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 3px solid #059669; }
   .sect-title .bar { width: 5px; height: 20px; background: #059669; border-radius: 3px; }
 
+  /* Label khusus pembaca layar. Portal berita memakai CSS sendiri (bukan
+     Tailwind situs utama), jadi kelas ini perlu didefinisikan di sini. */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
   header.site { background: #070B14; position: sticky; top: 0; z-index: 40; }
   .ticker { background: #dc2626; color: #fff; overflow: hidden; white-space: nowrap; }
   .ticker-inner { display: inline-flex; align-items: center; padding: 8px 0; animation: tick 28s linear infinite; }
@@ -122,6 +126,18 @@ const STYLE = `
   .aff-disc { margin: 14px 0 0; font-size: .72rem; color: #92400e; opacity: .8; }
 `;
 
+export const SITE_ORIGIN = "https://amandigital.my.id";
+
+/**
+ * Bungkus JSON-LD dengan aman. `</script>` di dalam string JSON bisa menutup
+ * tag lebih awal dan membuka celah XSS, jadi `<` di-escape ke bentuk unicode
+ * yang tetap valid JSON. Dipakai untuk seluruh structured data portal berita.
+ */
+export function jsonLdScript(data: unknown): string {
+  const json = JSON.stringify(data).replace(/</g, "\\u003c");
+  return `<script type="application/ld+json">${json}</script>`;
+}
+
 export function renderShell(opts: {
   title: string;
   description: string;
@@ -130,7 +146,33 @@ export function renderShell(opts: {
   activeCategory?: string;
   breaking?: Article[];
   noindex?: boolean;
+  /** Path absolut halaman ini, mis. "/berita/slug-artikel". */
+  canonicalPath?: string;
+  /** "website" untuk indeks/arsip, "article" untuk halaman artikel. */
+  ogType?: string;
+  /** URL gambar untuk OG/Twitter. Dipakai hanya kalau benar-benar ada. */
+  ogImage?: string;
+  /** Blok <script type="application/ld+json"> yang sudah jadi. */
+  jsonLd?: string;
 }): string {
+  const canonical = opts.canonicalPath ? `${SITE_ORIGIN}${opts.canonicalPath}` : "";
+  const ogImageAbs = opts.ogImage
+    ? (opts.ogImage.startsWith("http") ? opts.ogImage : `${SITE_ORIGIN}${opts.ogImage}`)
+    : "";
+  const social = `
+${canonical ? `<link rel="canonical" href="${escapeHtml(canonical)}">` : ""}
+<meta property="og:site_name" content="AMAN News">
+<meta property="og:locale" content="id_ID">
+<meta property="og:type" content="${escapeHtml(opts.ogType || "website")}">
+<meta property="og:title" content="${escapeHtml(opts.title)}">
+<meta property="og:description" content="${escapeHtml(opts.description)}">
+${canonical ? `<meta property="og:url" content="${escapeHtml(canonical)}">` : ""}
+${ogImageAbs ? `<meta property="og:image" content="${escapeHtml(ogImageAbs)}">` : ""}
+<meta name="twitter:card" content="${ogImageAbs ? "summary_large_image" : "summary"}">
+<meta name="twitter:title" content="${escapeHtml(opts.title)}">
+<meta name="twitter:description" content="${escapeHtml(opts.description)}">
+${ogImageAbs ? `<meta name="twitter:image" content="${escapeHtml(ogImageAbs)}">` : ""}`;
+
   const navLinks = opts.categories
     .map((c) => `<a href="/berita/kategori/${c.slug}" class="${opts.activeCategory === c.slug ? "active" : ""}">${escapeHtml(c.name)}</a>`)
     .join("");
@@ -150,8 +192,9 @@ export function renderShell(opts: {
 <meta name="description" content="${escapeHtml(opts.description)}">
 ${opts.noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="icon" type="image/png" href="/images/logo-tab.png">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="/berita/feed">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/berita/feed">${social}
 <style>${STYLE}</style>
+${opts.jsonLd || ""}
 </head>
 <body>
 ${ticker}
@@ -159,9 +202,10 @@ ${ticker}
   <div class="wrap topbar">
     <a class="brand" href="/berita"><img src="/images/logo-header.webp" alt=""><span class="brand-text">AMAN NEWS</span></a>
     <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;justify-content:flex-end">
-      <form class="search-box" action="/berita/cari" method="get">
-        <input type="text" name="q" placeholder="Cari berita…">
-        <button type="submit">🔍</button>
+      <form class="search-box" action="/berita/cari" method="get" role="search">
+        <label for="q-berita" class="sr-only">Cari berita</label>
+        <input id="q-berita" type="text" name="q" placeholder="Cari berita…">
+        <button type="submit" aria-label="Cari berita">🔍</button>
       </form>
       <a href="/admin/berita" title="Masuk Newsroom (redaksi)" style="display:grid;place-items:center;width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#cbd5e1;flex-shrink:0" aria-label="Masuk Newsroom">📰</a>
     </div>
@@ -213,9 +257,16 @@ export function sectionTitle(label: string): string {
   return `<h2 class="sect-title"><span class="bar"></span>${escapeHtml(label)}</h2>`;
 }
 
-function thumbOr(article: Article, fallback = "📰"): string {
+/**
+ * `priority` HANYA untuk gambar yang sudah terlihat begitu halaman dibuka
+ * (slide hero pertama). Gambar itu kandidat LCP -- kalau ikut `loading="lazy"`
+ * browser menundanya dan skor LCP jadi buruk. Sisanya tetap lazy supaya beban
+ * jaringan tidak bertambah.
+ */
+function thumbOr(article: Article, fallback = "📰", priority = false): string {
+  const loadAttrs = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
   return article.thumbnail
-    ? `<img src="${escapeHtml(article.thumbnail)}" alt="${escapeHtml(article.thumbnail_alt || article.title)}" loading="lazy">`
+    ? `<img src="${escapeHtml(article.thumbnail)}" alt="${escapeHtml(article.thumbnail_alt || article.title)}" ${loadAttrs}>`
     : `<div style="width:100%;height:100%;display:grid;place-items:center;font-size:2rem;background:#ecfdf5">${fallback}</div>`;
 }
 
@@ -299,8 +350,10 @@ export function renderListRow(a: Article, num?: number): string {
 }
 
 export function renderHeroSlide(a: Article, active: boolean): string {
+  // Hanya slide aktif (yang pertama) yang dimuat eager -- slide lain tetap
+  // lazy supaya tidak semua gambar carousel diunduh sekaligus.
   return `<div class="hero-slide" ${active ? "" : 'style="display:none"'} data-slide>
-    ${thumbOr(a)}
+    ${thumbOr(a, "📰", active)}
     <div class="ov">
       ${a.category_name ? `<span class="cat-badge" style="${catStyle(a.category_color || "")}">${escapeHtml(a.category_name)}</span>` : ""}
       <a href="/berita/${encodeURIComponent(a.slug)}"><h2>${escapeHtml(a.title)}</h2></a>

@@ -1,0 +1,25 @@
+# Redirect URL blog lama -> portal berita.
+#
+# Situs ini dulu memakai /blog (Notion, lalu CMS D1) sebelum diubah jadi portal
+# berita di /berita. Route /blog sudah lama tidak ada di source, tapi masih
+# muncul di hasil pencarian dan MASIH DISAJIKAN dari cache edge Cloudflare
+# (per 24-08-2026: HTTP 200 dengan tampilan situs versi lama, bukan 404).
+# Redirect ini yang menjadikannya 301 permanen ke tujuan yang benar.
+#
+# PENTING: baris spesifik harus di ATAS wildcard -- Cloudflare Pages memakai
+# aturan pertama yang cocok. Kalau /blog/* ditaruh duluan, dua baris di
+# bawahnya tidak akan pernah terpakai.
+#
+# Tujuan sudah diverifikasi hidup (HTTP 200) sebelum ditulis di sini.
+
+# Artikel lama tentang keamanan akun -> artikel AMAN News yang setara isinya.
+/blog/pentingnya-keamanan-akun-digital  /berita/tips-menjaga-akun-digital-usaha-tetap-aman  301
+
+# Artikel sambutan lama tidak punya padanan -> ke indeks berita.
+/blog/selamat-datang  /berita  301
+
+# Indeks blog lama -> indeks berita.
+/blog  /berita  301
+
+# Sisa slug lama yang belum terpetakan -> indeks berita.
+/blog/*  /berita  301

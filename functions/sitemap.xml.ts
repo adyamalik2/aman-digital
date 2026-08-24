@@ -24,6 +24,12 @@ const staticRoutes = [
   "/creative-studio",
   "/digital-store",
   "/aman-engine",
+  // Tiga halaman produk berikut sempat terlewat padahal indexable dan punya
+  // metadata lengkap. /produk-digital sengaja TETAP di luar sitemap karena
+  // halaman gerbang kode akses (robots: noindex).
+  "/amanin",
+  "/aman-content-engine",
+  "/aman-poster",
   "/berita",
 ];
 

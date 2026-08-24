@@ -12,8 +12,9 @@ import {
   getTrending,
   getVideos,
   promoteScheduledArticles,
+  escapeHtml,
 } from "./_lib/news";
-import { catStyle, renderAffiliateWidget, renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle } from "./_lib/newsRender";
+import { catStyle, jsonLdScript, renderAffiliateWidget, renderCard, renderHeroMini, renderHeroSlide, renderListRow, renderShell, renderVideoCard, sectionTitle, SITE_ORIGIN } from "./_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -55,7 +56,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     heroHtml = `<section class="sect">
       <div class="wrap hero">
         <div style="position:relative">${slides}
-          ${slider.length > 1 ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:10px" data-dots>${slider.map((_, i) => `<button data-dot="${i}" style="width:${i === 0 ? "22px" : "8px"};height:8px;border-radius:4px;border:0;background:${i === 0 ? "#059669" : "#cbd5e1"};cursor:pointer"></button>`).join("")}</div>` : ""}
+          ${slider.length > 1 ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:10px" data-dots role="tablist" aria-label="Pilih berita utama">${slider.map((_, i) => `<button data-dot="${i}" type="button" role="tab" aria-label="Buka slide ${i + 1}" aria-selected="${i === 0 ? "true" : "false"}" style="width:${i === 0 ? "22px" : "8px"};height:8px;border-radius:4px;border:0;background:${i === 0 ? "#059669" : "#cbd5e1"};cursor:pointer"></button>`).join("")}</div>` : ""}
         </div>
         <div class="hero-side">${sideItems}</div>
       </div>
@@ -66,7 +67,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         var dots = document.querySelectorAll('[data-dot]');
         if (slides.length < 2) return;
         var i = 0;
-        function show(n){ slides.forEach(function(s,idx){ s.style.display = idx===n ? '' : 'none'; }); dots.forEach(function(d,idx){ d.style.width = idx===n?'22px':'8px'; d.style.background = idx===n?'#059669':'#cbd5e1'; }); i = n; }
+        function show(n){ slides.forEach(function(s,idx){ s.style.display = idx===n ? '' : 'none'; }); dots.forEach(function(d,idx){ d.style.width = idx===n?'22px':'8px'; d.style.background = idx===n?'#059669':'#cbd5e1'; d.setAttribute('aria-selected', idx===n ? 'true' : 'false'); }); i = n; }
         dots.forEach(function(d,idx){ d.addEventListener('click', function(){ show(idx); }); });
         setInterval(function(){ show((i+1) % slides.length); }, 6000);
       })();
@@ -127,19 +128,50 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     ? `<section class="sect" style="padding-top:0"><div class="wrap">${renderAffiliateWidget(affItems, settings.affiliate_title || "Belanja Pilihan", settings.affiliate_disclosure || "")}</div></section>`
     : "";
 
+  // H1 tunggal untuk halaman ini. Dibuat sr-only karena desain hero memakai
+  // judul artikel sebagai elemen visual utama -- menambah H1 besar akan
+  // mengubah tata letak, sementara struktur heading tetap benar untuk mesin
+  // pencari dan pembaca layar. Halaman kategori/arsip/artikel sudah punya H1
+  // sendiri, jadi hanya beranda portal yang perlu ini.
+  const h1 = `<h1 class="sr-only">${escapeHtml(
+    curPage > 1
+      ? `${settings.site_name || "AMAN News"} — Halaman ${curPage}`
+      : `${settings.site_name || "AMAN News"} — ${settings.site_tagline || "Berita & Informasi Terkini"}`
+  )}</h1>`;
+
   const body = `
+  ${h1}
   ${heroHtml}
   ${headlineHtml}
   <section class="sect"><div class="wrap">${latestSection}</div></section>
   ${affHtml}
   ${videoSection}`;
 
+  const siteName = settings.site_name || "AMAN News";
+  const pageTitle =
+    curPage > 1
+      ? `${siteName} — Halaman ${curPage}`
+      : `${siteName} — ${settings.site_tagline || "Berita & Informasi Terkini"}`;
+
   const html = renderShell({
-    title: curPage > 1 ? `${settings.site_name || "AMAN News"} — Halaman ${curPage}` : `${settings.site_name || "AMAN News"} — ${settings.site_tagline || "Berita & Informasi Terkini"}`,
+    title: pageTitle,
     description: settings.site_description || "",
     body,
     categories,
     breaking,
+    // Halaman 2+ tetap canonical ke dirinya sendiri (bukan ke halaman 1):
+    // isinya memang beda, dan mengarahkan semuanya ke /berita akan membuat
+    // artikel di halaman berikutnya tidak terindeks.
+    canonicalPath: curPage > 1 ? `/berita?page=${curPage}` : "/berita",
+    ogType: "website",
+    jsonLd: jsonLdScript({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: pageTitle,
+      ...(settings.site_description ? { description: settings.site_description } : {}),
+      url: `${SITE_ORIGIN}/berita`,
+      inLanguage: "id-ID",
+    }),
   });
 
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });

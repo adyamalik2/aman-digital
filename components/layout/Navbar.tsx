@@ -122,6 +122,8 @@ export default function Navbar() {
                 <button
                   type="button"
                   aria-expanded={open}
+                  aria-haspopup="true"
+                  aria-controls={`dd-desktop-${dd.key}`}
                   className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     active
                       ? "bg-white/5 text-white"
@@ -139,7 +141,10 @@ export default function Navbar() {
 
                 {open && (
                   <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
-                    <div className="dd-anim min-w-56 overflow-hidden rounded-xl border border-white/10 bg-[#0b101e]/95 py-2 shadow-2xl backdrop-blur-md">
+                    <div
+                      id={`dd-desktop-${dd.key}`}
+                      className="dd-anim min-w-56 overflow-hidden rounded-xl border border-white/10 bg-[#0b101e]/95 py-2 shadow-2xl backdrop-blur-md"
+                    >
                       {dd.items.map((item) => (
                         <Link
                           key={item.href}
@@ -209,6 +214,8 @@ export default function Navbar() {
                   <button
                     type="button"
                     aria-expanded={open}
+                    aria-haspopup="true"
+                    aria-controls={`dd-mobile-${dd.key}`}
                     onClick={() => setMobileSection(open ? null : dd.key)}
                     className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/5 ${
                       active || open ? "text-emerald-light" : "text-slate-200"
@@ -223,7 +230,10 @@ export default function Navbar() {
                     />
                   </button>
                   {open && (
-                    <div className="ml-3 flex flex-col gap-0.5 border-l border-white/10 pl-3">
+                    <div
+                      id={`dd-mobile-${dd.key}`}
+                      className="ml-3 flex flex-col gap-0.5 border-l border-white/10 pl-3"
+                    >
                       {dd.items.map((item) => (
                         <Link
                           key={item.href}

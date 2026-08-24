@@ -273,7 +273,9 @@ const portfolio = [
 
 const stats = [
   { value: "Early Access", label: "Mengajak UMKM pertama bergabung" },
-  { value: "5", label: "Layanan dalam Satu Ekosistem" },
+  // 4, bukan 5: Digital Store adalah PRODUK (barang jadi yang dibeli), bukan
+  // layanan yang dikerjakan untuk klien. Lihat juga array `services` di bawah.
+  { value: "4", label: "Layanan dalam Satu Ekosistem" },
   { value: "3", label: "Aplikasi Gratis untuk Mulai" },
   { value: "100%", label: "Konsultasi Gratis via WhatsApp" },
 ];
@@ -508,7 +510,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4">
           <SectionHeading
             label="Layanan Praktis"
-            title="5 Layanan untuk Merapikan Bisnis"
+            title="4 Layanan untuk Merapikan Bisnis"
             subtitle="Bukan sekadar daftar jasa. Setiap layanan diarahkan untuk menyelesaikan masalah operasional UMKM, toko, dan kantor kecil."
           />
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -542,7 +544,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4">
           <SectionHeading
             label="Produk AMAN Digital"
-            title="5 Produk untuk Bisnis yang Lebih Rapi"
+            title="5 Produk Unggulan"
             subtitle="Dari kasir harian, pencatatan keuangan lewat suara, invoice profesional, sampai koleksi produk digital siap pakai — semuanya dalam satu ekosistem AMAN Digital."
           />
           <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -637,6 +639,7 @@ export default function HomePage() {
                 <button
                   key={cat}
                   type="button"
+                  aria-pressed={active}
                   onClick={() => setActiveCategory(cat)}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     active

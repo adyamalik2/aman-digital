@@ -1,6 +1,7 @@
 import { marked } from "marked";
 import {
   escapeHtml,
+  formatDateID,
   getAffiliateItems,
   getApprovedComments,
   getArticleBySlug,
@@ -14,7 +15,7 @@ import {
   youtubeId,
   type Comment,
 } from "../_lib/news";
-import { catStyle, renderAffiliateWidget, renderCard, renderShell } from "../_lib/newsRender";
+import { catStyle, jsonLdScript, renderAffiliateWidget, renderCard, renderShell, SITE_ORIGIN } from "../_lib/newsRender";
 
 interface Env {
   DB: D1Database;
@@ -108,10 +109,13 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
             <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
           </div>
           <div style="display:grid;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-            <input type="text" name="name" placeholder="Nama Anda" required maxlength="80" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
-            <input type="email" name="email" placeholder="Email (opsional, tidak ditampilkan)" maxlength="191" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+            <label for="komentar-nama" class="sr-only">Nama Anda</label>
+            <input id="komentar-nama" type="text" name="name" placeholder="Nama Anda" required maxlength="80" autocomplete="name" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
+            <label for="komentar-email" class="sr-only">Email (opsional, tidak ditampilkan)</label>
+            <input id="komentar-email" type="email" name="email" placeholder="Email (opsional, tidak ditampilkan)" maxlength="191" autocomplete="email" style="min-width:0;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit">
           </div>
-          <textarea name="content" placeholder="Tulis komentar…" required maxlength="2000" rows="3" style="width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit;resize:vertical"></textarea>
+          <label for="komentar-isi" class="sr-only">Tulis komentar</label>
+          <textarea id="komentar-isi" name="content" placeholder="Tulis komentar…" required maxlength="2000" rows="3" style="width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit;resize:vertical"></textarea>
           <button type="submit" style="margin-top:10px;background:#059669;color:#fff;border:0;padding:10px 22px;border-radius:999px;font-weight:700;font-size:.88rem;cursor:pointer">Kirim Komentar</button>
         </form>
       </div>
@@ -121,12 +125,26 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const body = `
   <article class="sect wrap" style="max-width:800px">
-    <a href="/berita" style="color:#94a3b8;font-size:.85rem;font-weight:600">← Kembali ke Blog</a>
+    <nav aria-label="Remah roti" style="font-size:.85rem;font-weight:600">
+      <a href="/berita" style="color:#94a3b8">Berita</a>${
+        article.category_name
+          ? ` <span style="color:#cbd5e1">›</span> <a href="/berita/kategori/${escapeHtml(article.category_slug || "")}" style="color:#94a3b8">${escapeHtml(article.category_name)}</a>`
+          : ""
+      }
+    </nav>
     ${article.category_name ? `<div style="margin-top:16px"><a href="/berita/kategori/${article.category_slug}" class="cat-badge" style="${catStyle(article.category_color || "")}">${article.category_name}</a></div>` : ""}
     <h1 style="font-size:2rem;font-weight:900;line-height:1.3;margin:14px 0 12px">${article.title}</h1>
     <div style="color:#94a3b8;font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap">
-      ${article.author_name ? `<span>✍️ <a href="/berita/penulis/${article.author_slug}" style="color:#475569;font-weight:600">${article.author_name}</a></span>` : ""}
-      <span>📅 ${article.published_at ? article.published_at.slice(0, 10) : ""}</span>
+      ${article.author_name ? `<span>✍️ <a href="/berita/penulis/${article.author_slug}" style="color:#475569;font-weight:600" rel="author">${article.author_name}</a></span>` : ""}
+      ${article.published_at ? `<span>📅 <time datetime="${escapeHtml(article.published_at)}">${formatDateID(article.published_at)}</time></span>` : ""}
+      ${
+        // Tanggal perbarui hanya ditampilkan kalau memang BEDA harinya dari
+        // tanggal terbit -- kalau tidak, ini cuma menampilkan tanggal yang sama
+        // dua kali dan menyesatkan pembaca.
+        article.updated_at && article.published_at && article.updated_at.slice(0, 10) !== article.published_at.slice(0, 10)
+          ? `<span>🔄 Diperbarui <time datetime="${escapeHtml(article.updated_at)}">${formatDateID(article.updated_at)}</time></span>`
+          : ""
+      }
       <span>⏱️ ${article.reading_minutes} menit baca</span>
       <span>👁️ ${article.view_count} views</span>
     </div>
@@ -150,13 +168,66 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     .article-content pre { background: #0f172a; color: #e2e8f0; padding: 1.1em; border-radius: 12px; overflow-x: auto; }
   </style>`;
 
+  const canonicalPath = `/berita/${article.slug}`;
+  const articleDesc = article.meta_description || article.excerpt || article.title;
+
+  // Structured data dibangun HANYA dari data yang benar-benar ada di artikel.
+  // Field yang datanya kosong sengaja tidak dikirim sama sekali daripada diisi
+  // nilai karangan -- schema dengan data palsu lebih berbahaya daripada tanpa
+  // schema. Organization/logo/publisher sengaja BELUM ditambahkan karena
+  // datanya belum dikonfirmasi pemilik.
+  const articleLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_ORIGIN}${canonicalPath}` },
+    url: `${SITE_ORIGIN}${canonicalPath}`,
+    inLanguage: "id-ID",
+  };
+  if (articleDesc) articleLd.description = articleDesc;
+  if (article.published_at) articleLd.datePublished = article.published_at;
+  if (article.updated_at) articleLd.dateModified = article.updated_at;
+  if (article.author_name) articleLd.author = { "@type": "Person", name: article.author_name };
+  if (article.category_name) articleLd.articleSection = article.category_name;
+  if (article.thumbnail) {
+    articleLd.image = article.thumbnail.startsWith("http") ? article.thumbnail : `${SITE_ORIGIN}${article.thumbnail}`;
+  }
+
+  const crumbs: { "@type": string; position: number; name: string; item: string }[] = [
+    { "@type": "ListItem", position: 1, name: "Berita", item: `${SITE_ORIGIN}/berita` },
+  ];
+  if (article.category_name && article.category_slug) {
+    crumbs.push({
+      "@type": "ListItem",
+      position: 2,
+      name: article.category_name,
+      item: `${SITE_ORIGIN}/berita/kategori/${article.category_slug}`,
+    });
+  }
+  crumbs.push({
+    "@type": "ListItem",
+    position: crumbs.length + 1,
+    name: article.title,
+    item: `${SITE_ORIGIN}${canonicalPath}`,
+  });
+
   const html = renderShell({
     title: `${article.meta_title || article.title} — AMAN News`,
-    description: article.meta_description || article.excerpt || article.title,
+    description: articleDesc,
     body,
     categories,
     activeCategory: article.category_slug,
     breaking,
+    canonicalPath,
+    ogType: "article",
+    ogImage: article.thumbnail || undefined,
+    jsonLd:
+      jsonLdScript(articleLd) +
+      jsonLdScript({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: crumbs,
+      }),
   });
 
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });

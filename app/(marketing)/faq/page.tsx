@@ -39,7 +39,7 @@ const faqs: Faq[] = [
   {
     category: "umum",
     q: "Apa itu AMAN Digital?",
-    a: "AMAN Digital adalah platform digital untuk UMKM Indonesia yang menyediakan tiga aplikasi bisnis (AMAN Kasir, AMAN Budget, AMAN Invoice) dan lima layanan profesional (Data & System, IT Advisor, Print Center, Creative Studio, Digital Store). Kami berbasis di Blangpidie, Aceh, dan melayani seluruh Indonesia secara online.",
+    a: "AMAN Digital adalah platform digital untuk UMKM Indonesia yang menyediakan tiga aplikasi bisnis (AMAN Kasir, AMAN Budget, AMAN Invoice) dan empat layanan profesional (Data & System, IT Advisor, Print Center, Creative Studio). Kami berbasis di Blangpidie, Aceh, dan melayani seluruh Indonesia secara online.",
   },
   {
     category: "umum",
@@ -54,7 +54,7 @@ const faqs: Faq[] = [
   {
     category: "umum",
     q: "Apa saja metode pembayaran yang diterima?",
-    a: "Untuk layanan (Data & System, IT Advisor, Print Center, Creative Studio, Digital Store): harga disepakati dulu lewat WhatsApp, baru pembayaran diatur langsung di sana — tidak ada nomor rekening baku yang dipasang di muka. Untuk produk digital (AMAN Engine, Content Engine, Poster Generator, 700+ Produk Digital): checkout otomatis lewat Lynk.id.",
+    a: "Untuk layanan (Data & System, IT Advisor, Print Center, Creative Studio): harga disepakati dulu lewat WhatsApp, baru pembayaran diatur langsung di sana — tidak ada nomor rekening baku yang dipasang di muka. Untuk produk digital (AMAN Engine, Content Engine, Poster Generator, 700+ Produk Digital): checkout otomatis lewat Lynk.id.",
   },
   {
     category: "umum",
@@ -153,7 +153,7 @@ const faqs: Faq[] = [
     q: "Apa saja layanan utama AMAN Digital?",
     a: (
       <>
-        Lima layanan: (1) {b("Data & System")} — dashboard dan sistem digital untuk bisnis; (2) {b("IT Advisor")} — konsultasi teknologi dan solusi digital; (3) {b("Print Center")} — cetak banner, brosur, undangan, dan lainnya; (4) {b("Digital Store")} — produk digital siap pakai (template, prompt AI); (5) {b("Creative Studio")} — konten kreatif TikTok, Instagram, dan copywriting.
+        Empat layanan: (1) {b("Data & System")} — dashboard dan sistem digital untuk bisnis; (2) {b("IT Advisor")} — konsultasi teknologi dan solusi digital; (3) {b("Print Center")} — cetak banner, brosur, undangan, dan lainnya; (4) {b("Creative Studio")} — konten kreatif TikTok, Instagram, dan copywriting. Produk digital siap pakai ada di {b("Produk Digital (700+)")}, yang termasuk produk — bukan layanan.
       </>
     ),
   },

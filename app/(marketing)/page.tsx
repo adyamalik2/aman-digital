@@ -106,9 +106,10 @@ const apps = [
       "Laporan omzet harian",
       "Bisa pakai offline",
     ],
-    // Sementara ke WhatsApp — amandigital.web.id nonaktif ~14 hari untuk
-    // migrasi hosting. Kembalikan URL aslinya setelah hosting baru aktif.
-    appUrl: wa("Halo, saya ingin coba AMAN Kasir."),
+    // Aplikasinya kini live sebagai PWA di subdomain sendiri. Sempat
+    // dialihkan ke WhatsApp saat hosting web.id lama mati — kondisi itu
+    // sudah tidak berlaku.
+    appUrl: "https://kasir.amandigital.my.id",
     detail: "/kasir",
   },
   {
@@ -121,7 +122,7 @@ const apps = [
       "Kalkulator zakat",
       "Gratis untuk mulai",
     ],
-    appUrl: wa("Halo, saya ingin coba AMAN Budget."),
+    appUrl: "https://budget.amandigital.my.id",
     detail: "/budget",
   },
   {
@@ -134,8 +135,21 @@ const apps = [
       "Kelola data pelanggan",
       "Kirim via WhatsApp",
     ],
-    appUrl: wa("Halo, saya ingin coba AMAN Invoice."),
+    appUrl: "https://invoice.amandigital.my.id",
     detail: "/invoice",
+  },
+  {
+    badge: "AMAN-in",
+    title: "Catat Pemasukan & Pengeluaran",
+    desc: "Cukup diucapkan — sebut transaksinya dalam bahasa sehari-hari, nominal dan kategorinya terisi sendiri. Untuk usaha maupun keuangan pribadi.",
+    features: [
+      "Input lewat suara",
+      "Pisah Kas, Bank, E-Wallet",
+      "Laporan otomatis",
+      "Bisa dikunci PIN",
+    ],
+    appUrl: "https://amanin.amandigital.my.id",
+    detail: "/amanin",
   },
 ];
 

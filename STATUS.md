@@ -1,6 +1,6 @@
 # Status Proyek — AMAN Digital
 
-**Diperbarui:** 24 Agustus 2026
+**Diperbarui:** 25 Agustus 2026
 
 Isi berkas ini cepat basi. Kalau ada yang terasa tidak cocok dengan kenyataan,
 **percayai produksi**, lalu perbarui berkas ini.
@@ -40,7 +40,7 @@ Diurutkan dari yang paling menghambat.
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
 | 1 | **Skema harga AMAN-in** | Aplikasinya belum punya pembatas kuota sama sekali, jadi "gratis kalau sedikit, bayar kalau banyak" belum bisa ditegakkan. Butuh angka: batas gratis berapa, tarif berapa. |
-| 2 | **Dokumen legal** | Kebijakan Privasi, S&K, Refund, Lisensi produk digital, ketentuan kode akses, moderasi komentar, koreksi berita, retensi data, definisi "akses selamanya". **Belum ada satu pun.** Situs mengumpulkan data (komentar, kode akses) tanpa kebijakan privasi. |
+| 2 | **Dokumen legal** | 📝 **Draf sudah ada** di `docs/legal/` (belum terbit). Yang dibutuhkan: jawaban atas pertanyaan di `docs/legal/YANG-DIBUTUHKAN-DARI-MALIK.md`. **Kelompok A saja (7 pertanyaan) sudah cukup untuk menerbitkan Kebijakan Privasi** — itu yang paling mendesak. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | Akun sudah didaftarkan, email terverifikasi, **masih menunggu approval manual**. Belum ada API key. Tanpa ini, paket berbayar tidak bisa diaktifkan. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
@@ -58,6 +58,16 @@ Diurutkan dari yang paling menghambat.
 (terpanjang `/digital-store` 205) dan 2 title melebihi 60 (65 & 63). Usulan
 teks pengganti sudah disiapkan, tinggal ditinjau. Belum diterapkan karena
 ini copy pemasaran milik Malik.
+
+**Dokumen legal.** Draf Kebijakan Privasi & Syarat–Ketentuan ada di
+`docs/legal/`, ditandai DRAFT dan **belum ditautkan ke situs**. Bagian teknis
+sudah diaudit dari kode (tidak dikarang); bagian yang butuh keputusan bisnis
+ditandai `【BUTUH KEPUTUSAN MALIK】`. Lihat
+`docs/legal/YANG-DIBUTUHKAN-DARI-MALIK.md`.
+
+⚠️ Kalau Malik menetapkan masa simpan data (pertanyaan A3/A4), **mekanisme
+penghapusan berkalanya belum ada dan harus dibangun dulu** — jangan
+menerbitkan kebijakan yang menjanjikan sesuatu yang tidak berjalan.
 
 **Penataan halaman `/harga`.** Sekarang hanya memuat Kasir/Budget/Invoice;
 5 produk lain harganya hardcode terpisah di halaman masing-masing, jadi

@@ -227,6 +227,48 @@ masalah yang dokumen ini diciptakan untuk mencegahnya.
 
 ---
 
+## K-12 · Kebijakan data: disimpan tanpa batas waktu, dan tidak ada refund
+
+**Tanggal:** 25-08-2026
+
+**Keputusan Malik**, menjawab pertanyaan Kelompok A dokumen legal:
+
+| Perkara | Keputusan |
+|---|---|
+| Identitas usaha | **Perorangan** atas nama Adya Malik — bukan PT/CV |
+| Email urusan data | adya.malik2@gmail.com (sementara) |
+| Masa simpan komentar | **Selamanya**, sampai pengomentar minta dihapus |
+| Masa simpan sidik pengunjung | **Selamanya** |
+| Waktu tanggap permintaan hapus | **1×24 jam** |
+| Usia minimum pengguna | **13 tahun** |
+| Kebijakan privasi aplikasi | **Terpisah** dari kebijakan situs |
+| Refund produk digital | **TIDAK ADA** |
+
+**Kenapa perlu dicatat:**
+
+1. **Tanpa batas simpan berarti tidak perlu mekanisme penghapusan berkala.**
+   Draf awal sempat memperingatkan bahwa menetapkan masa simpan menuntut
+   pembangunan proses purge otomatis. Karena Malik memilih menyimpan tanpa
+   batas, kebutuhan itu gugur. Kebijakan menyatakannya apa adanya — lebih
+   baik daripada mencantumkan angka yang tidak benar-benar dijalankan.
+
+2. **"Tidak ada refund" wajib terlihat SEBELUM pembeli membayar**, bukan
+   hanya tersembunyi di halaman S&K. Kalau hanya ada di sana, secara praktis
+   dianggap tidak diberitahukan. **Belum dipasang** di halaman produk.
+
+3. **Usaha perorangan, bukan badan usaha.** Jangan menulis PT/CV di mana pun.
+   Kalau suatu saat berbadan hukum, seluruh dokumen legal harus diperbarui.
+
+4. **Kebijakan aplikasi dibuat terpisah** karena aplikasi menyimpan data
+   keuangan pengguna — jauh lebih sensitif daripada situs. Mencampurnya
+   membuat keduanya kabur.
+
+**Catatan.** Email yang dipakai masih Gmail pribadi dan akan dipanen robot
+spam begitu dipublikasikan. Malik menyebutnya sementara — ganti ke email
+berdomain sendiri begitu tersedia.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

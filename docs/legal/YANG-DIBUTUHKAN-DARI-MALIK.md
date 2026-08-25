@@ -1,89 +1,81 @@
 # Yang dibutuhkan dari Malik
 
-Daftar pertanyaan yang harus dijawab sebelum draf legal bisa difinalkan.
-
-Tidak perlu dijawab sekaligus. **Kelompok A saja sudah cukup untuk
-menerbitkan Kebijakan Privasi**, yang merupakan kebutuhan paling mendesak.
+**Diperbarui 25-08-2026** — Kelompok A sudah dijawab seluruhnya.
 
 ---
 
-## Kelompok A — supaya Kebijakan Privasi bisa terbit
+## ✅ Kelompok A — SUDAH DIJAWAB (25-08-2026)
 
-Ini yang paling mendesak: situs sudah mengumpulkan data tanpa kebijakan apa
-pun.
+Kebijakan Privasi sudah bisa difinalkan.
 
-| # | Pertanyaan | Kenapa perlu |
+| # | Pertanyaan | Jawaban Malik |
 |---|---|---|
-| A1 | **Nama yang dipakai secara resmi** — badan usaha (PT/CV) atau perorangan? | Kebijakan privasi harus menyebut siapa yang bertanggung jawab atas data. Kalau usaha perorangan, tulis apa adanya — jangan mengaku badan usaha kalau bukan. |
-| A2 | **Email untuk urusan data** | Belum ada email `@amandigital.my.id`. Sementara boleh pakai email lain, asal Anda pantau. Tanpa kanal, hak pengguna tidak bisa dipakai. |
-| A3 | **Berapa lama komentar disimpan?** | Usulan: yang disetujui selama artikel tayang; yang spam dihapus tiap 90 hari. |
-| A4 | **Berapa lama sidik pengunjung disimpan?** | Usulan: 90 hari, lalu tinggal angka agregat. |
-| A5 | **Berapa lama kami menanggapi permintaan hapus data?** | Usulan: 7 hari kerja. |
-| A6 | **Batas usia minimum pengguna** | Usulan: 17 tahun. |
-| A7 | **Aplikasi (Kasir/Budget/Invoice/AMAN-in) dicakup kebijakan ini atau dibuat terpisah?** | **Rekomendasi saya: terpisah.** Aplikasi menyimpan data keuangan pengguna — jauh lebih sensitif daripada situs. Mencampurnya membuat keduanya kabur. |
+| A1 | Nama resmi | **Usaha perorangan** atas nama Adya Malik |
+| A2 | Email urusan data | **adya.malik2@gmail.com** (sementara) |
+| A3 | Masa simpan komentar | **Selamanya**, sampai pengomentar minta dihapus |
+| A4 | Masa simpan sidik pengunjung | **Selamanya** |
+| A5 | Waktu tanggap permintaan hapus | **1×24 jam** |
+| A6 | Usia minimum | **13 tahun** |
+| A7 | Aplikasi dicakup atau terpisah | **Terpisah** — aplikasi akan punya kebijakan sendiri |
+| B1 | Refund | **Tidak ada refund** |
 
-> ⚠️ **Catatan penting soal A3–A4:** saat ini **belum ada mekanisme penghapusan
-> berkala** di sistem. Kalau Anda menetapkan masa simpan, saya perlu
-> membangunnya dulu — supaya kebijakan tidak menjanjikan sesuatu yang tidak
-> berjalan. Menjanjikan lalu tidak menepati lebih buruk daripada tidak
-> menjanjikan.
+**Konsekuensi yang perlu dicatat:**
+
+- Karena A3/A4 = tanpa batas waktu, **tidak perlu membangun mekanisme
+  penghapusan berkala**. Peringatan pada draf sebelumnya sudah gugur.
+  Kebijakan menyatakannya terus terang: data disimpan sampai diminta hapus.
+- A2 memakai **Gmail pribadi**. Alamat yang dipublikasikan di halaman legal
+  akan dipanen robot spam. Malik menyebutnya "sementara" — sebaiknya diganti
+  ke email berdomain sendiri begitu tersedia.
+  *(Malik sempat menulis `adya.malik@gmail.com` tanpa angka 2; sudah
+  dikonfirmasi yang benar `adya.malik2@gmail.com`. Salah satu huruf saja
+  membuat kanal kontak wajib tidak bisa dihubungi.)*
+- B1 tidak ada refund: **wajib ditampilkan sebelum pembeli membayar**, bukan
+  hanya di halaman S&K. Lihat catatan di bagian 4 `syarat-ketentuan.md`.
 
 ---
 
-## Kelompok B — supaya Syarat & Ketentuan bisa terbit
+## ⏳ Kelompok B — sisa pertanyaan untuk Syarat & Ketentuan
 
-| # | Pertanyaan | Catatan |
+Draf S&K sudah disusun sejauh yang bisa. Yang tersisa hanya yang benar-benar
+butuh keputusan bisnis:
+
+| # | Pertanyaan | Ada di bagian |
 |---|---|---|
-| B1 | **Ada refund atau tidak?** | Yang paling penting. Kalau tidak ada, katakan terus terang — itu sah, asal disampaikan sebelum pembeli bayar. Yang berbahaya justru diam. |
-| B2 | **Kode akses: berapa perangkat?** | Sistem sekarang mengizinkan lebih dari satu. Batasnya berapa? |
-| B3 | **Kode hilang / dibagikan ke orang lain — apa akibatnya?** | |
-| B4 | **Kode kedaluwarsa?** | |
-| B5 | **Arti "akses selamanya"** | Selama produk masih dioperasikan, atau tanpa syarat? Kalau produk dihentikan, pembeli dapat apa? |
-| B6 | **Lisensi produk digital** | Boleh komersial? Boleh dimodifikasi? Boleh dibagikan ke tim? Boleh dijual ulang? Boleh dipakai untuk klien pembeli? |
-| B7 | **Alur layanan/jasa** | Uang muka? Berapa revisi? Siapa pemilik hasil kerja? Kalau dibatalkan di tengah? |
-| B8 | **Kanal koreksi/hak jawab berita** | Sama dengan WhatsApp umum, atau kanal khusus? Berapa lama ditanggapi? |
-| B9 | **Teks pengungkapan afiliasi** | Kolom `affiliate_disclosure` di database **masih kosong**, jadi paragraf pengungkapan tidak pernah tampil — padahal badge "Bersponsor" sudah muncul. |
-| B10 | **Penyelesaian sengketa** | Musyawarah dulu, lalu pengadilan mana? |
-| B11 | **Pemilik hasil keluaran AI** | Kemungkinan besar: pengguna. Perlu ditegaskan. |
+| B2 | Kode akses dikirim otomatis atau manual? | 3 |
+| B3 | Berapa perangkat maksimal per kode akses? | 5 |
+| B4 | Kode hilang — pembeli bisa apa? | 5 |
+| B5 | Kode dibagikan ke orang lain — apa akibatnya? | 5 |
+| B6 | Lisensi produk digital (5 baris tabel: komersial, modifikasi, berbagi ke tim, untuk klien, jual ulang) | 6 |
+| B7 | Arti "akses selamanya" (4 pertanyaan) | 7 |
+| B8 | Alur jasa: uang muka, jumlah revisi, kepemilikan hasil, pembatalan | 8 |
+| B9 | Teks pengungkapan afiliasi (kolom DB masih kosong) | 9 |
+| B10 | Hasil keluaran AI milik pengguna — konfirmasi | 10 |
+| B11 | Pengadilan mana bila musyawarah gagal | 13 |
+
+**Yang paling mendesak dari daftar ini: B6 dan B7.** Keduanya menyangkut apa
+yang boleh dilakukan pembeli terhadap barang yang sudah dibayar — tanpa
+kejelasan, pembeli akan berasumsi sendiri.
 
 ---
 
-## Kelompok C — perlu ditinjau orang yang paham hukum
+## ⚠️ Kelompok C — perlu ditinjau orang yang paham hukum
 
-Saya bisa menyusun kalimatnya, tapi **saya bukan penasihat hukum** dan tidak
-boleh dianggap begitu. Dua bagian ini sebaiknya dibaca orang yang paham
-sebelum terbit:
-
-1. **Pembatasan tanggung jawab** (bagian 12 Syarat & Ketentuan)
-2. **Klaim keamanan data** — pastikan yang tertulis benar-benar sesuai
+1. **Batasan tanggung jawab** (bagian 12 S&K)
+2. **Klaim keamanan data** (bagian 7 Kebijakan Privasi) — pastikan sesuai
    kenyataan teknis, jangan melebih-lebihkan
 
----
-
-## Yang TIDAK perlu Anda putuskan
-
-Bagian teknis sudah saya audit langsung dari kode dan database, jadi tidak
-perlu Anda jawab — sudah pasti:
-
-- data apa yang disimpan di tabel `comments` dan `views`
-- cookie apa yang dipasang dan sifatnya
-- tidak adanya analitik/pelacak (sudah diverifikasi, nol)
-- tidak adanya aset pihak ketiga yang dimuat di halaman
-- layanan pihak ketiga yang terlibat (Cloudflare, Google Gemini, Lynk.id,
-  YouTube mode privasi)
-- pembayaran tidak pernah melewati server kami
+Saya dapat menyusun kalimatnya, tetapi **saya bukan penasihat hukum.**
 
 ---
 
-## Saran urutan
+## Langkah berikutnya
 
-1. **Jawab Kelompok A** → saya finalkan Kebijakan Privasi → terbit.
-   Ini menutup risiko terbesar.
-2. Kalau A3/A4 menetapkan masa simpan → saya bangun mekanisme
-   penghapusannya.
-3. **Jawab Kelompok B** perlahan → S&K menyusul.
-4. Kelompok C ditinjau sebelum S&K terbit.
-
-Kalau mau lebih cepat lagi: **B1 (refund)** sebenarnya bisa dijawab sekarang
-juga dan langsung dipasang di halaman produk, terlepas dari S&K lengkapnya.
-Itu pertanyaan yang paling sering muncul di benak pembeli sebelum membayar.
+1. **Malik membaca `kebijakan-privasi.md`** versi final → kalau setuju, saya
+   buatkan halaman `/kebijakan-privasi` di situs + tautkan dari footer +
+   tautkan di dekat form komentar.
+2. Isi tiga halaman legal portal berita di D1 (`privacy`, `disclaimer`,
+   `pedoman-media-siber`) yang sekarang masih placeholder.
+3. Pasang keterangan **"tidak ada refund"** di halaman produk, dekat tombol
+   beli.
+4. Jawab Kelompok B perlahan → S&K menyusul.

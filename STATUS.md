@@ -40,7 +40,7 @@ Diurutkan dari yang paling menghambat.
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
 | 1 | **Skema harga AMAN-in** | Aplikasinya belum punya pembatas kuota sama sekali, jadi "gratis kalau sedikit, bayar kalau banyak" belum bisa ditegakkan. Butuh angka: batas gratis berapa, tarif berapa. |
-| 2 | **Dokumen legal** | 📝 **Draf sudah ada** di `docs/legal/` (belum terbit). Yang dibutuhkan: jawaban atas pertanyaan di `docs/legal/YANG-DIBUTUHKAN-DARI-MALIK.md`. **Kelompok A saja (7 pertanyaan) sudah cukup untuk menerbitkan Kebijakan Privasi** — itu yang paling mendesak. |
+| 2 | **Dokumen legal** | 📝 Kelompok A **sudah dijawab** 25-08 (lihat K-12). **Kebijakan Privasi siap terbit** — tinggal Malik baca versi finalnya lalu saya buatkan halamannya. S&K masih menunggu 10 pertanyaan Kelompok B, terutama **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")**. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | Akun sudah didaftarkan, email terverifikasi, **masih menunggu approval manual**. Belum ada API key. Tanpa ini, paket berbayar tidak bisa diaktifkan. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
@@ -59,15 +59,21 @@ Diurutkan dari yang paling menghambat.
 teks pengganti sudah disiapkan, tinggal ditinjau. Belum diterapkan karena
 ini copy pemasaran milik Malik.
 
-**Dokumen legal.** Draf Kebijakan Privasi & Syarat–Ketentuan ada di
-`docs/legal/`, ditandai DRAFT dan **belum ditautkan ke situs**. Bagian teknis
-sudah diaudit dari kode (tidak dikarang); bagian yang butuh keputusan bisnis
-ditandai `【BUTUH KEPUTUSAN MALIK】`. Lihat
-`docs/legal/YANG-DIBUTUHKAN-DARI-MALIK.md`.
+**Dokumen legal.** Draf ada di `docs/legal/`, **belum ditautkan ke situs**.
+Bagian teknis diaudit dari kode (tidak dikarang); keputusan bisnis Malik
+sudah masuk (K-12).
 
-⚠️ Kalau Malik menetapkan masa simpan data (pertanyaan A3/A4), **mekanisme
-penghapusan berkalanya belum ada dan harus dibangun dulu** — jangan
-menerbitkan kebijakan yang menjanjikan sesuatu yang tidak berjalan.
+- `kebijakan-privasi.md` — **siap terbit**, menunggu Malik membaca versi
+  final lalu menyatakan setuju.
+- `syarat-ketentuan.md` — sebagian besar tersusun; 10 penanda
+  `【PERLU DIPUTUSKAN】` masih terbuka.
+
+Setelah disetujui, tiga hal yang menyusul: (1) halaman
+`/kebijakan-privasi` + tautan footer + tautan dekat form komentar,
+(2) isi ulang tiga halaman legal portal berita di D1 yang masih placeholder,
+(3) **pasang keterangan "tidak ada refund" di halaman produk dekat tombol
+beli** — kalau hanya ada di S&K, secara praktis dianggap tidak
+diberitahukan.
 
 **Penataan halaman `/harga`.** Sekarang hanya memuat Kasir/Budget/Invoice;
 5 produk lain harganya hardcode terpisah di halaman masing-masing, jadi

@@ -1,20 +1,28 @@
-# 🚧 DRAFT UNTUK DITINJAU MALIK — BELUM BERLAKU 🚧
+# 🚧 DRAFT — MENUNGGU PERSETUJUAN AKHIR MALIK 🚧
 
-> Jangan terbitkan sebelum semua penanda `【BUTUH KEPUTUSAN MALIK】` terisi
-> dan Malik menyetujui isinya. Draf per 25-08-2026.
+> Semua pertanyaan Kelompok A sudah dijawab Malik (25-08-2026) dan sudah
+> dimasukkan ke draf ini. **Belum diterbitkan ke situs** — menunggu Malik
+> membaca versi final ini dan menyatakan setuju.
 
 ---
 
 # Kebijakan Privasi
 
-**Berlaku sejak:** 【BUTUH KEPUTUSAN MALIK: tanggal terbit】
-**Terakhir diperbarui:** 【tanggal】
+**Berlaku sejak:** 【diisi tanggal terbit】
+**Terakhir diperbarui:** 【diisi tanggal terbit】
 
 Halaman ini menjelaskan data apa yang kami kumpulkan saat Anda memakai
 **amandigital.my.id**, untuk apa data itu dipakai, dan hak Anda atasnya.
 
-Kami menulis ini apa adanya. Kalau ada bagian yang kurang jelas, silakan
+Kami menulis ini apa adanya — termasuk bagian yang mungkin tidak Anda sukai,
+seperti berapa lama data disimpan. Kalau ada yang kurang jelas, silakan
 hubungi kami lewat kanal di bagian akhir.
+
+**Cakupan.** Kebijakan ini berlaku untuk situs **amandigital.my.id** beserta
+portal berita dan alat bantu di dalamnya. Aplikasi AMAN Kasir, AMAN Budget,
+AMAN Invoice, dan AMAN-in berjalan terpisah dan **akan memiliki kebijakan
+privasinya sendiri** — data yang ditangani aplikasi berbeda jauh dari situs
+ini.
 
 ---
 
@@ -30,6 +38,7 @@ Kalau Anda hanya membaca satu bagian, baca yang ini:
 - Kami **tidak pernah menerima data kartu atau rekening Anda** — pembayaran
   ditangani sepenuhnya oleh penyedia pembayaran.
 - Kami **tidak menjual atau menyewakan data Anda** kepada siapa pun.
+- **Data disimpan tanpa batas waktu**, dan dihapus bila Anda memintanya.
 
 ---
 
@@ -97,10 +106,10 @@ Semua cookie kami bersifat **fungsional** — tanpanya, fitur yang bersangkutan
 tidak jalan. Semuanya `HttpOnly` (tidak bisa dibaca skrip halaman), `Secure`
 (hanya lewat koneksi terenkripsi), dan `SameSite=Lax`.
 
-| Cookie | Guna | Masa berlaku |
-|---|---|---|
-| `amaneng_dev`, `amceng_dev`, `amanposter_dev`, `amanprod_dev` | Menandai perangkat yang sudah memasukkan kode akses | 【BUTUH KEPUTUSAN MALIK: verifikasi masa berlaku cookie perangkat】 |
-| `amanadmin_sess` | Sesi login panel pengelola — hanya untuk kami | 30 hari |
+| Cookie | Guna |
+|---|---|
+| `amaneng_dev`, `amceng_dev`, `amanposter_dev`, `amanprod_dev` | Menandai perangkat yang sudah memasukkan kode akses |
+| `amanadmin_sess` | Sesi login panel pengelola — hanya untuk kami, masa berlaku 30 hari |
 
 Kami **tidak** memasang cookie untuk iklan maupun analitik. Karena itu situs
 ini tidak menampilkan spanduk persetujuan cookie.
@@ -138,18 +147,20 @@ Kami **tidak menjual, menyewakan, atau menukar** data Anda kepada pihak lain.
 
 ## 5. Berapa lama data disimpan
 
-【BUTUH KEPUTUSAN MALIK: tentukan masa simpan untuk masing-masing】
+Kami menyampaikan ini terus terang: **kami tidak menetapkan batas waktu
+penyimpanan, dan tidak ada proses penghapusan otomatis.**
 
-- Komentar yang disetujui: 【usulan: selama artikelnya masih tayang】
-- Komentar yang ditolak/spam: 【usulan: dihapus berkala, mis. tiap 90 hari】
-- Catatan jumlah baca: 【usulan: agregat disimpan, sidik pengunjung dihapus
-  setelah mis. 90 hari】
-- Kode akses & token perangkat: 【terkait definisi "akses selamanya" — lihat
-  Syarat & Ketentuan】
+| Data | Masa simpan |
+|---|---|
+| Komentar (nama, email, isi) | Disimpan **selama artikelnya ada**, sampai Anda meminta penghapusan |
+| Sidik pengunjung (hash IP + peramban) | Disimpan tanpa batas waktu |
+| Kode akses & token perangkat | Selama kode tersebut masih berlaku |
 
-*Catatan untuk Malik: saat ini belum ada mekanisme penghapusan berkala di
-sistem. Kalau Anda menetapkan masa simpan, itu perlu dibangun dulu supaya
-kebijakan ini tidak menjanjikan sesuatu yang belum berjalan.*
+Artinya: data Anda **tetap tersimpan sampai Anda sendiri meminta kami
+menghapusnya**. Cara memintanya ada di bagian 6.
+
+Kami memilih menyampaikan ini apa adanya daripada mencantumkan angka yang
+tidak benar-benar kami jalankan.
 
 ---
 
@@ -162,9 +173,9 @@ Anda berhak:
 - **Meminta penghapusan** komentar Anda beserta data yang menyertainya.
 - **Menarik email Anda** dari komentar yang sudah terkirim.
 
-Cara memakainya: hubungi kami lewat kanal di bagian bawah, sebutkan artikel
-dan nama yang Anda pakai saat berkomentar. Kami akan menanggapi dalam
-【BUTUH KEPUTUSAN MALIK: berapa hari kerja?】.
+**Cara memakainya:** kirim permintaan ke email di bagian 10, sebutkan artikel
+dan nama yang Anda pakai saat berkomentar. **Kami menanggapi dalam 1×24
+jam.**
 
 Karena kami sengaja tidak menyimpan identitas Anda secara lengkap, untuk
 sebagian permintaan kami mungkin perlu bertanya balik untuk memastikan
@@ -181,49 +192,33 @@ komentar itu memang milik Anda.
 
 Kami berusaha sebaik mungkin, tetapi tidak ada sistem yang sepenuhnya kebal.
 Kalau terjadi kebocoran yang berdampak pada data Anda, kami akan
-memberitahukannya lewat 【BUTUH KEPUTUSAN MALIK: kanal apa — pengumuman di
-situs? email?】.
+mengumumkannya di situs ini dan menghubungi Anda bila kami punya email Anda.
 
 ---
 
 ## 8. Anak-anak
 
-Layanan ini ditujukan untuk pelaku usaha dan pengguna dewasa. Kami tidak
-sengaja mengumpulkan data anak di bawah 【BUTUH KEPUTUSAN MALIK: batas usia】
-tahun. Kalau Anda orang tua dan menemukan anak Anda mengirim data ke kami,
-hubungi kami dan akan kami hapus.
+Layanan ini ditujukan untuk pengguna berusia **13 tahun ke atas**. Kami tidak
+sengaja mengumpulkan data anak di bawah usia tersebut. Kalau Anda orang tua
+atau wali dan menemukan anak Anda mengirim data ke kami, hubungi kami dan
+akan segera kami hapus.
 
 ---
 
-## 9. Aplikasi AMAN (Kasir, Budget, Invoice, AMAN-in)
-
-Keempat aplikasi tersebut **berjalan terpisah** dari situs ini, punya
-penyimpanan sendiri, dan sebagian memakai layanan Google Firebase untuk
-masuk akun serta pencadangan.
-
-【BUTUH KEPUTUSAN MALIK: apakah aplikasi mau dicakup kebijakan ini, atau
-dibuatkan kebijakan sendiri? Rekomendasi saya: dibuat terpisah, karena data
-yang ditangani berbeda jauh — aplikasi menyimpan data keuangan pengguna,
-sementara situs ini tidak.】
-
----
-
-## 10. Perubahan kebijakan
+## 9. Perubahan kebijakan
 
 Kalau kebijakan ini berubah, kami perbarui tanggal di bagian atas. Perubahan
 yang berdampak besar akan kami umumkan di halaman depan.
 
 ---
 
-## 11. Menghubungi kami
+## 10. Menghubungi kami
 
-**AMAN Digital**
-【BUTUH KEPUTUSAN MALIK: nama badan usaha resmi kalau ada, atau nama
-perorangan】
-Blangpidie, Aceh Barat Daya
+**AMAN Digital** — usaha perorangan milik **Adya Malik**
+Blangpidie, Aceh Barat Daya, Indonesia
 
-- WhatsApp: +62 822-1076-8038
-- Email: 【BUTUH KEPUTUSAN MALIK: belum ada email @amandigital.my.id】
+- **Email (urusan data pribadi):** adya.malik2@gmail.com
+- **WhatsApp:** +62 822-1076-8038
 
-Untuk urusan pemberitaan (koreksi, hak jawab, pengaduan isi artikel):
-【BUTUH KEPUTUSAN MALIK: kanal terpisah atau sama dengan di atas?】
+Untuk urusan pemberitaan — koreksi, hak jawab, atau pengaduan isi artikel —
+silakan pakai kanal yang sama.

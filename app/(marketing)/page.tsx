@@ -95,6 +95,7 @@ const services: { icon: LucideIcon; title: string; desc: string; href: string }[
 const apps = [
   {
     badge: "AMAN Kasir",
+    price: "Gratis",
     title: "Aplikasi Kasir & Stok",
     desc: "Catat transaksi, pantau stok masuk/keluar, dan lihat omzet harian langsung dari HP. Cocok untuk warung dan toko kecil.",
     features: [
@@ -111,6 +112,7 @@ const apps = [
   },
   {
     badge: "AMAN Budget",
+    price: "Gratis",
     title: "Keuangan Keluarga",
     desc: "Atur uang keluarga per anggota (Ayah/Bunda), catat pemasukan & pengeluaran, target tabungan, sampai zakat — semua dari HP.",
     features: [
@@ -124,6 +126,7 @@ const apps = [
   },
   {
     badge: "AMAN Invoice",
+    price: "Gratis",
     title: "Invoice & Penawaran",
     desc: "Buat invoice, nota, dan surat penawaran profesional dalam menit. Kirim ke pelanggan via WhatsApp atau cetak PDF.",
     features: [
@@ -137,6 +140,7 @@ const apps = [
   },
   {
     badge: "AMAN-in",
+    price: "Gratis",
     title: "Catat Pemasukan & Pengeluaran",
     desc: "Cukup diucapkan — sebut transaksinya dalam bahasa sehari-hari, nominal dan kategorinya terisi sendiri. Untuk usaha maupun keuangan pribadi.",
     features: [
@@ -150,6 +154,7 @@ const apps = [
   },
   {
     badge: "Produk Digital (700+)",
+    price: "Rp 49.000",
     title: "44 Produk Terkurasi + 700 Berkas",
     desc: "Bahan ibadah, edukasi anak, game ringan, sampai template konten. Satu kode akses membuka semuanya, langsung dari browser.",
     features: [
@@ -161,6 +166,42 @@ const apps = [
     // Beda dari yang lain: ini produk yang dibeli, bukan aplikasi yang dibuka.
     appUrl: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
     ctaLabel: "Beli Sekarang",
+    detail: "/digital-store",
+  },
+];
+
+// Produk yang benar-benar DIJUAL, lengkap dengan harga Rupiah. Harga dan
+// tautan checkout diambil sama persis dari halaman produk masing-masing --
+// kalau salah satu berubah, ubah di kedua tempat supaya tidak bertentangan.
+const paidProducts = [
+  {
+    name: "AMAN Engine",
+    desc: "Storyboard generator AI: ide cerita, karakter, dan prompt visual untuk konten TikTok & Instagram.",
+    price: "Rp 39.000",
+    strike: "Rp 79.000",
+    checkout: "https://lynk.id/adya.malik/6y6m9djlkywg/checkout",
+    detail: "/aman-engine",
+  },
+  {
+    name: "AMAN Content Engine",
+    desc: "Satu topik jadi satu paket konten siap pakai — caption, hook, sampai ide visual.",
+    price: "Rp 39.000",
+    checkout: "https://lynk.id/adya.malik/kvz4m4km1j9m/checkout",
+    detail: "/aman-content-engine",
+  },
+  {
+    name: "AMAN Poster Generator",
+    desc: "Racik prompt poster promosi siap pakai untuk Canva, ChatGPT, atau Gemini.",
+    price: "Rp 39.000",
+    checkout: "https://lynk.id/adya.malik/1m6zmzlzek3d/checkout",
+    detail: "/aman-poster",
+  },
+  {
+    name: "Produk Digital (700+)",
+    desc: "44 produk terkurasi berisi 700+ berkas: printable anak, template Canva, bahan ibadah, dan game edukasi.",
+    price: "Rp 49.000",
+    strike: "Rp 200.000",
+    checkout: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
     detail: "/digital-store",
   },
 ];
@@ -557,6 +598,9 @@ export default function HomePage() {
                   {app.badge}
                 </span>
                 <h3 className="mt-4 text-lg font-bold text-navy">{app.title}</h3>
+                {/* Harga ditampilkan langsung di kartu supaya pengunjung tahu
+                    biayanya tanpa harus membuka halaman produk satu per satu. */}
+                <p className="mt-2 text-xl font-black text-emerald-dark">{app.price}</p>
                 <p className="mt-2 text-sm text-slate-600">{app.desc}</p>
                 <ul className="mt-4 space-y-2">
                   {app.features.map((f) => (
@@ -597,6 +641,61 @@ export default function HomePage() {
               Lihat Paket Harga Semua Produk →
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ===== ALAT BANTU AI — PRODUK BERBAYAR =====
+          Empat produk berbayar ditampilkan lengkap dengan harga Rupiah di
+          halaman utama. Sebelumnya harga hanya terlihat setelah membuka
+          halaman produk satu per satu, sehingga pengunjung (dan pemeriksa
+          penyedia pembayaran) tidak bisa melihat apa yang dijual dan berapa
+          harganya langsung dari beranda. */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <SectionHeading
+            label="Produk Berbayar"
+            title="Produk Digital Siap Beli"
+            subtitle="Bayar sekali, kode akses langsung dapat, dan bisa dipakai selamanya selama produknya masih kami operasikan."
+          />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {paidProducts.map((p) => (
+              <div
+                key={p.name}
+                className="flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <h3 className="text-base font-bold text-navy">{p.name}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
+                  {p.desc}
+                </p>
+                <div className="mt-4 flex items-baseline gap-2">
+                  <span className="text-2xl font-black text-navy">{p.price}</span>
+                  {p.strike && (
+                    <span className="text-sm text-slate-400 line-through">
+                      {p.strike}
+                    </span>
+                  )}
+                </div>
+                <a
+                  href={p.checkout}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 rounded-lg bg-emerald-cta px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
+                >
+                  Beli Sekarang
+                </a>
+                <Link
+                  href={p.detail}
+                  className="mt-2 text-center text-xs font-semibold text-emerald-dark hover:underline"
+                >
+                  Lihat detail produk
+                </Link>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-xs text-slate-500">
+            Harga dalam Rupiah, sudah final. Produk digital — tidak dapat
+            dikembalikan setelah kode akses diterima.
+          </p>
         </div>
       </section>
 

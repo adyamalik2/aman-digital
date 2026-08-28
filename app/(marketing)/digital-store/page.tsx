@@ -222,6 +222,12 @@ export default function DigitalStorePage() {
             <span>✓ Buka langsung di browser</span>
             <span>✓ Bisa dari HP</span>
           </div>
+          {/* Keterangan refund sengaja ditaruh di dekat tombol beli, bukan
+              cuma di halaman S&K -- kalau hanya di sana, secara praktis
+              dianggap tidak diberitahukan sebelum pembeli membayar. */}
+          <p className="mt-4 text-xs text-slate-500">
+            Produk digital — tidak dapat dikembalikan setelah kode akses diterima.
+          </p>
         </div>
       </section>
 

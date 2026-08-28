@@ -104,33 +104,49 @@ Berdasarkan cara sistem bekerja saat ini:
 
 ## 6. Lisensi produk digital
 
-【PERLU DIPUTUSKAN — jawab boleh/tidak untuk masing-masing:】
+Setelah membeli, Anda **boleh**:
 
-| Penggunaan | Boleh? |
+| Penggunaan | |
 |---|---|
-| Dipakai untuk keperluan komersial sendiri | 【?】 |
-| Dimodifikasi sesuai kebutuhan | 【?】 |
-| Dibagikan ke rekan kerja / anggota tim | 【?】 |
-| Dipakai untuk mengerjakan pesanan klien | 【?】 |
-| **Dijual ulang berkas aslinya** | Hampir pasti **tidak** — perlu ditegaskan |
+| Memakainya untuk keperluan **komersial** — termasuk usaha Anda sendiri | ✅ Boleh |
+| **Memodifikasi** sesuai kebutuhan Anda | ✅ Boleh |
+| **Membagikan ke rekan kerja atau anggota tim** Anda | ✅ Boleh |
+| Memakainya untuk **mengerjakan pesanan klien** Anda | ✅ Boleh |
 
-*Tanpa bagian ini, pembeli akan menganggap boleh melakukan apa saja.*
+Yang **tidak boleh**:
+
+| | |
+|---|---|
+| **Menjual ulang berkas aslinya** — baik utuh maupun sebagian, dengan atau tanpa perubahan | ❌ Tidak boleh |
+| Mendistribusikan ulang sebagai produk digital Anda sendiri | ❌ Tidak boleh |
+
+Singkatnya: **pakai sebebas-bebasnya untuk pekerjaan Anda, tetapi jangan
+menjualnya kembali sebagai produk.**
 
 ---
 
 ## 7. Arti "akses selamanya"
 
-Istilah ini dipakai di beberapa halaman produk, jadi perlu dibatasi
-maknanya.
+Beberapa halaman produk memakai istilah "akses selamanya" atau "bayar
+sekali, akses selamanya". Berikut maksudnya:
 
-【PERLU DIPUTUSKAN — empat pertanyaan:】
-- "Selamanya" = selama produk masih kami operasikan, atau tanpa syarat?
-- Kalau suatu saat produk dihentikan, pembeli mendapat apa?
-- Kalau platform/domain pindah, akses ikut pindah?
-- Apakah termasuk pembaruan fitur di masa depan?
+**"Selamanya" berarti selama produk tersebut masih kami operasikan.**
 
-*Ini istilah paling berisiko di seluruh situs kalau dibiarkan tanpa
-definisi.*
+Artinya:
+
+- Anda **tidak** perlu membayar lagi, tidak ada langganan, dan tidak ada
+  biaya perpanjangan.
+- Selama produknya masih kami jalankan, kode akses Anda tetap berlaku.
+- Kami **tidak** menjanjikan produk akan beroperasi selamanya tanpa batas —
+  tidak ada layanan digital yang bisa menjamin itu secara jujur.
+
+Bila suatu saat kami menghentikan sebuah produk, kami akan
+memberitahukannya lebih dahulu melalui situs ini.
+
+【PERLU DIPUTUSKAN — dua hal lanjutan:】
+- Berapa lama pemberitahuan sebelum produk dihentikan? *(usulan: 30 hari)*
+- Apakah pembeli diberi kesempatan mengunduh/menyimpan hasil kerjanya
+  sebelum layanan berhenti? *(usulan: ya)*
 
 ---
 

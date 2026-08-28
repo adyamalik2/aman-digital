@@ -1,6 +1,6 @@
 # Status Proyek — AMAN Digital
 
-**Diperbarui:** 25 Agustus 2026
+**Diperbarui:** 28 Agustus 2026
 
 Isi berkas ini cepat basi. Kalau ada yang terasa tidak cocok dengan kenyataan,
 **percayai produksi**, lalu perbarui berkas ini.
@@ -42,7 +42,7 @@ Diurutkan dari yang paling menghambat.
 | 1 | **Skema harga AMAN-in** | Aplikasinya belum punya pembatas kuota sama sekali, jadi "gratis kalau sedikit, bayar kalau banyak" belum bisa ditegakkan. Butuh angka: batas gratis berapa, tarif berapa. |
 | 2 | **Dokumen legal** | 📝 Kelompok A **sudah dijawab** 25-08 (lihat K-12). **Kebijakan Privasi siap terbit** — tinggal Malik baca versi finalnya lalu saya buatkan halamannya. S&K masih menunggu 10 pertanyaan Kelompok B, terutama **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")**. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
-| 4 | **Duitku** | Akun sudah didaftarkan, email terverifikasi, **masih menunggu approval manual**. Belum ada API key. Tanpa ini, paket berbayar tidak bisa diaktifkan. |
+| 4 | **Duitku** | 📩 Tim onboarding minta 3 hal sebelum verifikasi (email 27-08): (1) produk+harga Rupiah di halaman utama — ✅ **sudah dikerjakan 28-08**; (2) fitur checkout hingga pembayaran DI website — ❌ belum, sekarang masih lempar ke Lynk.id; (3) integrasi Sandbox Duitku — ❌ belum, **butuh Merchant Code + API Key sandbox dari Malik**. Plus foto tampak depan lokasi usaha. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
 | 6 | **Email bisnis** | Belum ada email `@amandigital.my.id`. Kartu Email di `/kontak` sementara diganti kartu Telepon (ada komentar penjelasnya di kode). |
 | 7 | **Pin Google Maps** | Tautan di `/kontak` masih pencarian area "Blangpidie Aceh Barat Daya", bukan pin alamat. Butuh koordinat/alamat persis. |

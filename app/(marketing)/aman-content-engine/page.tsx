@@ -131,6 +131,8 @@ export default function AmanContentEnginePage() {
           </div>
           <p className="mt-5 text-sm text-slate-500">
             Akses khusus pemegang kode · Jalan di browser · Tanpa install
+            <br />
+            Produk digital — tidak dapat dikembalikan setelah kode diterima.
           </p>
         </div>
       </section>

@@ -57,10 +57,14 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const name = String(body.name || "").trim().slice(0, 80);
   const email = String(body.email || "").trim().slice(0, 191);
   const phone = String(body.phone || "").trim().slice(0, 30);
+  const paymentMethod = String(body.paymentMethod || "").trim().slice(0, 8);
 
   if (!name) return json(400, { ok: false, message: "Nama wajib diisi." });
   if (!looksLikeEmail(email)) {
     return json(400, { ok: false, message: "Email tidak valid. Kode akses dikirim ke sini." });
+  }
+  if (!paymentMethod) {
+    return json(400, { ok: false, message: "Pilih metode pembayaran dulu." });
   }
 
   const orderId = newOrderId();
@@ -80,6 +84,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const invoice = await createInvoice(env, {
     merchantOrderId: orderId,
     paymentAmount: product.price,
+    paymentMethod,
     productDetails: product.name,
     email,
     phoneNumber: phone,
@@ -92,7 +97,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   if (!invoice.ok) {
     order.status = "failed";
     await saveOrder(env.AMAN_LEDGER, order);
-    return json(502, { ok: false, message: invoice.message });
+    // 200 dengan ok:false, bukan 5xx: Cloudflare mengganti balasan 5xx dari
+    // Function dengan halaman galatnya sendiri, sehingga pesan asli dari
+    // Duitku hilang dan pembeli hanya melihat "error code: 502".
+    return json(200, { ok: false, message: invoice.message });
   }
 
   order.reference = invoice.reference;

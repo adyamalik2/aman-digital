@@ -90,9 +90,66 @@ export function safeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+/** SHA-256 hex — dipakai untuk endpoint daftar metode pembayaran. */
+export async function sha256(input: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** Waktu lokal format "YYYY-MM-DD HH:mm:ss" seperti yang diminta Duitku. */
+function duitkuDatetime(): string {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+export type PaymentMethod = {
+  paymentMethod: string;
+  paymentName: string;
+  paymentImage: string;
+  totalFee: string;
+};
+
+/**
+ * Ambil metode pembayaran yang tersedia untuk suatu nominal.
+ *
+ * Daftar ini TIDAK di-hardcode karena berbeda per merchant dan per nominal --
+ * mis. sebagian metode punya batas minimum. Signature memakai SHA-256, beda
+ * dari endpoint lain yang memakai MD5.
+ */
+export async function getPaymentMethods(
+  env: DuitkuEnv,
+  amount: number
+): Promise<{ ok: true; methods: PaymentMethod[] } | { ok: false; message: string }> {
+  const merchantCode = env.DUITKU_MERCHANT_CODE || "";
+  const apiKey = env.DUITKU_API_KEY || "";
+  if (!merchantCode || !apiKey) return { ok: false, message: "Duitku belum dikonfigurasi." };
+
+  const amt = Math.round(amount);
+  const datetime = duitkuDatetime();
+  const signature = await sha256(merchantCode + amt + datetime + apiKey);
+
+  try {
+    const res = await fetch(`${baseUrl(env)}/webapi/api/merchant/paymentmethod/getpaymentmethod`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ merchantcode: merchantCode, amount: String(amt), datetime, signature }),
+    });
+    const data = (await res.json()) as { responseCode?: string; responseMessage?: string; paymentFee?: PaymentMethod[] };
+    if (data.responseCode !== "00") {
+      return { ok: false, message: data.responseMessage || "Gagal mengambil metode pembayaran." };
+    }
+    return { ok: true, methods: data.paymentFee || [] };
+  } catch {
+    return { ok: false, message: "Tidak bisa menghubungi Duitku." };
+  }
+}
+
 export type CreateInvoiceInput = {
   merchantOrderId: string;
   paymentAmount: number;
+  /** Kode metode dari getPaymentMethods, mis. "BC" (BCA VA). WAJIB diisi. */
+  paymentMethod: string;
   productDetails: string;
   email: string;
   phoneNumber?: string;
@@ -122,6 +179,8 @@ export async function createInvoice(
   const body = {
     merchantCode,
     paymentAmount: amount,
+    // Wajib -- tanpa ini Duitku membalas 400 "paymentMethod is mandatory".
+    paymentMethod: input.paymentMethod,
     merchantOrderId: input.merchantOrderId,
     productDetails: input.productDetails,
     email: input.email,

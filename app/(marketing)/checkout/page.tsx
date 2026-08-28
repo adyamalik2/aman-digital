@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+
+type Metode = { kode: string; nama: string; gambar: string; biaya: number };
 
 /**
  * Halaman checkout di situs sendiri.
@@ -34,6 +36,30 @@ function CheckoutForm() {
   const [telepon, setTelepon] = useState("");
   const [proses, setProses] = useState(false);
   const [galat, setGalat] = useState("");
+  const [metode, setMetode] = useState<Metode[]>([]);
+  const [metodePilihan, setMetodePilihan] = useState("");
+  const [memuatMetode, setMemuatMetode] = useState(true);
+
+  // Metode pembayaran diambil dari Duitku, bukan di-hardcode: daftarnya
+  // berbeda per merchant dan per nominal.
+  useEffect(() => {
+    if (!produkId) return;
+    let batal = false;
+    (async () => {
+      try {
+        const res = await fetch(`/api/payment-methods?produk=${encodeURIComponent(produkId)}`);
+        const data = await res.json();
+        if (batal) return;
+        if (data.ok) setMetode(data.methods);
+        else setGalat(data.message || "Metode pembayaran belum tersedia.");
+      } catch {
+        if (!batal) setGalat("Tidak bisa memuat metode pembayaran.");
+      } finally {
+        if (!batal) setMemuatMetode(false);
+      }
+    })();
+    return () => { batal = true; };
+  }, [produkId]);
 
   if (!produkId) {
     return (
@@ -62,7 +88,13 @@ function CheckoutForm() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: produkId, name: nama, email, phone: telepon }),
+        body: JSON.stringify({
+          productId: produkId,
+          name: nama,
+          email,
+          phone: telepon,
+          paymentMethod: metodePilihan,
+        }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
@@ -155,6 +187,49 @@ function CheckoutForm() {
             />
           </div>
 
+          {/* Metode pembayaran */}
+          <fieldset className="mt-6">
+            <legend className="mb-2 text-sm font-medium text-navy">
+              Metode Pembayaran <span className="text-rose-600">*</span>
+            </legend>
+
+            {memuatMetode ? (
+              <p className="text-sm text-slate-500">Memuat metode pembayaran…</p>
+            ) : metode.length === 0 ? (
+              <p className="text-sm text-slate-500">
+                Metode pembayaran belum tersedia. Hubungi kami lewat WhatsApp.
+              </p>
+            ) : (
+              <div className="grid max-h-72 grid-cols-2 gap-2 overflow-y-auto rounded-lg border border-slate-200 p-2">
+                {metode.map((m) => (
+                  <label
+                    key={m.kode}
+                    className={`flex cursor-pointer items-center gap-2 rounded-lg border p-2.5 text-sm transition-colors ${
+                      metodePilihan === m.kode
+                        ? "border-emerald bg-emerald/5 font-semibold text-navy"
+                        : "border-slate-200 text-slate-700 hover:border-emerald/40"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="metode"
+                      value={m.kode}
+                      checked={metodePilihan === m.kode}
+                      onChange={() => setMetodePilihan(m.kode)}
+                      className="accent-emerald"
+                    />
+                    <span className="min-w-0 flex-1 truncate">{m.nama}</span>
+                    {m.biaya > 0 && (
+                      <span className="shrink-0 text-xs text-slate-500">
+                        +{rupiah(m.biaya)}
+                      </span>
+                    )}
+                  </label>
+                ))}
+              </div>
+            )}
+          </fieldset>
+
           {galat && (
             <p className="mt-4 rounded-lg border border-rose-300 bg-rose-50 px-4 py-2.5 text-sm text-rose-700">
               {galat}
@@ -163,7 +238,7 @@ function CheckoutForm() {
 
           <button
             type="submit"
-            disabled={proses}
+            disabled={proses || !metodePilihan}
             className="mt-6 w-full rounded-full bg-emerald-cta px-6 py-3.5 font-semibold text-white transition-colors hover:bg-emerald-cta-hover disabled:opacity-60"
           >
             {proses ? "Menyiapkan pembayaran…" : `Bayar ${rupiah(produk.harga)}`}

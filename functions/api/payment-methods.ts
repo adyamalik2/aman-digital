@@ -36,6 +36,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   return json(200, {
     ok: true,
     amount: product.price,
+    // Dipakai halaman checkout untuk memberi tahu pengunjung bahwa pembayaran
+    // masih tahap pengujian, dan menawarkan jalur bayar yang sungguhan.
+    sandbox: context.env.DUITKU_SANDBOX === "1",
     methods: hasil.methods.map((m) => ({
       kode: m.paymentMethod,
       nama: m.paymentName,

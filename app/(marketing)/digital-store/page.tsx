@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const CHECKOUT = "https://lynk.id/adya.malik/v3xngqxp56vj/checkout";
+const CHECKOUT = "/checkout?produk=produk-digital";
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 const TANYA_WA = wa(
@@ -203,8 +203,6 @@ export default function DigitalStorePage() {
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
             <a
               href={CHECKOUT}
-              target="_blank"
-              rel="noopener noreferrer"
               className="rounded-full bg-emerald-cta px-8 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
             >
               🛒 Beli Sekarang
@@ -464,8 +462,6 @@ export default function DigitalStorePage() {
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a
                   href={CHECKOUT}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="rounded-full bg-white px-8 py-3.5 font-bold text-emerald-dark transition-colors hover:bg-slate-100"
                 >
                   🛒 Beli Sekarang

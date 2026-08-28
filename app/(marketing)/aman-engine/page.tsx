@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { pageMeta } from "@/lib/seo";
 
-const CHECKOUT = "https://lynk.id/adya.malik/6y6m9djlkywg/checkout";
+const CHECKOUT = "/checkout?produk=aman-engine";
 
 export const metadata: Metadata = pageMeta({
   title: "AMAN Engine — Storyboard Generator AI | AMAN Digital",
@@ -123,8 +123,6 @@ function CtaButtons() {
     <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
       <a
         href={CHECKOUT}
-        target="_blank"
-        rel="noopener noreferrer"
         className="rounded-full bg-emerald-cta px-7 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
       >
         🛒 Beli Kode Akses

@@ -164,7 +164,7 @@ const apps = [
       "Bayar sekali, akses selamanya",
     ],
     // Beda dari yang lain: ini produk yang dibeli, bukan aplikasi yang dibuka.
-    appUrl: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
+    appUrl: "/checkout?produk=produk-digital",
     ctaLabel: "Beli Sekarang",
     detail: "/digital-store",
   },
@@ -179,21 +179,21 @@ const paidProducts = [
     desc: "Storyboard generator AI: ide cerita, karakter, dan prompt visual untuk konten TikTok & Instagram.",
     price: "Rp 39.000",
     strike: "Rp 79.000",
-    checkout: "https://lynk.id/adya.malik/6y6m9djlkywg/checkout",
+    checkout: "/checkout?produk=aman-engine",
     detail: "/aman-engine",
   },
   {
     name: "AMAN Content Engine",
     desc: "Satu topik jadi satu paket konten siap pakai — caption, hook, sampai ide visual.",
     price: "Rp 39.000",
-    checkout: "https://lynk.id/adya.malik/kvz4m4km1j9m/checkout",
+    checkout: "/checkout?produk=aman-content-engine",
     detail: "/aman-content-engine",
   },
   {
     name: "AMAN Poster Generator",
     desc: "Racik prompt poster promosi siap pakai untuk Canva, ChatGPT, atau Gemini.",
     price: "Rp 39.000",
-    checkout: "https://lynk.id/adya.malik/1m6zmzlzek3d/checkout",
+    checkout: "/checkout?produk=aman-poster",
     detail: "/aman-poster",
   },
   {
@@ -201,7 +201,7 @@ const paidProducts = [
     desc: "44 produk terkurasi berisi 700+ berkas: printable anak, template Canva, bahan ibadah, dan game edukasi.",
     price: "Rp 49.000",
     strike: "Rp 200.000",
-    checkout: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
+    checkout: "/checkout?produk=produk-digital",
     detail: "/digital-store",
   },
 ];
@@ -614,10 +614,15 @@ export default function HomePage() {
                   ))}
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  {/* Aplikasi tayang di subdomain (tab baru), sedangkan Produk
+                      Digital kini menuju checkout di situs ini sendiri — jadi
+                      target="_blank" hanya dipasang untuk yang benar-benar
+                      keluar situs. */}
                   <a
                     href={app.appUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    {...(app.appUrl.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     className="flex-1 rounded-lg bg-emerald-cta px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
                   >
                     {/* Produk Digital dibeli, bukan dibuka — labelnya menyesuaikan. */}
@@ -675,14 +680,14 @@ export default function HomePage() {
                     </span>
                   )}
                 </div>
-                <a
+                {/* Checkout kini di situs sendiri, jadi tanpa target="_blank"
+                    dan memakai Link supaya navigasinya tetap sisi klien. */}
+                <Link
                   href={p.checkout}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="mt-4 rounded-lg bg-emerald-cta px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
                 >
                   Beli Sekarang
-                </a>
+                </Link>
                 <Link
                   href={p.detail}
                   className="mt-2 text-center text-xs font-semibold text-emerald-dark hover:underline"

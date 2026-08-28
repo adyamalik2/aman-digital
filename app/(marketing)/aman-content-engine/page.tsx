@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { pageMeta } from "@/lib/seo";
 
-const CHECKOUT = "https://lynk.id/adya.malik/kvz4m4km1j9m/checkout";
+const CHECKOUT = "/checkout?produk=aman-content-engine";
 
 export const metadata: Metadata = pageMeta({
   title: "AMAN Content Engine — Satu Topik Jadi Paket Konten | AMAN Digital",
@@ -90,8 +90,6 @@ function CtaButtons() {
     <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
       <a
         href={CHECKOUT}
-        target="_blank"
-        rel="noopener noreferrer"
         className="rounded-full bg-emerald-cta px-7 py-3.5 text-center font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
       >
         🛒 Beli Kode Akses

@@ -14,10 +14,26 @@ type Metode = { kode: string; nama: string; gambar: string; biaya: number };
  * berbeda, yang berlaku tetap yang di server. Ubah keduanya bersamaan.
  */
 const PRODUK = {
-  "aman-engine": { nama: "AMAN Engine", harga: 39000, ket: "Storyboard generator AI untuk konten TikTok & Instagram." },
-  "aman-content-engine": { nama: "AMAN Content Engine", harga: 39000, ket: "Satu topik jadi satu paket konten siap pakai." },
-  "aman-poster": { nama: "AMAN Poster Generator", harga: 39000, ket: "Prompt poster promosi siap pakai untuk AI gambar." },
-  "produk-digital": { nama: "Produk Digital (700+)", harga: 49000, ket: "44 produk terkurasi berisi 700+ berkas siap pakai." },
+  "aman-engine": {
+    nama: "AMAN Engine", harga: 39000,
+    ket: "Storyboard generator AI untuk konten TikTok & Instagram.",
+    lynk: "https://lynk.id/adya.malik/6y6m9djlkywg/checkout",
+  },
+  "aman-content-engine": {
+    nama: "AMAN Content Engine", harga: 39000,
+    ket: "Satu topik jadi satu paket konten siap pakai.",
+    lynk: "https://lynk.id/adya.malik/kvz4m4km1j9m/checkout",
+  },
+  "aman-poster": {
+    nama: "AMAN Poster Generator", harga: 39000,
+    ket: "Prompt poster promosi siap pakai untuk AI gambar.",
+    lynk: "https://lynk.id/adya.malik/1m6zmzlzek3d/checkout",
+  },
+  "produk-digital": {
+    nama: "Produk Digital (700+)", harga: 49000,
+    ket: "44 produk terkurasi berisi 700+ berkas siap pakai.",
+    lynk: "https://lynk.id/adya.malik/v3xngqxp56vj/checkout",
+  },
 } as const;
 
 type ProdukId = keyof typeof PRODUK;
@@ -39,6 +55,7 @@ function CheckoutForm() {
   const [metode, setMetode] = useState<Metode[]>([]);
   const [metodePilihan, setMetodePilihan] = useState("");
   const [memuatMetode, setMemuatMetode] = useState(true);
+  const [sandbox, setSandbox] = useState(false);
 
   // Metode pembayaran diambil dari Duitku, bukan di-hardcode: daftarnya
   // berbeda per merchant dan per nominal.
@@ -50,7 +67,7 @@ function CheckoutForm() {
         const res = await fetch(`/api/payment-methods?produk=${encodeURIComponent(produkId)}`);
         const data = await res.json();
         if (batal) return;
-        if (data.ok) setMetode(data.methods);
+        if (data.ok) { setMetode(data.methods); setSandbox(Boolean(data.sandbox)); }
         else setGalat(data.message || "Metode pembayaran belum tersedia.");
       } catch {
         if (!batal) setGalat("Tidak bisa memuat metode pembayaran.");
@@ -132,6 +149,32 @@ function CheckoutForm() {
 
       {/* Data pembeli */}
       <div className="md:col-span-3">
+        {/* Selama DUITKU_SANDBOX=1, pembayaran di sini TIDAK menagih uang
+            sungguhan. Pengunjung harus diberi tahu, dan diberi jalur bayar
+            yang benar-benar berfungsi -- kalau tidak, mereka mengira sudah
+            membeli padahal belum. Blok ini hilang sendiri begitu
+            DUITKU_SANDBOX diubah ke 0. */}
+        {sandbox && (
+          <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4">
+            <p className="text-sm font-bold text-amber-900">
+              Pembayaran otomatis masih dalam tahap pengujian
+            </p>
+            <p className="mt-1 text-sm text-amber-800">
+              Pembayaran lewat halaman ini <strong>belum menagih uang sungguhan</strong>.
+              Untuk membeli sekarang, silakan lewat tautan di bawah — kode akses
+              dikirim setelah pembayaran kami terima.
+            </p>
+            <a
+              href={produk.lynk}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block rounded-full bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700"
+            >
+              Beli sekarang lewat Lynk.id →
+            </a>
+          </div>
+        )}
+
         <form onSubmit={kirim} className="rounded-2xl border border-slate-200 bg-white p-6">
           <h2 className="text-sm font-bold uppercase tracking-wide text-emerald-dark">
             Data Pembeli

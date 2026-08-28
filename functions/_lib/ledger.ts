@@ -19,7 +19,31 @@ export type LedgerEntry = {
   buyer?: string;
   phone?: string;
   email?: string;
+  /**
+   * Produk yang boleh dibuka kode ini, mis. "aman-engine".
+   *
+   * Kode LAMA tidak punya field ini, dan sengaja tetap berlaku untuk semua
+   * produk (lihat `codeAllowsProduct`) supaya pembeli lama tidak kehilangan
+   * akses. Kode baru dari checkout selalu terikat satu produk.
+   */
+  product?: string;
+  /** Pesanan yang menerbitkan kode ini, untuk penelusuran. */
+  orderId?: string;
 };
+
+/**
+ * Apakah sebuah entri kode boleh membuka produk tertentu.
+ *
+ * Sebelum ada field `product`, login tiap tool hanya memeriksa "kode ini ada
+ * di KV atau tidak" -- tanpa memeriksa kode itu untuk produk apa. Akibatnya
+ * satu kode membuka SEMUA tool. Itu belum berbahaya selama kode diterbitkan
+ * manual, tapi menjadi masalah begitu penerbitan otomatis setelah pembayaran:
+ * membayar satu produk berarti mendapat semuanya.
+ */
+export function codeAllowsProduct(entry: LedgerEntry, productId: string): boolean {
+  if (!entry.product) return true; // kode lama -- jangan diputus aksesnya
+  return entry.product === productId;
+}
 
 export async function loadEntry(kv: KVNamespace, code: string): Promise<LedgerEntry | null> {
   const raw = await kv.get(code);
@@ -72,10 +96,15 @@ export function newDeviceToken(): string {
 export async function checkDevice(
   kv: KVNamespace,
   code: string,
-  cookieToken: string | null
+  cookieToken: string | null,
+  /** Produk yang sedang dibuka. Kalau diisi, kode terikat produk lain ditolak. */
+  productId?: string
 ): Promise<{ status: "ok-new" | "ok-known" | "locked" | "invalid"; token?: string }> {
   const entry = await loadEntry(kv, code);
   if (!entry) return { status: "invalid" };
+  // Kode milik produk lain diperlakukan sama seperti kode tidak dikenal --
+  // jangan membocorkan bahwa kodenya sebenarnya ada.
+  if (productId && !codeAllowsProduct(entry, productId)) return { status: "invalid" };
 
   if (cookieToken && entry.devices.includes(cookieToken)) {
     return { status: "ok-known" };

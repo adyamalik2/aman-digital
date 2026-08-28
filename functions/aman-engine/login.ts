@@ -22,7 +22,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   if (!code) return redirect("invalid");
 
   const cookieToken = getCookie(context.request, DEV_COOKIE);
-  const result = await checkDevice(context.env.AMAN_LEDGER, code, cookieToken);
+  const result = await checkDevice(context.env.AMAN_LEDGER, code, cookieToken, "aman-engine");
 
   if (result.status === "invalid") {
     await ratelimitFail(context.env.AMAN_LEDGER, RATE_SCOPE, ip);

@@ -94,7 +94,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ selesai 31-08 (aturan Firestore sudah diterbitkan) |
 | 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | ✅ live 31-08 — Profil → Privasi & Data |
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | ✅ live 31-08 — Profil → Zona Bahaya |
-| 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | belum |
+| 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | ✅ live 01-09 — jalur manual & PWA aktif; jalur APK menunggu build |
 | 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14; menunggu angka dari Malik | belum |
 | 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | belum |
 | 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
@@ -129,6 +129,24 @@ membuktikan apa pun tentang itu.
 sisi ini tanpa kredensial. Pemeriksaan yang menentukan: catat transaksi
 berfoto, lalu lihat sub-koleksi `receipts` muncul di Firebase Console →
 Firestore → Data → `users/{uid}`.
+
+### Notifikasi bank — tiga jalur, satu belum terverifikasi
+
+`parseNotifikasi.js` mengubah teks notifikasi jadi draf transaksi. Teksnya
+selalu diserahkan pengguna; aplikasi **tidak** membaca notifikasi sendiri.
+
+| Jalur | Status |
+|---|---|
+| Tombol "Tempel Teks Notifikasi" di modal | ✅ live, teruji |
+| PWA terpasang → `share_target` → `/?text=` | ✅ live, manifest terverifikasi |
+| APK → `ACTION_SEND` → `SharedTextPlugin.java` | ⚠️ kode siap, **belum bisa diuji tanpa APK terpasang** |
+
+27 pemeriksaan lulus dengan teks BRI, Mandiri, GoPay, QRIS, dan format IDR.
+Dua jebakan yang ditangani khusus: mengambil **saldo** alih-alih nominal
+transaksi, dan salah membaca `150.000` gaya Inggris jadi seratus lima puluh
+rupiah.
+
+---
 
 ### Dua hal terbuka dari kebijakan privasi AMAN-in
 

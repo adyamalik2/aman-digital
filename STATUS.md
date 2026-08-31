@@ -92,7 +92,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | # | Pekerjaan | Kenapa sekarang | Status |
 |---|---|---|---|
 | 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ selesai 31-08 (aturan Firestore sudah diterbitkan) |
-| 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | belum |
+| 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | ✅ live 31-08 — Profil → Privasi & Data |
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | belum |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | belum |
 | 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14; menunggu angka dari Malik | belum |
@@ -129,6 +129,27 @@ membuktikan apa pun tentang itu.
 sisi ini tanpa kredensial. Pemeriksaan yang menentukan: catat transaksi
 berfoto, lalu lihat sub-koleksi `receipts` muncul di Firebase Console →
 Firestore → Data → `users/{uid}`.
+
+### Dua hal terbuka dari kebijakan privasi AMAN-in
+
+Layar `src/screens/PrivacyScreen.jsx` sudah live, isinya diverifikasi dari kode
+(nol pelacak, nol analitik, satu-satunya `fetch` pihak ketiga adalah endpoint
+OCR). Dua hal sengaja dibiarkan terbuka:
+
+1. **Tier akun Gemini belum dikonfirmasi Malik.** Halaman itu menulis apa yang
+   pasti benar — "server kami tidak menyimpan salinan fotonya, pemrosesan di
+   sisi Google tunduk pada ketentuan layanan Google". Pesaing berani menulis
+   fotonya tidak dipakai melatih model AI; untuk Gemini API itu bergantung
+   tier langganan, jadi klaim itu **tidak** ditulis. Kalau Malik memastikan
+   akunnya berbayar, kalimatnya boleh diperkuat.
+2. **Belum ada URL publik.** Play Store mewajibkan kebijakan privasi bisa
+   diakses lewat tautan web, bukan hanya di dalam aplikasi. Perlu halaman di
+   situs utama sebelum AMAN-in masuk Play Store.
+
+Catatan: layar itu menyatakan tombol hapus akun permanen **belum ada** — itu
+memang benar, dan jadi alasan tambahan mengerjakan langkah 3.
+
+---
 
 ### Yang sengaja TIDAK dikerjakan
 

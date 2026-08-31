@@ -96,7 +96,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | ✅ live 31-08 — Profil → Zona Bahaya |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | ✅ live 01-09 — jalur manual & PWA aktif; jalur APK menunggu build |
 | 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14; menunggu angka dari Malik | belum |
-| 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | belum |
+| 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | ✅ live 01-09 — Bagikan → Excel (CSV) / Laporan PDF |
 | 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
 
 ### Bug yang memicu nomor 1
@@ -129,6 +129,29 @@ membuktikan apa pun tentang itu.
 sisi ini tanpa kredensial. Pemeriksaan yang menentukan: catat transaksi
 berfoto, lalu lihat sub-koleksi `receipts` muncul di Firebase Console →
 Firestore → Data → `users/{uid}`.
+
+### Ekspor laporan — apa yang sekarang bisa dihasilkan
+
+Dari modal **Bagikan**, memakai pemilihan periode yang sudah ada
+(harian/mingguan/bulanan/custom):
+
+| Berkas | Untuk apa |
+|---|---|
+| **CSV** | Dibuka di Excel atau Google Sheets, bisa dijumlah dan dipivot |
+| **PDF** | Laporan siap cetak: kop usaha, periode, ringkasan, rincian per kategori, tabel transaksi |
+
+Tiga jebakan CSV yang ditangani khusus dan **jangan dihapus**: pemisah titik
+koma (Excel id-ID memakai koma untuk desimal), BOM UTF-8, dan pelumpuhan
+suntikan rumus pada sel yang diawali `=`, `+`, `-`, `@`.
+
+41 pemeriksaan lulus (32 CSV + 9 PDF). Hasil PDF-nya diperiksa **secara
+visual**, bukan hanya dipastikan tidak melempar error.
+
+Dependensi baru: `jspdf`, dimuat dinamis hanya saat tombol PDF ditekan
+(~130KB gzip). `html2canvas` ikut terbawa sebagai chunk terpisah tapi tidak
+pernah diunduh karena `doc.html()` tidak dipakai.
+
+---
 
 ### Notifikasi bank — tiga jalur, satu belum terverifikasi
 

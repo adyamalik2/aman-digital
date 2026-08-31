@@ -91,7 +91,7 @@ akan menimpa pelanggan, sisanya menyusul.
 
 | # | Pekerjaan | Kenapa sekarang | Status |
 |---|---|---|---|
-| 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ live 31-08 — **menunggu Malik menerbitkan `firestore.rules`** |
+| 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ selesai 31-08 (aturan Firestore sudah diterbitkan) |
 | 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | belum |
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | belum |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | belum |
@@ -119,12 +119,16 @@ penanda `hasReceipt`. Migrasi berjalan sendiri saat data dimuat dan saat
 backup lama dipulihkan. Diuji 33 pemeriksaan dengan Firestore & IndexedDB
 palsu, termasuk bukti model lama melewati 1 MiB pada foto ke-4.
 
-> ⚠ **Satu langkah masih di tangan Malik.** `aman-in/firestore.rules` sudah
-> diberi path `receipts`, tapi aturan Firestore **hanya berlaku setelah
-> diterbitkan ulang di Firebase Console** (project `aman-in-app` → Firestore
-> Database → Rules → paste isi berkas → Publish). Sampai itu dilakukan, foto
-> hanya tersimpan di perangkat dan mengantre; transaksinya sendiri sudah
-> aman. Deploy web tidak bisa menggantikan langkah ini.
+`aman-in/firestore.rules` diberi path `receipts` dan **sudah diterbitkan
+Malik di Firebase Console 31-08**. Catatan untuk ke depan: aturan Firestore
+tidak ikut ter-deploy bersama web — menambah path penyimpanan baru selalu
+menuntut penerbitan ulang manual di Console, dan build yang sukses tidak
+membuktikan apa pun tentang itu.
+
+**Belum diverifikasi langsung.** Aturan yang terbit tidak bisa dibaca dari
+sisi ini tanpa kredensial. Pemeriksaan yang menentukan: catat transaksi
+berfoto, lalu lihat sub-koleksi `receipts` muncul di Firebase Console →
+Firestore → Data → `users/{uid}`.
 
 ### Yang sengaja TIDAK dikerjakan
 

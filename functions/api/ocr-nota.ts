@@ -29,10 +29,22 @@ const MODEL = "gemini-2.5-flash";
 // akses apa pun.
 const AMANIN_FIREBASE_KEY = "AIzaSyBuA7CX1k88qGEouQx1tCY9Gq0H41H9PaY";
 
+/**
+ * `https://localhost` adalah origin WebView di dalam APK Capacitor
+ * (capacitor.config.json memakai androidScheme "https"). Tanpa ini, Scan Nota
+ * jalan di web tapi gagal di aplikasi Android -- dan gagalnya tidak jelas
+ * sebabnya karena peramban memblokirnya sebelum permintaan sampai ke sini.
+ *
+ * Perlu dicatat: CORS di sini lapis kedua, bukan pengaman utama. Yang
+ * benar-benar menjaga endpoint ini adalah verifikasi Firebase ID token --
+ * origin gampang dipalsukan dari luar peramban, token tidak.
+ */
 const ALLOWED_ORIGINS = [
   "https://amanin.amandigital.my.id",
-  "http://localhost:5173",
-  "http://localhost:4173",
+  "https://localhost",      // APK Android (Capacitor)
+  "capacitor://localhost",  // kalau androidScheme diubah ke skema capacitor
+  "http://localhost:5173",  // vite dev
+  "http://localhost:4173",  // vite preview
 ];
 
 // Foto sudah dikecilkan di sisi aplikasi (maks ~200KB). Batas ini jaring

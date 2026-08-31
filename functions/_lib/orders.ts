@@ -12,7 +12,14 @@
 import { saveEntry, type LedgerEntry } from "./ledger";
 
 /** Produk yang bisa dibeli. `id` dipakai di URL checkout. */
-export type ProductId = "aman-engine" | "aman-content-engine" | "aman-poster" | "produk-digital";
+export type ProductId =
+  | "aman-engine"
+  | "aman-content-engine"
+  | "aman-poster"
+  | "produk-digital"
+  | "amanin-bulanan"
+  | "amanin-tahunan"
+  | "amanin-selamanya";
 
 export type Product = {
   id: ProductId;
@@ -23,6 +30,11 @@ export type Product = {
   codePrefix: string;
   /** Ke mana pembeli diarahkan untuk memakai produknya. */
   masukPath: string;
+  /**
+   * Masa berlaku dalam hari, untuk produk berlangganan. Kosong = selamanya.
+   * Dipakai issueAccessCode untuk mengisi `expiresAt` pada kodenya.
+   */
+  durasiHari?: number;
 };
 
 export const PRODUCTS: Record<ProductId, Product> = {
@@ -54,7 +66,39 @@ export const PRODUCTS: Record<ProductId, Product> = {
     codePrefix: "PROD",
     masukPath: "/produk-digital",
   },
+
+  // --- AMAN-in. Tiga cara bayar untuk aplikasi yang sama. ---
+  // Harganya ditetapkan Malik 01-09-2026; lihat KEPUTUSAN.md K-15.
+  // Kode aktivasinya diikat ke akun Firebase, bukan cookie perangkat --
+  // lihat bindAccount() di ledger.ts.
+  "amanin-bulanan": {
+    id: "amanin-bulanan",
+    name: "AMAN-in Pro — Bulanan",
+    price: 25000,
+    codePrefix: "AIB",
+    masukPath: "/amanin",
+    durasiHari: 30,
+  },
+  "amanin-tahunan": {
+    id: "amanin-tahunan",
+    name: "AMAN-in Pro — Tahunan",
+    price: 144000,
+    codePrefix: "AIT",
+    masukPath: "/amanin",
+    durasiHari: 365,
+  },
+  "amanin-selamanya": {
+    id: "amanin-selamanya",
+    name: "AMAN-in Pro — Bayar Sekali",
+    price: 199000,
+    codePrefix: "AIS",
+    masukPath: "/amanin",
+    // Tanpa durasiHari: berlaku selamanya.
+  },
 };
+
+/** Ketiga produk yang membuka AMAN-in Pro. */
+export const PRODUK_AMANIN: ProductId[] = ["amanin-bulanan", "amanin-tahunan", "amanin-selamanya"];
 
 export function getProduct(id: string): Product | null {
   return (PRODUCTS as Record<string, Product>)[id] ?? null;
@@ -141,6 +185,11 @@ export async function issueAccessCode(
       product: order.productId,
       orderId: order.orderId,
     };
+    // Produk berlangganan diberi masa berlaku; produk bayar-sekali tidak,
+    // supaya perilakunya sama persis dengan kode yang sudah terbit selama ini.
+    if (product.durasiHari) {
+      entry.expiresAt = new Date(Date.now() + product.durasiHari * 86400_000).toISOString();
+    }
     await saveEntry(kv, code, entry);
     return code;
   }

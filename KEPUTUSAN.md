@@ -332,6 +332,47 @@ ia masih rencana, bukan fitur.
 
 ---
 
+## K-15 · Harga dan batas gratis AMAN-in
+
+**Tanggal:** 01-09-2026
+
+**Keputusan Malik.**
+
+| Paket | Harga | Catatan |
+|---|---|---|
+| Bulanan | **Rp25.000/bulan** | |
+| Tahunan | **Rp144.000/tahun** | setara Rp12.000/bulan, hemat 52% |
+| Bayar sekali | **Rp199.000** | angkanya usulan saya; Malik hanya menetapkan syarat "lebih tinggi dari langganan tahunan" |
+
+**Batas paket gratis.**
+
+1. Riwayat hanya bisa **dilihat 1 bulan ke belakang**. Datanya **tidak dihapus**,
+   hanya disembunyikan, dan muncul utuh kembali begitu berlangganan.
+2. **Scan Nota hanya untuk berbayar.** Ini satu-satunya fitur yang biayanya
+   nyata ke Malik (kuota API Gemini), jadi wajar jadi pembatas.
+3. **Mencatat transaksi tetap gratis tanpa batas.** Membatasi pencatatan akan
+   membuat aplikasi berhenti berguna sehari-hari, dan orang berhenti memakai
+   sebelum sempat melihat nilainya.
+
+**Kenapa "melihat", bukan "menyimpan".** Membatasi jumlah transaksi berarti
+suatu saat aplikasi menolak mencatat — dan pemilik warung yang sedang melayani
+pembeli tidak akan berhenti untuk membayar. Membatasi riwayat menyimpan
+nilainya justru di tempat yang orang bersedia bayar: laporan, rekap bulan lalu,
+dan lampiran pengajuan pinjaman.
+
+**Yang HARUS diikuti kalau harga berubah.** Angkanya ada di **tiga** tempat dan
+harus sama persis:
+
+1. `functions/_lib/orders.ts` — katalog server, ini yang **menagih**
+2. `aman-in/src/utils/langganan.js` — yang **ditampilkan** di aplikasi
+3. Halaman `/amanin` di situs
+
+Kalau berbeda, pengguna melihat satu harga lalu ditagih harga lain.
+
+**Yang belum dikerjakan.** Gerbangnya **belum menyala** — lihat STATUS.md.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

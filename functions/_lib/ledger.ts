@@ -29,7 +29,54 @@ export type LedgerEntry = {
   product?: string;
   /** Pesanan yang menerbitkan kode ini, untuk penelusuran. */
   orderId?: string;
+  /**
+   * Kapan kode ini berhenti berlaku (ISO 8601). Hanya diisi untuk produk
+   * berlangganan. Kode TANPA field ini berlaku selamanya -- itu perilaku
+   * seluruh kode yang sudah terbit sebelum langganan ada, dan tidak boleh
+   * berubah.
+   */
+  expiresAt?: string;
 };
+
+/** Kode tanpa `expiresAt` berlaku selamanya. */
+export function sudahKedaluwarsa(entry: LedgerEntry, now = Date.now()): boolean {
+  if (!entry.expiresAt) return false;
+  const batas = Date.parse(entry.expiresAt);
+  return Number.isFinite(batas) && batas < now;
+}
+
+/**
+ * Ikat satu akun (uid Firebase) ke sebuah kode akses.
+ *
+ * Tool web mengikat kode ke cookie perangkat. AMAN-in tidak bisa begitu: ia
+ * berjalan sebagai APK dan sebagai web, dan pengguna berpindah HP sambil
+ * membawa akunnya. Jadi yang diikat di sini adalah uid, memakai slot yang
+ * sama dengan `devices` supaya batas MAX_DEVICES tetap berlaku.
+ *
+ * BEDA PENTING DARI checkDevice: di sini kode WAJIB punya field `product`
+ * yang cocok. `codeAllowsProduct` sengaja meloloskan kode lama tanpa field
+ * itu supaya pembeli lama tidak kehilangan akses -- tapi kode-kode itu dijual
+ * sebelum AMAN-in ada, jadi meloloskannya berarti membagikan produk baru
+ * secara cuma-cuma.
+ */
+export async function bindAccount(
+  kv: KVNamespace,
+  code: string,
+  uid: string,
+  allowedProducts: string[]
+): Promise<{ status: "ok" | "penuh" | "invalid" | "kedaluwarsa"; entry?: LedgerEntry }> {
+  const entry = await loadEntry(kv, code);
+  if (!entry) return { status: "invalid" };
+  if (!entry.product || !allowedProducts.includes(entry.product)) return { status: "invalid" };
+  if (sudahKedaluwarsa(entry)) return { status: "kedaluwarsa", entry };
+
+  if (entry.devices.includes(uid)) return { status: "ok", entry };
+  if (entry.devices.length >= MAX_DEVICES) return { status: "penuh", entry };
+
+  entry.devices.push(uid);
+  await saveEntry(kv, code, entry);
+  return { status: "ok", entry };
+}
 
 /**
  * Apakah sebuah entri kode boleh membuka produk tertentu.

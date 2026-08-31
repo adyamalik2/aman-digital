@@ -93,7 +93,7 @@ akan menimpa pelanggan, sisanya menyusul.
 |---|---|---|---|
 | 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ selesai 31-08 (aturan Firestore sudah diterbitkan) |
 | 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | ✅ live 31-08 — Profil → Privasi & Data |
-| 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | belum |
+| 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | ✅ live 31-08 — Profil → Zona Bahaya |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | belum |
 | 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14; menunggu angka dari Malik | belum |
 | 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | belum |
@@ -136,18 +136,32 @@ Layar `src/screens/PrivacyScreen.jsx` sudah live, isinya diverifikasi dari kode
 (nol pelacak, nol analitik, satu-satunya `fetch` pihak ketiga adalah endpoint
 OCR). Dua hal sengaja dibiarkan terbuka:
 
-1. **Tier akun Gemini belum dikonfirmasi Malik.** Halaman itu menulis apa yang
-   pasti benar — "server kami tidak menyimpan salinan fotonya, pemrosesan di
-   sisi Google tunduk pada ketentuan layanan Google". Pesaing berani menulis
-   fotonya tidak dipakai melatih model AI; untuk Gemini API itu bergantung
-   tier langganan, jadi klaim itu **tidak** ditulis. Kalau Malik memastikan
-   akunnya berbayar, kalimatnya boleh diperkuat.
+1. **API Gemini berjalan di tier GRATIS — sudah dipastikan Malik 31-08.**
+   Langganan Gemini pribadinya berbayar, tapi penagihan API terpisah dan tidak
+   diaktifkan. Ketentuan Google untuk tier gratis mengizinkan isi yang dikirim
+   dipakai mengembangkan layanan mereka dan ditinjau manusia. Karena struk
+   memuat nama toko, nominal, dan tanggal, ini **diungkap terang-terangan** di
+   halaman privasi beserta cara menghindarinya.
+
+   **Usul yang belum diputuskan:** aktifkan penagihan pada project API-nya di
+   Google Cloud. Di tier berbayar Google menyatakan isi kiriman tidak dipakai
+   memperbaiki produk mereka. Pemakaian dibatasi 30 scan/pengguna/hari dengan
+   model `gemini-2.5-flash`, jadi biayanya kemungkinan besar sangat kecil —
+   tapi **angkanya belum diperiksa**, jangan dikutip sebelum dicek di halaman
+   harga Google. Kalau diaktifkan, peringatan kuning di halaman privasi harus
+   dicabut.
 2. **Belum ada URL publik.** Play Store mewajibkan kebijakan privasi bisa
    diakses lewat tautan web, bukan hanya di dalam aplikasi. Perlu halaman di
    situs utama sebelum AMAN-in masuk Play Store.
 
-Catatan: layar itu menyatakan tombol hapus akun permanen **belum ada** — itu
-memang benar, dan jadi alasan tambahan mengerjakan langkah 3.
+Langkah 3 sudah selesai, jadi baris "belum ada tombolnya" di tabel hak sudah
+dicabut dan diganti jalur yang sebenarnya.
+
+**Belum diuji di perangkat sungguhan.** Logikanya lulus 25 pemeriksaan dengan
+Firestore dan Firebase Auth palsu, tapi hapus akun tidak bisa diuji sungguhan
+dari sisi ini tanpa mengorbankan akun asli. Sebelum APK dibagikan, Malik perlu
+mencobanya dengan akun uji sekali pakai — terutama alur verifikasi ulang, yang
+muncul hanya kalau sesi masuknya sudah lama.
 
 ---
 

@@ -1,6 +1,6 @@
 # Status Proyek — AMAN Digital
 
-**Diperbarui:** 28 Agustus 2026
+**Diperbarui:** 31 Agustus 2026
 
 Isi berkas ini cepat basi. Kalau ada yang terasa tidak cocok dengan kenyataan,
 **percayai produksi**, lalu perbarui berkas ini.
@@ -39,7 +39,7 @@ Diurutkan dari yang paling menghambat.
 
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
-| 1 | **Skema harga AMAN-in** | Aplikasinya belum punya pembatas kuota sama sekali, jadi "gratis kalau sedikit, bayar kalau banyak" belum bisa ditegakkan. Butuh angka: batas gratis berapa, tarif berapa. |
+| 1 | **Skema harga AMAN-in** | Modelnya **sudah diputuskan 31-08**: gratis dengan batas → bayar untuk melepas batas, tanpa iklan (K-14). Yang masih kosong **angkanya** — batas gratis berapa, tarif berapa. Pembatas kuotanya juga belum dibangun, jadi skema ini masih rencana. Pembanding pasar yang diketahui: pesaing Rp29rb/bulan, Rp12.500/bulan bila tahunan. |
 | 2 | **Dokumen legal** | 📝 Kelompok A **sudah dijawab** 25-08 (lihat K-12). **Kebijakan Privasi siap terbit** — tinggal Malik baca versi finalnya lalu saya buatkan halamannya. S&K masih menunggu 10 pertanyaan Kelompok B, terutama **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")**. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | ✅ Ketiga syarat **selesai 28-08**: harga di halaman utama, checkout di situs sendiri, integrasi Sandbox teruji (kode akses terbit otomatis, callback palsu & nominal dikurangi ditolak, kode terikat produk). Tombol beli sudah diarahkan ke `/checkout`. **MASIH SANDBOX** (`DUITKU_SANDBOX=1`) — pembayaran belum menagih uang sungguhan, jadi halaman checkout menampilkan jalur Lynk.id sebagai pembelian nyata. Begitu akun Duitku aktif: ganti secret ke kredensial produksi + `DUITKU_SANDBOX=0`, banner hilang sendiri. Panduan: `docs/duitku-setup.md`. |
@@ -80,6 +80,61 @@ diberitahukan.
 pengunjung tidak punya satu tempat untuk melihat seluruh harga. Usulan: satu
 halaman dengan tiga blok — langganan, bayar-sekali, gratis. Tanpa mengubah
 angka mana pun. Belum dikerjakan.
+
+---
+
+## Rencana AMAN-in — dikerjakan berurutan
+
+Disepakati 31-08-2026. Dikerjakan **satu per satu**, tiap langkah diuji ke
+produksi sebelum lanjut. Urutannya bukan selera: nomor 1 memperbaiki bug yang
+akan menimpa pelanggan, sisanya menyusul.
+
+| # | Pekerjaan | Kenapa sekarang | Status |
+|---|---|---|---|
+| 1 | **Foto struk keluar dari dokumen transaksi** | Bug nyata, lihat di bawah | ✅ live 31-08 — **menunggu Malik menerbitkan `firestore.rules`** |
+| 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | belum |
+| 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | belum |
+| 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | belum |
+| 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14; menunggu angka dari Malik | belum |
+| 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | belum |
+| 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
+
+### Bug yang memicu nomor 1
+
+Seluruh transaksi disimpan dalam **satu dokumen Firestore**
+(`users/{uid}/data/aman-in:transactions-v2`), dan foto struk ikut masuk ke
+dalamnya sebagai base64 hingga 200KB per foto. Firestore membatasi **1 MiB
+per dokumen**, dan base64 membengkakkan ukuran ±33%.
+
+**Akibatnya sekitar 3–4 foto struk membuat dokumen penuh dan sinkronisasi
+berhenti total.** Scan Nota yang baru dirilis justru mengajak pengguna
+memotret struk, jadi ini akan menimpa pelanggan yang paling rajin lebih dulu.
+
+Bug ini **tidak sembuh dengan pindah database** — lihat K-13.
+
+**Diperbaiki 31-08-2026** (commit `56bb492` di repo `aman-in`, live di
+`amanin.amandigital.my.id`). Foto kini disimpan satu dokumen per transaksi di
+`users/{uid}/receipts/{txId}`, lokalnya di IndexedDB; transaksi hanya membawa
+penanda `hasReceipt`. Migrasi berjalan sendiri saat data dimuat dan saat
+backup lama dipulihkan. Diuji 33 pemeriksaan dengan Firestore & IndexedDB
+palsu, termasuk bukti model lama melewati 1 MiB pada foto ke-4.
+
+> ⚠ **Satu langkah masih di tangan Malik.** `aman-in/firestore.rules` sudah
+> diberi path `receipts`, tapi aturan Firestore **hanya berlaku setelah
+> diterbitkan ulang di Firebase Console** (project `aman-in-app` → Firestore
+> Database → Rules → paste isi berkas → Publish). Sampai itu dilakukan, foto
+> hanya tersimpan di perangkat dan mengantre; transaksinya sendiri sudah
+> aman. Deploy web tidak bisa menggantikan langkah ini.
+
+### Yang sengaja TIDAK dikerjakan
+
+| Perkara | Alasan |
+|---|---|
+| Iklan / AdMob | K-14 — hitungannya tidak masuk dan merusak kepercayaan |
+| Pindah ke Supabase | K-13 |
+| Pembaca notifikasi otomatis penuh | Butuh plugin native + izin sensitif Play Store, dan 20+ pengurai teks bank yang harus dirawat selamanya. Dicoba dulu versi ringannya (nomor 4) |
+| Baca SMS | Izin sensitif, dan bank sekarang memakai notifikasi aplikasi, bukan SMS |
+| Bot Telegram | Ditolak Malik 30-08 ("jangan dulu") |
 
 ---
 

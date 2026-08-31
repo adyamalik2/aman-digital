@@ -269,6 +269,69 @@ berdomain sendiri begitu tersedia.
 
 ---
 
+## K-13 · AMAN-in tetap di Firebase, bukan pindah Supabase
+
+**Tanggal:** 31-08-2026
+
+**Keputusan.** Basis data empat aplikasi **tetap Firebase (Firestore +
+Auth)**. Supabase dipertimbangkan lalu ditolak.
+
+**Kenapa.** Tiga alasan, diurutkan dari yang paling menentukan:
+
+1. **Paket gratis Supabase menjeda proyek setelah ±7 hari tanpa aktivitas.**
+   Aplikasi berbayar dengan pengguna sedikit justru sering sepi seminggu.
+   Pelanggan membuka aplikasi, servernya tidur, dia menyimpulkan aplikasinya
+   rusak. Menghindarinya butuh paket Pro ±$25/bulan untuk produk seharga
+   Rp39rb. Firestore paket Spark tidak pernah dijeda.
+2. **Keempat aplikasi memakai Firebase Auth.** Pindah berarti menulis ulang
+   login di Kasir, Budget, Invoice, dan AMAN-in — dan **APK yang sudah
+   terpasang akan berhenti bekerja**, karena asetnya ter-bundle dan tidak
+   ikut berubah saat web di-deploy.
+3. **Di skala sekarang keduanya gratis.** Harga bukan pembeda, jadi tidak
+   ada alasan finansial untuk memindahkan.
+
+**Yang penting dipahami.** Pertanyaan "Supabase atau Firebase" muncul karena
+sinkronisasi AMAN-in bermasalah. Tapi sebabnya **bukan merek databasenya** —
+melainkan seluruh transaksi ditulis ke satu dokumen (lihat K-14). Pindah
+database hanya menyembunyikan gejalanya sebentar lalu memunculkannya lagi
+sebagai lambat dan boros kuota.
+
+**Kalau suatu hari benar-benar pindah**, tujuan yang paling masuk akal bukan
+Supabase melainkan **Cloudflare D1 + R2** — sudah dibayar, sudah dipakai
+situs utama, tidak menambah vendor ketiga.
+
+---
+
+## K-14 · AMAN-in tidak beriklan; monetisasi lewat batas pemakaian
+
+**Tanggal:** 31-08-2026
+
+**Keputusan.** **Tidak ada iklan** (AdMob atau lainnya) di aplikasi mana pun.
+Model pendapatan AMAN-in: **gratis dengan batas, bayar untuk melepas batas.**
+
+**Kenapa.**
+
+- **Hitungannya tidak masuk.** Perkiraan kasar 200 pengguna aktif × 10
+  tayangan/hari ≈ 60.000 tayangan/bulan → sekitar Rp300rb–900rb/bulan, itu
+  pun optimistis, dengan ambang pencairan AdMob $100. Iklan baru mengalahkan
+  penjualan langsung kalau penggunanya sudah ribuan.
+- **Aplikasi berbayar yang tetap beriklan terasa menagih dua kali.** Pesaing
+  boleh beriklan karena mereka gratis — itu imbalan yang jujur.
+- **Iklan berarti pelacakan**, yang wajib diungkap di kebijakan privasi dan
+  langsung membatalkan nilai jual "tanpa iklan, tanpa pelacak" pada aplikasi
+  yang memegang data keuangan orang.
+
+**Skema yang dipilih Malik.** Batas gratis, lalu berbayar untuk melepasnya.
+Angkanya **belum final** — yang beredar sebagai contoh: 50 transaksi/bulan
+dan Scan Nota tidak termasuk paket gratis. **Jangan tulis angka ini di
+halaman produk atau kebijakan sampai Malik menetapkannya** (lihat K-02).
+
+**Catatan penegakan.** Aplikasi **belum punya pembatas kuota sama sekali**.
+Skema ini baru jadi kenyataan setelah pembatasnya dibangun; sampai saat itu
+ia masih rencana, bukan fitur.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

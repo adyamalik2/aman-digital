@@ -22,13 +22,9 @@
  * mengaktifkannya.
  */
 
-import {
-  loadEntry,
-  bindAccount,
-  sudahKedaluwarsa,
-  type LedgerEntry,
-} from "../_lib/ledger";
+import { bindAccount, type LedgerEntry } from "../_lib/ledger";
 import { PRODUCTS, PRODUK_AMANIN } from "../_lib/orders";
+import { statusPro, kunciAkun } from "../_lib/amanin";
 import { checkUsageLimit } from "../_lib/ratelimit";
 
 interface Env {
@@ -50,9 +46,6 @@ const ALLOWED_ORIGINS = [
 /** Berapa kali satu akun boleh mencoba kode dalam sehari. Menahan tebak-tebakan. */
 const BATAS_COBA = 20;
 const JENDELA = 60 * 60 * 24;
-
-/** Indeks uid → kode, supaya pemeriksaan berkala tidak perlu kodenya lagi. */
-const kunciAkun = (uid: string) => `amanin:akun:${uid}`;
 
 const corsHeaders = (origin: string) => ({
   "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
@@ -130,20 +123,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   // ---- Tanpa kode: pemeriksaan berkala apakah langganan masih berlaku ----
   if (!kode) {
-    const tersimpan = await kv.get(kunciAkun(uid));
-    if (!tersimpan) return json(200, { ok: true, pro: false }, origin);
-
-    const entry = await loadEntry(kv, tersimpan);
-    if (!entry || !entry.devices.includes(uid)) {
-      await kv.delete(kunciAkun(uid));
-      return json(200, { ok: true, pro: false }, origin);
-    }
-    if (sudahKedaluwarsa(entry)) {
-      // Ikatannya sengaja TIDAK dihapus: kalau nanti diperpanjang dengan kode
-      // yang sama, slotnya masih miliknya dan tidak menghabiskan kuota baru.
-      return json(200, { ok: true, pro: false, alasan: "kedaluwarsa" }, origin);
-    }
-    return json(200, { ok: true, ...entitlement(entry, tersimpan) }, origin);
+    return json(200, { ok: true, ...(await statusPro(kv, uid)) }, origin);
   }
 
   // ---- Dengan kode: aktivasi ----

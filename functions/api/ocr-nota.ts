@@ -16,6 +16,7 @@
  */
 
 import { checkUsageLimit } from "../_lib/ratelimit";
+import { statusPro } from "../_lib/amanin";
 
 interface Env {
   AMAN_LEDGER: KVNamespace;
@@ -144,6 +145,28 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const uid = await verifyIdToken(idToken);
   if (!uid) {
     return json(401, { ok: false, message: "Sesi Anda sudah berakhir. Masuk ulang lalu coba lagi." }, origin);
+  }
+
+  /**
+   * Scan Nota hanya untuk AMAN-in Pro (K-15).
+   *
+   * Diperiksa DI SINI, bukan di aplikasi. Ini satu-satunya fitur yang biayanya
+   * nyata -- tiap panggilan memakai kuota Gemini milik Malik. Pemeriksaan di
+   * sisi aplikasi bisa dilewati siapa pun yang membaca bundelnya, dan yang
+   * menanggung tagihannya bukan dia.
+   *
+   * Kode 402 (Payment Required) dipakai supaya aplikasi bisa membedakan
+   * "belum berlangganan" dari galat biasa, lalu membuka layar paket.
+   */
+  const status = await statusPro(env.AMAN_LEDGER, uid);
+  if (!status.pro) {
+    return json(402, {
+      ok: false,
+      perluPro: true,
+      message: status.alasan === "kedaluwarsa"
+        ? "Masa langganan Anda sudah habis. Perpanjang untuk memakai Scan Nota."
+        : "Scan Nota tersedia untuk AMAN-in Pro.",
+    }, origin);
   }
 
   // checkUsageLimit membalas null kalau boleh, atau sisa detik sampai reset.

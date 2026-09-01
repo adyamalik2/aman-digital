@@ -133,11 +133,62 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Perlu bayar?",
-    a: "Sekarang gratis dipakai. Ke depan akan ada paket berbayar untuk pemakaian besar, tapi pencatatan sehari-hari tetap bisa dimulai tanpa biaya dan tanpa kartu kredit.",
+    a: "Mencatat transaksi gratis selamanya, tanpa batas jumlah dan tanpa kartu kredit. Yang berbayar hanya dua: melihat riwayat lebih dari satu bulan ke belakang, dan fitur Scan Nota. Paketnya Rp25.000/bulan, Rp144.000/tahun, atau Rp199.000 sekali bayar. Data Anda tidak pernah dihapus - riwayat lama hanya disembunyikan dan muncul utuh kembali begitu berlangganan.",
   },
 ];
 
 /* ---------------- Page ---------------- */
+
+/**
+ * Paket AMAN-in. Angkanya HARUS sama dengan katalog server
+ * (functions/_lib/orders.ts) dan konstanta aplikasi
+ * (aman-in/src/utils/langganan.js). Lihat KEPUTUSAN.md K-15.
+ */
+const PAKET_AMANIN = [
+  {
+    nama: "Gratis",
+    harga: "Rp0",
+    satuan: "selamanya",
+    fitur: [
+      "Catat transaksi tanpa batas",
+      "Input suara",
+      "Multi-dompet & multi-usaha",
+      "Riwayat 1 bulan terakhir",
+    ],
+    cta: "Mulai Gratis",
+    href: APP_URL,
+    eksternal: true,
+    utama: false,
+  },
+  {
+    nama: "Bulanan",
+    harga: "Rp25.000",
+    satuan: "per bulan",
+    fitur: [
+      "Semua fitur gratis",
+      "Riwayat penuh tanpa batas waktu",
+      "Scan Nota - foto struk jadi transaksi",
+      "Laporan & ekspor periode bebas",
+    ],
+    cta: "Pilih Bulanan",
+    href: "/checkout?produk=amanin-bulanan",
+    utama: false,
+  },
+  {
+    nama: "Tahunan",
+    harga: "Rp144.000",
+    satuan: "per tahun",
+    catatan: "Setara Rp12.000/bulan - hemat 52%",
+    fitur: [
+      "Semua fitur Bulanan",
+      "Bayar sekali untuk 12 bulan",
+      "Cara paling hemat",
+    ],
+    cta: "Pilih Tahunan",
+    href: "/checkout?produk=amanin-tahunan",
+    utama: true,
+  },
+];
 
 export default function AmaninPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -332,31 +383,86 @@ export default function AmaninPage() {
         </div>
       </section>
 
-      {/* ===== HARGA ===== */}
+      {/* ===== HARGA =====
+          Angkanya HARUS sama dengan katalog server (functions/_lib/orders.ts)
+          dan konstanta aplikasi (aman-in/src/utils/langganan.js). Lihat K-15.
+          Kalau berbeda, pengunjung melihat satu harga lalu ditagih harga lain. */}
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-2xl px-4 text-center">
-          <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
-            Biaya
-          </span>
-          <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
-            Gratis dipakai sekarang
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600">
-            Semua fitur di halaman ini bisa Anda pakai tanpa biaya — termasuk
-            input suara, laporan, dan multi-dompet. Ke depan akan ada paket
-            berbayar untuk pemakaian dalam jumlah besar, dan itu akan
-            diumumkan lebih dulu sebelum diberlakukan.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <a
-              href={APP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-emerald-cta px-8 py-3.5 font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
-            >
-              Coba Gratis — Tanpa Kartu Kredit
-            </a>
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="text-center">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
+              Biaya
+            </span>
+            <h2 className="mt-5 text-3xl font-bold text-navy md:text-4xl">
+              Mencatat selalu gratis
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600">
+              Catat pemasukan dan pengeluaran sebanyak apa pun tanpa biaya, dengan
+              suara maupun manual. Yang berbayar hanya dua: melihat riwayat lebih
+              dari <strong className="text-navy">satu bulan ke belakang</strong>, dan
+              fitur <strong className="text-navy">Scan Nota</strong>.
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500">
+              Data Anda tidak pernah dihapus. Riwayat lama hanya disembunyikan, dan
+              muncul utuh kembali begitu berlangganan.
+            </p>
           </div>
+
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {PAKET_AMANIN.map((p) => (
+              <div
+                key={p.nama}
+                className={`flex flex-col rounded-2xl border p-6 ${
+                  p.utama
+                    ? "border-emerald-cta bg-emerald/5 shadow-lg"
+                    : "border-slate-200 bg-white"
+                }`}
+              >
+                {p.utama && (
+                  <span className="mb-3 self-start rounded-full bg-emerald-cta px-2.5 py-1 text-[11px] font-bold text-white">
+                    PALING HEMAT
+                  </span>
+                )}
+                <h3 className="text-lg font-bold text-navy">{p.nama}</h3>
+                <div className="mt-3 flex items-baseline gap-1.5">
+                  <span className="text-3xl font-bold text-navy">{p.harga}</span>
+                  <span className="text-sm text-slate-500">{p.satuan}</span>
+                </div>
+                {p.catatan && (
+                  <p className="mt-1.5 text-xs font-medium text-emerald-cta-hover">{p.catatan}</p>
+                )}
+                <ul className="mt-5 flex-1 space-y-2.5">
+                  {p.fitur.map((f) => (
+                    <li key={f} className="flex gap-2.5 text-sm leading-relaxed text-slate-600">
+                      <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-cta-hover">&#10003;</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={p.href}
+                  {...(p.eksternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className={`mt-6 rounded-full px-6 py-3 text-center font-semibold transition-colors ${
+                    p.utama
+                      ? "bg-emerald-cta text-white hover:bg-emerald-cta-hover"
+                      : "border border-slate-300 text-navy hover:border-emerald-cta hover:text-emerald-cta-hover"
+                  }`}
+                >
+                  {p.cta}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-slate-500">
+            Ingin bayar sekali tanpa perpanjangan?{" "}
+            <a href="/checkout?produk=amanin-selamanya" className="font-semibold text-emerald-cta-hover underline">
+              Rp199.000 berlaku selamanya
+            </a>
+            . Setelah membayar Anda menerima kode aktivasi &mdash; masukkan di aplikasi
+            lewat Profil &rarr; AMAN-in Pro. Kode terikat ke akun, jadi tetap berlaku
+            saat ganti HP.
+          </p>
         </div>
       </section>
 

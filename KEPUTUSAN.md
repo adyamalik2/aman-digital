@@ -373,6 +373,30 @@ Kalau berbeda, pengguna melihat satu harga lalu ditagih harga lain.
 
 ---
 
+## K-16 · Pecah transaksi per bulan ditunda sampai ada banyak pelanggan
+
+**Tanggal:** 01-09-2026
+
+**Keputusan Malik.** Memecah `transactions-v2` jadi dokumen per bulan
+**ditunda**, bukan dibatalkan. Dikerjakan nanti setelah pelanggannya banyak.
+
+**Kenapa masuk akal.** Pekerjaan itu menyentuh migrasi data pengguna yang sudah
+ada dan semua yang membaca transaksi — risikonya paling tinggi dari seluruh
+daftar, sementara masalahnya belum menggigit. Warung yang mencatat 15
+transaksi/hari baru menyentuh ~5.000 transaksi (batas 1 MiB Firestore) setelah
+sekitar satu tahun.
+
+**Kapan harus dikerjakan.** Jangan menunggu sampai ada yang mengeluh. Tanda
+paling awal: pengguna dengan **>2.000 transaksi**, atau keluhan "mencatat jadi
+lambat" — mencatat satu transaksi masih menulis ulang seluruh riwayat, jadi
+lambatnya muncul jauh sebelum batas kerasnya tercapai.
+
+**Yang menahannya tetap aman sementara ini.** Foto struk sudah dikeluarkan dari
+dokumen transaksi (perbaikan 31-08), yang tadinya membuat dokumen penuh hanya
+dengan 4 foto. Tanpa foto, satu transaksi cuma ~200 byte.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

@@ -27,9 +27,32 @@ Isi berkas ini cepat basi. Kalau ada yang terasa tidak cocok dengan kenyataan,
 | AMAN Kasir | ✅ `kasir.amandigital.my.id` | terpasang (dipakai Malik) |
 | AMAN Budget | ✅ `budget.amandigital.my.id` | terpasang (dipakai Malik, Pro aktif) |
 | AMAN Invoice | ✅ `invoice.amandigital.my.id` | terpasang |
-| AMAN-in | ✅ `amanin.amandigital.my.id` | terpasang |
+| AMAN-in | ✅ `amanin.amandigital.my.id` | **v1.2.6 (vc18) dibangun 01-09** |
 
 APK **belum pernah dibagikan ke pelanggan** dan **belum ada di Play Store**.
+
+---
+
+### APK AMAN-in 1.2.6 — dibangun 01-09-2026
+
+`D:\Bukak toko Photo Copy dan percetakan\WEB\Aplikasi baru Amanin\APK\AMAN-in-1.2.6-vc18.apk`
+
+6,5 MB, `versionCode 18`, ditandatangani keystore release
+(`CN=Adya Malik, AMAN Digital`) — bukan debug, jadi bisa dipasang menimpa
+1.2.5. `applicationId` dan konfigurasi penandatanganan tidak disentuh.
+
+Delapan hal yang **belum pernah ada di APK mana pun** ikut di sini: Scan Nota,
+Onboarding & tipe akun, foto struk terpisah, Privasi & Data, hapus akun
+permanen, bagikan-notifikasi, ekspor CSV/PDF, dan langganan Pro.
+
+**Yang cuma bisa diuji dari APK ini** (tidak mungkin diverifikasi dari sisi
+pengembangan): bagikan notifikasi lewat menu Bagikan Android, input suara
+native, biometrik, pengingat harian, dan share sheet untuk backup/ekspor.
+
+> Saat membangunnya ketahuan halaman Privasi & Data menyebut 3 izin padahal
+> APK meminta 9 — empat tambahan disumbang plugin biometrik dan notifikasi
+> tanpa menyentuh AndroidManifest.xml kita. Sudah diperbaiki sebelum APK
+> dirilis. Perintah pemeriksaannya dicatat di `aman-in/AGENTS.md`.
 
 ---
 
@@ -97,7 +120,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | ✅ live 01-09 — jalur manual & PWA aktif; jalur APK menunggu build |
 | 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14/K-15 | ✅ selesai 01-09 — teruji ujung-ke-ujung |
 | 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | ✅ live 01-09 — Bagikan → Excel (CSV) / Laporan PDF |
-| 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
+| 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | ⏸ ditunda sampai banyak pelanggan (K-16) |
 
 ### Bug yang memicu nomor 1
 

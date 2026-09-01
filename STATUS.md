@@ -95,7 +95,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | ✅ live 31-08 — Profil → Privasi & Data |
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | ✅ live 31-08 — Profil → Zona Bahaya |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | ✅ live 01-09 — jalur manual & PWA aktif; jalur APK menunggu build |
-| 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14/K-15 | 🔨 separuh — aktivasi live, **gerbang belum menyala** |
+| 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14/K-15 | ✅ live 01-09 — **menunggu Malik menukarkan kode uji** |
 | 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | ✅ live 01-09 — Bagikan → Excel (CSV) / Laporan PDF |
 | 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
 
@@ -130,44 +130,44 @@ sisi ini tanpa kredensial. Pemeriksaan yang menentukan: catat transaksi
 berfoto, lalu lihat sub-koleksi `receipts` muncul di Firebase Console →
 Firestore → Data → `users/{uid}`.
 
-### AMAN-in Pro — aktivasi sudah live, gerbang SENGAJA belum menyala
+### AMAN-in Pro — sudah menyala
 
-Harga & batas ditetapkan Malik 01-09 (K-15). Yang sudah jadi dan terverifikasi
-di produksi:
+Harga & batas ditetapkan Malik 01-09 (K-15). Seluruhnya live dan terverifikasi.
 
-| Bagian | Status |
+| Bagian | Bukti |
 |---|---|
-| 3 produk di katalog server + masa berlaku | ✅ `amanin-tahunan` → Rp144.000 di checkout |
-| `POST /api/amanin-aktivasi` | ✅ token palsu ditolak 401, CORS APK diizinkan |
-| Pengikatan kode ke uid Firebase (bukan cookie) | ✅ 14 pemeriksaan lulus |
-| Layar Langganan di aplikasi + tukar kode | ✅ live, harga cocok dengan katalog |
-| Penyaringan jendela 1 bulan | ✅ ditulis & teruji (26 pemeriksaan) — **belum dipasang** |
+| 3 produk di katalog server + masa berlaku | checkout `amanin-tahunan` → Rp144.000 |
+| `POST /api/amanin-aktivasi` | token palsu ditolak 401, CORS APK diizinkan |
+| Kode terikat uid Firebase (bukan cookie) | 14 pemeriksaan lulus |
+| Halaman `/amanin` | 3 kartu paket; janji "gratis selamanya" sudah dicabut |
+| Batas 1 bulan di Riwayat/Laporan/Analisis/Ekspor | 26 pemeriksaan lulus |
+| **Scan Nota digerbangi di SERVER** | `ocr-nota.ts` menjawab 402 untuk non-Pro |
 
-**Kenapa gerbangnya belum dinyalakan.** Tiga alasan, semuanya harus beres dulu:
+**Kode uji sudah diterbitkan.** `AIS-MMBD-7ED7` — produk `amanin-selamanya`,
+ditulis langsung ke KV lewat wrangler dan ditandai `via: "uji-internal"`,
+`buyer: "UJI COBA - Malik"` supaya jelas terbedakan dari penjualan asli.
 
-1. **Halaman `/amanin` masih menjanjikan gratis.** Isinya *"Gratis dipakai
-   sekarang… ke depan akan ada paket berbayar"*. Menyalakan paywall sebelum
-   halaman itu diperbarui berarti mengingkari janji yang masih terpampang.
-2. **Duitku masih sandbox** (`"sandbox":true` di `/api/payment-methods`).
-   Belum ada yang bisa benar-benar membayar, jadi belum ada yang bisa
-   membuka gerbangnya.
-3. **Malik sendiri akan ikut terkunci.** Persis pelajaran K-01 di AMAN Budget:
-   jalur membuka akses harus ada dan terbukti jalan SEBELUM penguncian
-   dinyalakan.
+> ⚠ **BELUM diuji ujung-ke-ujung.** Penukaran kode dengan token Firebase asli
+> belum pernah dijalankan — itu butuh akun sungguhan dan tidak bisa dilakukan
+> dari sisi ini. Sampai Malik menukarkannya, dia sendiri kehilangan Scan Nota
+> dan riwayat lebih dari sebulan. Kalau penukarannya gagal, gerbangnya harus
+> dimatikan lagi.
 
-**Yang tersisa untuk menyalakannya:**
+**Keputusan desain yang jangan dibalik:**
 
-- Perbarui harga & batas di halaman `/amanin`
-- Pasang `saringUntukTampilan()` ke Riwayat, Laporan, Analisis, dan **ekspor**
-  (ekspor wajib ikut, kalau tidak batasnya bisa dilewati lewat tombol unduh)
-- Gerbang Scan Nota **di server** (`ocr-nota.ts`), bukan di aplikasi — ini
-  satu-satunya yang biayanya nyata, jadi harus ditegakkan di tempat yang tidak
-  bisa dilewati
-- Malik menukarkan satu kode uji untuk membuktikan jalurnya jalan
+- **Saldo tidak ikut disaring.** Menyembunyikan riwayat lama dari perhitungan
+  saldo membuat aplikasi salah menyebutkan berapa uang yang dimiliki orang.
+  `HomeScreen` karena itu menerima dua prop terpisah.
+- **Ekspor ikut disaring**, kalau tidak batasnya bisa dilewati lewat tombol unduh.
+- **Backup di Profil TIDAK disaring** — itu hak portabilitas data yang
+  dijanjikan halaman Privasi & Data, bukan fitur berbayar.
+- **Scan Nota digerbangi di server**, bukan di aplikasi. Satu-satunya fitur
+  yang biayanya nyata; pemeriksaan klien bisa dilewati dan yang menanggung
+  tagihannya bukan pelakunya.
 
-> Penyaringan sengaja **tidak** dipakai untuk menghitung saldo. Menyembunyikan
-> riwayat lama dari perhitungan saldo membuat aplikasi salah menyebutkan berapa
-> uang yang dimiliki orang — jauh lebih buruk daripada tidak punya pembatas.
+**Masih tersisa:** Duitku masih sandbox (`"sandbox":true`), jadi belum ada yang
+bisa benar-benar membayar. Sampai akun Duitku aktif, satu-satunya jalan
+mendapat kode adalah diterbitkan manual.
 
 ---
 

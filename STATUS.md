@@ -95,7 +95,7 @@ akan menimpa pelanggan, sisanya menyusul.
 | 2 | **Kebijakan privasi AMAN-in + layar Privasi & Data** | Scan Nota sudah rilis dan mengirim foto ke pihak ketiga tanpa pemberitahuan | ✅ live 31-08 — Profil → Privasi & Data |
 | 3 | **Tombol hapus akun permanen** | Sekarang hanya ada reset data lokal; akun Firebase tetap hidup. Syarat mutlak Play Store | ✅ live 31-08 — Profil → Zona Bahaya |
 | 4 | **Bagikan-notifikasi (Share Intent)** | Manfaat besar tanpa izin sensitif | ✅ live 01-09 — jalur manual & PWA aktif; jalur APK menunggu build |
-| 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14/K-15 | ✅ live 01-09 — **menunggu Malik menukarkan kode uji** |
+| 5 | **Pembatas kuota gratis/berbayar** | Menegakkan K-14/K-15 | ✅ selesai 01-09 — teruji ujung-ke-ujung |
 | 6 | **Ekspor CSV/PDF** | Sekarang hanya ekspor JSON, tidak terbaca pemilik warung | ✅ live 01-09 — Bagikan → Excel (CSV) / Laporan PDF |
 | 7 | **Pecah transaksi per bulan** | Mencatat satu transaksi kini menulis ulang seluruh riwayat | belum |
 
@@ -147,11 +147,15 @@ Harga & batas ditetapkan Malik 01-09 (K-15). Seluruhnya live dan terverifikasi.
 ditulis langsung ke KV lewat wrangler dan ditandai `via: "uji-internal"`,
 `buyer: "UJI COBA - Malik"` supaya jelas terbedakan dari penjualan asli.
 
-> ⚠ **BELUM diuji ujung-ke-ujung.** Penukaran kode dengan token Firebase asli
-> belum pernah dijalankan — itu butuh akun sungguhan dan tidak bisa dilakukan
-> dari sisi ini. Sampai Malik menukarkannya, dia sendiri kehilangan Scan Nota
-> dan riwayat lebih dari sebulan. Kalau penukarannya gagal, gerbangnya harus
-> dimatikan lagi.
+**Sudah teruji ujung-ke-ujung 01-09.** Malik menukarkan `AIS-MMBD-7ED7` dengan
+akun aslinya dan berhasil. Diperiksa langsung di KV produksi, bukan sekadar
+laporan: entri kodenya memakai 1 dari 5 slot dengan uid Malik terikat di
+dalamnya, dan indeks balik `amanin:akun:{uid}` menunjuk kembali ke kodenya —
+indeks itulah yang dibaca gerbang Scan Nota, dan tanpanya Scan Nota tetap
+tertutup walau aktivasinya sukses.
+
+Artinya seluruh rantainya terbukti: Firebase ID token asli → verifikasi di
+server → pengikatan kode ke akun → hak akses terbaca kembali.
 
 **Keputusan desain yang jangan dibalik:**
 

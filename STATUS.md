@@ -239,6 +239,27 @@ rupiah.
 
 ---
 
+### Dua celah dari perbandingan Catat-in — sudah ditutup 01-09
+
+Croscek langsung ke screenshot Catat-in (aplikasi sejenis), bukan tebakan:
+
+- **Foto struk hanya dari kamera** (`capture="environment"` memaksa buka
+  kamera) — pengguna tidak bisa mengunggah struk elektronik (screenshot
+  QRIS/e-wallet). **Diperbaiki**: Scan Nota dan Foto Struk masing-masing
+  punya tombol Kamera dan Galeri terpisah.
+- **Kuota Scan Nota tidak terlihat** — baru ketahuan saat ditolak. **Diperbaiki**:
+  tombol membawa "Sisa X/30 hari ini" setelah percobaan pertama di sesi modal.
+  `peekUsageCount()` (baru, di `_lib/ratelimit.ts`) murni membaca hitungan yang
+  sudah dinaikkan `checkUsageLimit` — tidak mengubah tiga pemanggil lain
+  (poster-text, amanin-aktivasi).
+
+**Belum dikerjakan, menunggu keputusan Malik soal AMAN Budget** (lihat
+percakapan 01-09): Pantauan Anggaran dan Target Tabungan ada di Catat-in tapi
+tidak di AMAN-in. Menambahkan Anggaran ke AMAN-in berarti sebagian nilai
+AMAN Budget pindah ke sini — itu keputusan bisnis, bukan teknis.
+
+---
+
 ### Dua hal terbuka dari kebijakan privasi AMAN-in
 
 Layar `src/screens/PrivacyScreen.jsx` sudah live, isinya diverifikasi dari kode

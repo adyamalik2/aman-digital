@@ -397,6 +397,54 @@ dengan 4 foto. Tanpa foto, satu transaksi cuma ~200 byte.
 
 ---
 
+## K-17 · Pembeli BOLEH menjual ulang produk digital
+
+**Tanggal:** 06-09-2026
+
+**Keputusan Malik.** Lisensi produk digital mengizinkan **kelima** hal:
+pakai komersial, modifikasi, bagikan ke tim, pakai untuk klien, **dan jual
+ulang**.
+
+**Ini keputusan sadar, bukan kelalaian.** Akibatnya disampaikan lebih dulu —
+bahwa pembeli Rp39.000 berhak menjual ulang produk yang sama dan menjadi
+pesaing dengan barang Malik sendiri, serta bahwa izin ini tidak bisa ditarik
+lagi untuk pembeli yang sudah terlanjur membeli. Malik tetap memilihnya.
+
+**Jangan "memperbaiki" ini** menjadi larangan jual ulang tanpa Malik memintanya
+sendiri. Draf S&K sebelumnya sempat menuliskan larangan itu sebagai asumsi
+bawaan; asumsi itu salah dan sudah diganti.
+
+**Yang tetap dibatasi** (dan sudah tertulis di S&K bagian 6):
+
+- Yang boleh dijual adalah berkas/hasil produknya, **bukan kode aksesnya** —
+  kode terikat pembelian sendiri dan dibatasi 5 perangkat
+- Penjual ulang bertanggung jawab penuh kepada pembelinya sendiri; AMAN
+  Digital tidak melayani pembeli dari pihak ketiga
+
+---
+
+## K-18 · "Akses selamanya" = selama produknya masih dijalankan
+
+**Tanggal:** 06-09-2026
+
+**Keputusan Malik.** Pembaruan gratis selamanya, tapi AMAN Digital berhak
+menghentikan produk, menutup layanan, atau menutup situs kapan pun — dan
+**uang yang sudah dibayarkan tidak dapat diminta kembali** dalam keadaan apa
+pun.
+
+**Kenapa dicatat.** Ini menciptakan ketegangan dengan kata "selamanya" yang
+dipakai di materi pemasaran. Keduanya bisa berdiri bersama **hanya kalau
+batasnya disebut terus terang di muka**, dan itu sudah dilakukan di S&K
+bagian 7.
+
+⚠ **Yang masih perlu diselaraskan:** halaman `/amanin` menulis
+"Rp199.000 **berlaku selamanya**" tanpa keterangan batas itu. Kalimat itu
+sebaiknya diperjelas supaya tidak bertentangan dengan S&K — misalnya
+"berlaku selama produk dijalankan". Menunggu keputusan Malik karena itu
+naskah pemasaran miliknya.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

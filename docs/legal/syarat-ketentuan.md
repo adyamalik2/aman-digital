@@ -1,20 +1,6 @@
-# 🚧 DRAFT — MENUNGGU PERSETUJUAN AKHIR MALIK 🚧
-
-> Disusun 25-08-2026 atas arahan Malik: *"S&K kamu susun sesuai yang kamu
-> ketahui dulu aja."*
->
-> Isinya dibangun dari **cara sistem benar-benar bekerja** (hasil audit kode)
-> plus keputusan yang sudah Malik berikan. Beberapa bagian masih ditandai
-> `【PERLU DIPUTUSKAN】` — bukan karena saya malas, tapi karena mengarangnya
-> berisiko: begitu terbit, dokumen ini mengikat.
->
-> **Belum diterbitkan ke situs.**
-
----
-
 # Syarat & Ketentuan
 
-**Berlaku sejak:** 【diisi tanggal terbit】
+**Berlaku sejak:** 6 September 2026
 
 Dengan memakai amandigital.my.id dan produk di dalamnya, Anda menyetujui
 ketentuan berikut. Kalau tidak setuju, mohon jangan memakai layanan ini.
@@ -53,9 +39,13 @@ memproses, atau menyimpan data kartu maupun rekening Anda.
 Setelah pembayaran berhasil, Anda menerima **kode akses** untuk membuka
 produk yang dibeli.
 
-【PERLU DIPUTUSKAN: kode dikirim otomatis seketika, atau dikirim manual oleh
-Malik? Jangan menulis "instan" kalau prosesnya manual — pembeli akan
-menagih.】
+Kode diterbitkan **otomatis oleh sistem** begitu penyedia pembayaran
+mengonfirmasi pembayaran Anda lunas — tanpa menunggu kami memprosesnya
+manual.
+
+Kalau setelah pembayaran berhasil Anda belum menerima kode dalam beberapa
+menit, hubungi kami lewat kanal di bagian akhir dengan menyertakan bukti
+pembayaran.
 
 ---
 
@@ -90,15 +80,20 @@ Berdasarkan cara sistem bekerja saat ini:
 
 - Kode akses **terikat pada perangkat** yang memakainya. Setelah dimasukkan
   sekali, perangkat itu dikenali dan tidak perlu memasukkan ulang.
-- Satu kode **dapat dipakai di lebih dari satu perangkat**.
-  【PERLU DIPUTUSKAN: berapa batas maksimalnya? Sistem sekarang tidak
-  membatasi.】
-- Kode **tidak memiliki masa kedaluwarsa** dalam sistem saat ini.
+- Satu kode dapat dipakai di **maksimal 5 perangkat**. Perangkat ke-6
+  akan ditolak.
+- Kode **tidak memiliki masa kedaluwarsa**, kecuali untuk produk berlangganan
+  yang masa berlakunya disebutkan saat pembelian.
 - Kode akses bersifat **pribadi** dan diberikan untuk Anda sebagai pembeli.
 
-【PERLU DIPUTUSKAN — dua hal yang pasti akan ditanyakan pembeli:】
-- Kalau kode hilang, apa yang bisa dilakukan pembeli?
-- Kalau kode dibagikan ke orang lain, apa akibatnya?
+**Kalau kode Anda hilang.** Kami dapat mengirimkannya kembali. Syaratnya
+Anda menunjukkan **bukti pembelian** — misalnya bukti transfer, tangkapan
+layar konfirmasi pembayaran, atau nomor pesanan.
+
+**Kalau kode Anda dibagikan ke orang lain.** Setiap perangkat yang memakai
+kode itu memakan satu dari 5 slot yang menjadi jatah Anda. Begitu 5 slot
+terpakai, **Anda sendiri** tidak bisa lagi menambah perangkat baru. Kami
+tidak menambah slot karena kode dibagikan.
 
 ---
 
@@ -112,16 +107,20 @@ Setelah membeli, Anda **boleh**:
 | **Memodifikasi** sesuai kebutuhan Anda | ✅ Boleh |
 | **Membagikan ke rekan kerja atau anggota tim** Anda | ✅ Boleh |
 | Memakainya untuk **mengerjakan pesanan klien** Anda | ✅ Boleh |
+| **Menjual ulang** produknya | ✅ Boleh |
 
-Yang **tidak boleh**:
+Singkatnya: **pakai sebebas-bebasnya, termasuk menjualnya kembali.**
 
-| | |
-|---|---|
-| **Menjual ulang berkas aslinya** — baik utuh maupun sebagian, dengan atau tanpa perubahan | ❌ Tidak boleh |
-| Mendistribusikan ulang sebagai produk digital Anda sendiri | ❌ Tidak boleh |
+Yang tetap berlaku:
 
-Singkatnya: **pakai sebebas-bebasnya untuk pekerjaan Anda, tetapi jangan
-menjualnya kembali sebagai produk.**
+- Lisensi ini diberikan **apa adanya**. Kami tidak menjamin produk ini cocok
+  untuk keperluan tertentu Anda, termasuk bila Anda menjualnya kembali.
+- Kalau Anda menjual ulang, **Andalah** yang bertanggung jawab kepada pembeli
+  Anda — termasuk urusan dukungan, keluhan, dan pengembalian dana. Kami tidak
+  melayani pembeli dari pihak Anda.
+- Kode akses **tidak ikut berpindah**. Yang boleh Anda jual adalah berkas
+  atau hasil produknya, bukan kode akses Anda — kode itu terikat pada
+  pembelian Anda sendiri dan dibatasi 5 perangkat.
 
 ---
 
@@ -143,10 +142,23 @@ Artinya:
 Bila suatu saat kami menghentikan sebuah produk, kami akan
 memberitahukannya lebih dahulu melalui situs ini.
 
-【PERLU DIPUTUSKAN — dua hal lanjutan:】
-- Berapa lama pemberitahuan sebelum produk dihentikan? *(usulan: 30 hari)*
-- Apakah pembeli diberi kesempatan mengunduh/menyimpan hasil kerjanya
-  sebelum layanan berhenti? *(usulan: ya)*
+**Yang termasuk:**
+
+- **Pembaruan gratis selamanya.** Selama produk masih kami jalankan, semua
+  pembaruannya Anda dapatkan tanpa biaya tambahan.
+- **Tanpa biaya berulang** untuk produk yang dibeli sekali bayar.
+
+**Yang perlu Anda pahami sebelum membeli:**
+
+- "Selamanya" berarti **selama produknya masih kami jalankan** — bukan
+  jaminan bahwa produk itu akan ada tanpa batas waktu.
+- **AMAN Digital berhak menghentikan sebuah produk, menutup layanan, atau
+  menutup situs ini** kapan pun.
+- Bila itu terjadi, **uang yang sudah Anda bayarkan tidak dapat diminta
+  kembali** — baik seluruhnya maupun sebagian.
+
+Kami menuliskan ini terus terang di muka, supaya Anda memutuskan dengan
+tahu risikonya, bukan mengetahuinya belakangan.
 
 ---
 
@@ -159,8 +171,16 @@ Untuk Data & System, IT Advisor, Print Center, dan Creative Studio:
 - Harga bersifat per kasus — tidak ada daftar harga baku, karena kebutuhan
   tiap klien berbeda.
 
-【PERLU DIPUTUSKAN: uang muka? berapa kali revisi termasuk? siapa pemilik
-hasil kerja setelah lunas? bagaimana kalau dibatalkan di tengah jalan?】
+**Ketentuan yang berlaku:**
+
+| Perkara | Ketentuan |
+|---|---|
+| Uang muka | **Tidak ada.** Pengerjaan dimulai tanpa pembayaran di muka |
+| Jumlah revisi | **4–5 kali**, sudah termasuk dalam harga yang disepakati |
+| Pemilik hasil kerja | **Milik Anda** sepenuhnya setelah pekerjaan selesai |
+| Pembatalan di tengah jalan | Boleh, dan kami tidak mempermasalahkannya |
+
+Revisi di luar 4–5 kali dapat dikerjakan dengan kesepakatan biaya tersendiri.
 
 ---
 
@@ -202,10 +222,15 @@ Kami dapat memperoleh komisi bila Anda membeli lewat tautan tersebut, **tanpa
 biaya tambahan bagi Anda**. Label itu selalu ditampilkan — kami tidak
 menyembunyikan tautan afiliasi.
 
-【PERLU DIPUTUSKAN: teks pengungkapan yang lebih panjang. Kolom
-`affiliate_disclosure` di basis data saat ini **kosong**, sehingga paragraf
-pengungkapan tidak pernah tampil — padahal label "Bersponsor" sudah muncul.
-Cukup isi satu paragraf lewat panel admin.】
+Teks pengungkapan yang kami tampilkan pada widget produk:
+
+> Sebagian tautan produk di halaman ini adalah tautan afiliasi. Bila Anda
+> membeli lewat tautan tersebut, kami dapat memperoleh komisi dari penjual —
+> **tanpa biaya tambahan bagi Anda**, dan tanpa memengaruhi harga yang Anda
+> bayar.
+
+Kami tidak menyembunyikan tautan afiliasi. Bila Anda lebih nyaman membeli
+langsung dari penjualnya tanpa lewat tautan kami, silakan.
 
 ---
 
@@ -218,8 +243,9 @@ AI pihak ketiga (Google Gemini).
   terutama untuk keperluan bisnis.
 - **Jangan memasukkan data rahasia** atau data pribadi orang lain.
 - Kami tidak bertanggung jawab atas kerugian akibat pemakaian hasil AI.
-- Hasil keluaran yang Anda buat menjadi milik Anda untuk dipakai.
-  【PERLU DIPUTUSKAN: konfirmasi bahwa ini memang yang Malik maksudkan.】
+- **Hasil keluaran yang Anda buat menjadi milik Anda sepenuhnya**, untuk
+  dipakai bebas termasuk secara komersial. Kami tidak mengklaim hak apa pun
+  atasnya.
 
 ---
 
@@ -252,7 +278,9 @@ kerugian tidak langsung yang timbul dari pemakaian layanan ini.
 Ketentuan ini tunduk pada hukum Republik Indonesia. Setiap perselisihan
 diupayakan diselesaikan lebih dahulu secara **musyawarah**.
 
-【PERLU DIPUTUSKAN: kalau musyawarah gagal — pengadilan negeri mana?】
+Bila musyawarah tidak mencapai kesepakatan, perselisihan diselesaikan
+melalui **Pengadilan Negeri di wilayah domisili AMAN Digital, yaitu
+Kabupaten Aceh Barat Daya, Provinsi Aceh**.
 
 ---
 

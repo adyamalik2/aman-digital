@@ -33,6 +33,7 @@ const tentang = [
   { label: "FAQ", href: "/faq" },
   { label: "Kontak", href: "/kontak" },
   { label: "Kebijakan Privasi", href: "/kebijakan-privasi" },
+  { label: "Syarat & Ketentuan", href: "/syarat-ketentuan" },
 ];
 
 const socials = [

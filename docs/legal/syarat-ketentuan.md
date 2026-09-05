@@ -99,7 +99,7 @@ tidak menambah slot karena kode dibagikan.
 
 ## 6. Lisensi produk digital
 
-Setelah membeli, Anda **boleh**:
+Setelah membeli, Anda **boleh**, untuk **semua** produk:
 
 | Penggunaan | |
 |---|---|
@@ -107,20 +107,36 @@ Setelah membeli, Anda **boleh**:
 | **Memodifikasi** sesuai kebutuhan Anda | ✅ Boleh |
 | **Membagikan ke rekan kerja atau anggota tim** Anda | ✅ Boleh |
 | Memakainya untuk **mengerjakan pesanan klien** Anda | ✅ Boleh |
-| **Menjual ulang** produknya | ✅ Boleh |
 
-Singkatnya: **pakai sebebas-bebasnya, termasuk menjualnya kembali.**
+### Menjual ulang — tergantung produknya
 
-Yang tetap berlaku:
+Hanya satu produk kami yang boleh dijual kembali:
 
-- Lisensi ini diberikan **apa adanya**. Kami tidak menjamin produk ini cocok
-  untuk keperluan tertentu Anda, termasuk bila Anda menjualnya kembali.
-- Kalau Anda menjual ulang, **Andalah** yang bertanggung jawab kepada pembeli
-  Anda — termasuk urusan dukungan, keluhan, dan pengembalian dana. Kami tidak
-  melayani pembeli dari pihak Anda.
-- Kode akses **tidak ikut berpindah**. Yang boleh Anda jual adalah berkas
-  atau hasil produknya, bukan kode akses Anda — kode itu terikat pada
-  pembelian Anda sendiri dan dibatasi 5 perangkat.
+| Produk | Boleh dijual ulang? |
+|---|---|
+| **Produk Digital (700+)** — kumpulan berkas digital | ✅ **Boleh** |
+| AMAN Engine | ❌ Tidak boleh |
+| AMAN Content Engine | ❌ Tidak boleh |
+| AMAN Poster Generator | ❌ Tidak boleh |
+| AMAN-in Pro | ❌ Tidak boleh |
+
+**Kenapa dibedakan.** Produk Digital (700+) adalah kumpulan berkas yang
+memang dijual dengan hak jual ulang. Sisanya adalah **alat yang berjalan di
+server kami** dan diakses dengan kode — yang Anda beli adalah aksesnya, bukan
+alatnya, jadi tidak ada yang bisa dipindahtangankan.
+
+**Kalau Anda menjual ulang Produk Digital (700+):**
+
+- **Andalah** yang bertanggung jawab kepada pembeli Anda — termasuk dukungan,
+  keluhan, dan pengembalian dana. Kami tidak melayani pembeli dari pihak Anda.
+- Lisensi diberikan **apa adanya**; kami tidak menjamin berkasnya cocok untuk
+  keperluan pembeli Anda.
+
+**Yang tidak boleh untuk produk mana pun:**
+
+- **Menjual, meminjamkan, atau memindahtangankan kode akses Anda.** Kode
+  terikat pada pembelian Anda sendiri dan dibatasi 5 perangkat.
+- Mendaftarkan ulang alat kami sebagai layanan Anda sendiri.
 
 ---
 

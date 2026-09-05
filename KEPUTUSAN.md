@@ -445,6 +445,58 @@ naskah pemasaran miliknya.
 
 ---
 
+## K-17 · Jual ulang hanya untuk Produk Digital (700+)
+
+**Tanggal:** 06-09-2026
+
+**Keputusan Malik.** Dari lima izin lisensi, empat berlaku untuk **semua**
+produk: pakai komersial, modifikasi, bagikan ke tim, pakai untuk klien.
+Izin kelima — **menjual ulang** — hanya berlaku untuk **Produk Digital (700+)**.
+
+| Produk | Jual ulang |
+|---|---|
+| Produk Digital (700+) | ✅ boleh |
+| AMAN Engine, Content Engine, Poster Generator | ❌ tidak |
+| AMAN-in Pro | ❌ tidak |
+
+**Kenapa dibedakan.** Produk Digital (700+) adalah kumpulan berkas yang di
+pasar Indonesia memang lazim dijual dengan hak jual ulang. Sisanya alat yang
+berjalan di server AMAN Digital dan diakses lewat kode — yang dibeli adalah
+aksesnya, bukan alatnya, jadi memang tidak ada yang bisa dipindahtangankan.
+
+**Riwayat singkat, supaya tidak diputar balik lagi.** Malik semula menjawab
+"boleh" untuk kelimanya secara menyeluruh. Akibatnya disampaikan lebih dulu
+(pembeli Rp39.000 bisa jadi pesaing dengan produk Malik sendiri), dia
+mengonfirmasi, lalu **mengoreksi sendiri** sebelum dokumennya terbit: AMAN
+Engine tidak boleh dijual ulang. Batas akhirnya ditetapkan per jenis produk
+seperti tabel di atas.
+
+**Kode akses tidak pernah boleh dipindahtangankan**, untuk produk mana pun —
+termasuk Produk Digital (700+). Yang boleh dijual adalah berkasnya, bukan
+kodenya. Kode terikat pembelian sendiri dan dibatasi 5 perangkat.
+
+---
+
+## K-18 · "Akses selamanya" = selama produknya masih dijalankan
+
+**Tanggal:** 06-09-2026
+
+**Keputusan Malik.** Pembaruan gratis selamanya, tapi AMAN Digital berhak
+menghentikan produk, menutup layanan, atau menutup situs kapan pun — dan
+**uang yang sudah dibayarkan tidak dapat diminta kembali** dalam keadaan apa
+pun.
+
+**Kenapa dicatat.** Ini menciptakan ketegangan dengan kata "selamanya" di
+materi pemasaran. Keduanya bisa berdiri bersama **hanya kalau batasnya
+disebutkan terus terang di muka** — dan itu sudah dilakukan di S&K bagian 7.
+
+⚠ **Yang masih perlu diselaraskan:** halaman `/amanin` menulis "Rp199.000
+**berlaku selamanya**" tanpa keterangan batas itu. Sebaiknya diperjelas
+supaya tidak bertentangan dengan S&K — misalnya "berlaku selama produk
+dijalankan". Belum diubah karena itu naskah pemasaran milik Malik.
+
+---
+
 ## Keputusan yang masih terbuka
 
 Lihat `STATUS.md` bagian "Menunggu keputusan Malik".

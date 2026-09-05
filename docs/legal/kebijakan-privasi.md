@@ -1,15 +1,7 @@
-# 🚧 DRAFT — MENUNGGU PERSETUJUAN AKHIR MALIK 🚧
-
-> Semua pertanyaan Kelompok A sudah dijawab Malik (25-08-2026) dan sudah
-> dimasukkan ke draf ini. **Belum diterbitkan ke situs** — menunggu Malik
-> membaca versi final ini dan menyatakan setuju.
-
----
-
 # Kebijakan Privasi
 
-**Berlaku sejak:** 【diisi tanggal terbit】
-**Terakhir diperbarui:** 【diisi tanggal terbit】
+**Berlaku sejak:** 6 September 2026
+**Terakhir diperbarui:** 6 September 2026
 
 Halaman ini menjelaskan data apa yang kami kumpulkan saat Anda memakai
 **amandigital.my.id**, untuk apa data itu dipakai, dan hak Anda atasnya.
@@ -90,7 +82,20 @@ Yang perlu Anda tahu:
 - Karena itu, **jangan memasukkan data rahasia atau data pribadi orang lain**
   ke dalam alat-alat ini.
 
-### e. Yang TIDAK kami kumpulkan
+### e. Saat Anda membeli lewat halaman checkout kami
+
+Untuk memproses pembelian, kami meminta **nama, email, dan nomor WhatsApp**
+Anda. Ketiganya dipakai untuk dua hal: mengirimkan kode akses setelah
+pembayaran berhasil, dan menghubungi Anda kalau pembayarannya bermasalah.
+
+Data ini tersimpan pada catatan pesanan kami beserta kode akses yang terbit.
+
+Pembayarannya sendiri diproses **Duitku**, penyedia pembayaran berizin.
+Anda memasukkan data kartu, rekening, atau e-wallet **di halaman Duitku,
+bukan di halaman kami** — kami tidak pernah menerima, melihat, maupun
+menyimpannya.
+
+### f. Yang TIDAK kami kumpulkan
 
 - Tidak ada layanan analitik (Google Analytics, Meta Pixel, dan sejenisnya).
 - Tidak ada cookie iklan atau cookie pelacak lintas situs.
@@ -136,8 +141,10 @@ ini tidak menampilkan spanduk persetujuan cookie.
 - **Penyedia infrastruktur:**
   - **Cloudflare** — tempat situs dan basis data ini berjalan.
   - **Google (Gemini)** — hanya teks yang Anda masukkan ke alat bantu AI.
-  - **Lynk.id** — penyedia pembayaran; data pembelian Anda ada pada mereka,
-    tunduk pada kebijakan privasi mereka sendiri.
+  - **Duitku** — penyedia pembayaran untuk checkout di situs ini. Nama,
+    email, dan nomor Anda diteruskan ke mereka untuk membuat tagihan.
+  - **Lynk.id** — penyedia pembayaran untuk sebagian produk; data pembelian
+    Anda ada pada mereka, tunduk pada kebijakan privasi mereka sendiri.
   - **YouTube** — hanya kalau artikel yang Anda buka memuat video. Kami
     memakai mode privasi (`youtube-nocookie.com`).
 
@@ -155,6 +162,7 @@ penyimpanan, dan tidak ada proses penghapusan otomatis.**
 | Komentar (nama, email, isi) | Disimpan **selama artikelnya ada**, sampai Anda meminta penghapusan |
 | Sidik pengunjung (hash IP + peramban) | Disimpan tanpa batas waktu |
 | Kode akses & token perangkat | Selama kode tersebut masih berlaku |
+| Data pesanan (nama, email, nomor) | Disimpan tanpa batas waktu, sebagai bukti pembelian |
 
 Artinya: data Anda **tetap tersimpan sampai Anda sendiri meminta kami
 menghapusnya**. Cara memintanya ada di bagian 6.

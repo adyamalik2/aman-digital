@@ -32,6 +32,7 @@ const tentang = [
   { label: "Portofolio", href: "/#portofolio" },
   { label: "FAQ", href: "/faq" },
   { label: "Kontak", href: "/kontak" },
+  { label: "Kebijakan Privasi", href: "/kebijakan-privasi" },
 ];
 
 const socials = [

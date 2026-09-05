@@ -461,14 +461,29 @@ export default function AmaninPage() {
             Produk digital &mdash; tidak dapat dikembalikan setelah kode aktivasi diterima.
           </p>
 
+          {/* Sengaja TIDAK memakai kata "selamanya" di sini.
+              S&K bagian 7 menyatakan AMAN Digital berhak menghentikan produk
+              kapan pun tanpa pengembalian dana (K-18); menjanjikan "selamanya"
+              di tempat uang berpindah bertentangan dengan itu.
+
+              Lagipula yang ditanyakan pembeli saat memilih bayar-sekali adalah
+              "apakah saya ditagih lagi?", bukan "apakah ini abadi?" -- dan
+              jawaban itu bisa kita janjikan tanpa ragu. */}
           <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-slate-500">
-            Ingin bayar sekali tanpa perpanjangan?{" "}
+            Ingin bayar sekali tanpa tagihan berulang?{" "}
             <a href="/checkout?produk=amanin-selamanya" className="font-semibold text-emerald-cta-hover underline">
-              Rp199.000 berlaku selamanya
+              Rp199.000 &mdash; bayar sekali, tanpa perpanjangan
             </a>
             . Setelah membayar Anda menerima kode aktivasi &mdash; masukkan di aplikasi
             lewat Profil &rarr; AMAN-in Pro. Kode terikat ke akun, jadi tetap berlaku
             saat ganti HP.
+          </p>
+
+          {/* Fakta yang memang sudah berlaku dan dijamin halaman Privasi & Data
+              di dalam aplikasi -- backup JSON, ekspor CSV, dan ekspor PDF. */}
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-slate-500">
+            Catatan keuangan Anda tetap milik Anda: bisa diekspor kapan saja ke
+            JSON, CSV, atau PDF &mdash; termasuk kalau Anda berhenti berlangganan.
           </p>
         </div>
       </section>

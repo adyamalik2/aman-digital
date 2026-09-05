@@ -490,10 +490,22 @@ pun.
 materi pemasaran. Keduanya bisa berdiri bersama **hanya kalau batasnya
 disebutkan terus terang di muka** — dan itu sudah dilakukan di S&K bagian 7.
 
-⚠ **Yang masih perlu diselaraskan:** halaman `/amanin` menulis "Rp199.000
-**berlaku selamanya**" tanpa keterangan batas itu. Sebaiknya diperjelas
-supaya tidak bertentangan dengan S&K — misalnya "berlaku selama produk
-dijalankan". Belum diubah karena itu naskah pemasaran milik Malik.
+✅ **Sudah diselaraskan 06-09.** Halaman `/amanin` semula menulis "Rp199.000
+**berlaku selamanya**". Diganti jadi **"bayar sekali, tanpa perpanjangan"**.
+
+Alasannya bukan sekadar menghindari pertentangan dengan S&K: yang sebenarnya
+ditanyakan pembeli saat memilih bayar-sekali adalah *"apakah saya ditagih
+lagi?"*, bukan *"apakah ini abadi?"* — dan jawaban itu bisa dijanjikan tanpa
+ragu. Kekuatan jualannya justru tidak berkurang.
+
+Sekalian ditambahkan fakta yang sudah berlaku tapi belum pernah dipakai
+berjualan: **data pengguna bisa diekspor kapan saja** (JSON, CSV, PDF), sudah
+dijamin halaman Privasi & Data di dalam aplikasi. Itu jawaban jujur untuk
+kekhawatiran "kalau aplikasinya tutup bagaimana?".
+
+Dua kata "selamanya" untuk paket **gratis** sengaja **dibiarkan** — tidak ada
+uang yang berpindah di situ, dan mengubahnya justru membuat penawaran gratis
+terdengar ragu-ragu.
 
 ---
 

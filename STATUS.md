@@ -27,9 +27,28 @@ Isi berkas ini cepat basi. Kalau ada yang terasa tidak cocok dengan kenyataan,
 | AMAN Kasir | ✅ `kasir.amandigital.my.id` | terpasang (dipakai Malik) |
 | AMAN Budget | ✅ `budget.amandigital.my.id` | terpasang (dipakai Malik, Pro aktif) |
 | AMAN Invoice | ✅ `invoice.amandigital.my.id` | terpasang |
-| AMAN-in | ✅ `amanin.amandigital.my.id` | **v1.2.6 (vc18) dibangun 01-09** |
+| AMAN-in | ✅ `amanin.amandigital.my.id` | **v1.2.7 (vc19) dibangun 06-09** |
 
 APK **belum pernah dibagikan ke pelanggan** dan **belum ada di Play Store**.
+
+---
+
+### APK AMAN-in 1.2.7 — dibangun 06-09-2026
+
+`D:\Bukak toko Photo Copy dan percetakan\WEB\Aplikasi baru Amanin\APK\AMAN-in-1.2.7-vc19.apk`
+
+6,5 MB, `versionCode 19`, ditandatangani keystore release
+(`CN=Adya Malik, AMAN Digital`). Menimpa 1.2.6 tanpa masalah.
+
+Baru sejak 1.2.6, sudah diperiksa ikut di dalam bundel APK-nya:
+
+- Penyesuaian saldo wallet dicatat sebagai transaksi (+ migrasi data lama)
+- Daftar transaksi per wallet, dibentangkan dari menu Wallet
+- Pilihan Galeri/Kamera untuk foto struk dan Scan Nota
+- Tampilan sisa kuota Scan Nota
+
+Izin Android tetap **sembilan**, cocok dengan yang tertulis di halaman
+Privasi & Data.
 
 ---
 

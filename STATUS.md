@@ -310,6 +310,14 @@ muncul hanya kalau sesi masuknya sudah lama.
 
 ---
 
+## Traksi
+
+**10.000+ pageviews** di `amandigital.my.id` pada Agustus 2026 (11.218 tepatnya,
+laporan Cloudflare) — pertama kalinya situs melewati ambang itu, sejak dibuat
+21-06-2026.
+
+---
+
 ## Riwayat singkat
 
 - **Agustus 2026** — audit visual & aksesibilitas (kontras, area sentuh),

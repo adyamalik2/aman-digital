@@ -82,7 +82,7 @@ Diurutkan dari yang paling menghambat.
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
 | 1 | ~~Skema harga AMAN-in~~ | ✅ **SELESAI 01-09.** Angkanya ditetapkan (K-15), gerbangnya menyala, aktivasi kode teruji ujung-ke-ujung. Tidak menunggu apa pun lagi. |
-| 2 | **Dokumen legal** | 📝 Kelompok A **sudah dijawab** 25-08 (lihat K-12). **Kebijakan Privasi siap terbit** — tinggal Malik baca versi finalnya lalu saya buatkan halamannya. S&K masih menunggu 10 pertanyaan Kelompok B, terutama **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")**. |
+| 2 | **Syarat & Ketentuan** | ✅ **Kebijakan Privasi TERBIT 06-09** di `/kebijakan-privasi`, ditautkan dari footer. Sisa: S&K menunggu Kelompok B — **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")** yang paling mendesak. B2/B3/B5 sudah bisa dijawab dari kode. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | ✅ Ketiga syarat **selesai 28-08**: harga di halaman utama, checkout di situs sendiri, integrasi Sandbox teruji (kode akses terbit otomatis, callback palsu & nominal dikurangi ditolak, kode terikat produk). Tombol beli sudah diarahkan ke `/checkout`. **MASIH SANDBOX** (`DUITKU_SANDBOX=1`) — pembayaran belum menagih uang sungguhan, jadi halaman checkout menampilkan jalur Lynk.id sebagai pembelian nyata. Begitu akun Duitku aktif: ganti secret ke kredensial produksi + `DUITKU_SANDBOX=0`, banner hilang sendiri. Panduan: `docs/duitku-setup.md`. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
@@ -105,17 +105,19 @@ ini copy pemasaran milik Malik.
 Bagian teknis diaudit dari kode (tidak dikarang); keputusan bisnis Malik
 sudah masuk (K-12).
 
-- `kebijakan-privasi.md` — **siap terbit**, menunggu Malik membaca versi
-  final lalu menyatakan setuju.
+- `kebijakan-privasi.md` — ✅ **SUDAH TERBIT 06-09** di `/kebijakan-privasi`.
+  Halamannya membaca berkas Markdown ini saat build, jadi tidak ada salinan
+  kedua yang bisa menyimpang. Ubah berkasnya, halaman ikut.
 - `syarat-ketentuan.md` — sebagian besar tersusun; 10 penanda
   `【PERLU DIPUTUSKAN】` masih terbuka.
 
-Setelah disetujui, tiga hal yang menyusul: (1) halaman
-`/kebijakan-privasi` + tautan footer + tautan dekat form komentar,
-(2) isi ulang tiga halaman legal portal berita di D1 yang masih placeholder,
-(3) **pasang keterangan "tidak ada refund" di halaman produk dekat tombol
-beli** — kalau hanya ada di S&K, secara praktis dianggap tidak
-diberitahukan.
+Yang sudah menyusul: (1) ✅ halaman `/kebijakan-privasi` + tautan footer,
+(3) ✅ keterangan "tidak ada refund" kini ada di **semua** halaman jual
+(`/amanin` menyusul 06-09; empat lainnya sudah sejak lama).
+
+Yang **belum**: (2) isi ulang tiga halaman legal portal berita di D1
+(`privacy`, `disclaimer`, `pedoman-media-siber`) yang masih placeholder, dan
+(4) tautan kebijakan privasi di dekat form komentar berita.
 
 **Penataan halaman `/harga`.** Sekarang hanya memuat Kasir/Budget/Invoice;
 5 produk lain harganya hardcode terpisah di halaman masing-masing, jadi

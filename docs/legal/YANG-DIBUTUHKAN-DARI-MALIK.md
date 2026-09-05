@@ -42,10 +42,10 @@ butuh keputusan bisnis:
 
 | # | Pertanyaan | Ada di bagian |
 |---|---|---|
-| B2 | Kode akses dikirim otomatis atau manual? | 3 |
-| B3 | Berapa perangkat maksimal per kode akses? | 5 |
+| ~~B2~~ | ~~Kode akses dikirim otomatis atau manual?~~ | ✅ **Terjawab dari kode 06-09: OTOMATIS.** `duitku-callback.ts` memanggil `issueAccessCode()` begitu pembayaran lunas. |
+| ~~B3~~ | ~~Berapa perangkat maksimal per kode akses?~~ | ✅ **Terjawab dari kode 06-09: 5.** `MAX_DEVICES = 5` di `ledger.ts`. |
 | B4 | Kode hilang — pembeli bisa apa? | 5 |
-| B5 | Kode dibagikan ke orang lain — apa akibatnya? | 5 |
+| ~~B5~~ | ~~Kode dibagikan ke orang lain — apa akibatnya?~~ | ✅ **Terjawab dari kode 06-09.** Slot ke-6 ditolak (`status: "penuh"`/`"locked"`), jadi berbagi kode memakan jatah perangkat pembeli sendiri. |
 | B6 | Lisensi produk digital (5 baris tabel: komersial, modifikasi, berbagi ke tim, untuk klien, jual ulang) | 6 |
 | B7 | Arti "akses selamanya" (4 pertanyaan) | 7 |
 | B8 | Alur jasa: uang muka, jumlah revisi, kepemilikan hasil, pembatalan | 8 |
@@ -71,9 +71,9 @@ Saya dapat menyusun kalimatnya, tetapi **saya bukan penasihat hukum.**
 
 ## Langkah berikutnya
 
-1. **Malik membaca `kebijakan-privasi.md`** versi final → kalau setuju, saya
-   buatkan halaman `/kebijakan-privasi` di situs + tautkan dari footer +
-   tautkan di dekat form komentar.
+1. ✅ **SELESAI 06-09.** Malik menyetujui, halaman `/kebijakan-privasi`
+   terbit dan ditautkan dari footer. Tautan di dekat form komentar berita
+   masih belum.
 2. Isi tiga halaman legal portal berita di D1 (`privacy`, `disclaimer`,
    `pedoman-media-siber`) yang sekarang masih placeholder.
 3. Pasang keterangan **"tidak ada refund"** di halaman produk, dekat tombol

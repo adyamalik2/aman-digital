@@ -81,7 +81,7 @@ Diurutkan dari yang paling menghambat.
 
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
-| 1 | **Skema harga AMAN-in** | Modelnya **sudah diputuskan 31-08**: gratis dengan batas → bayar untuk melepas batas, tanpa iklan (K-14). Yang masih kosong **angkanya** — batas gratis berapa, tarif berapa. Pembatas kuotanya juga belum dibangun, jadi skema ini masih rencana. Pembanding pasar yang diketahui: pesaing Rp29rb/bulan, Rp12.500/bulan bila tahunan. |
+| 1 | ~~Skema harga AMAN-in~~ | ✅ **SELESAI 01-09.** Angkanya ditetapkan (K-15), gerbangnya menyala, aktivasi kode teruji ujung-ke-ujung. Tidak menunggu apa pun lagi. |
 | 2 | **Dokumen legal** | 📝 Kelompok A **sudah dijawab** 25-08 (lihat K-12). **Kebijakan Privasi siap terbit** — tinggal Malik baca versi finalnya lalu saya buatkan halamannya. S&K masih menunggu 10 pertanyaan Kelompok B, terutama **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")**. |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | ✅ Ketiga syarat **selesai 28-08**: harga di halaman utama, checkout di situs sendiri, integrasi Sandbox teruji (kode akses terbit otomatis, callback palsu & nominal dikurangi ditolak, kode terikat produk). Tombol beli sudah diarahkan ke `/checkout`. **MASIH SANDBOX** (`DUITKU_SANDBOX=1`) — pembayaran belum menagih uang sungguhan, jadi halaman checkout menampilkan jalur Lynk.id sebagai pembelian nyata. Begitu akun Duitku aktif: ganti secret ke kredensial produksi + `DUITKU_SANDBOX=0`, banner hilang sendiri. Panduan: `docs/duitku-setup.md`. |

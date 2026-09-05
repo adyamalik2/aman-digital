@@ -454,7 +454,14 @@ export default function AmaninPage() {
             ))}
           </div>
 
-          <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-slate-500">
+          {/* Wajib terlihat SEBELUM orang membayar, bukan cuma di halaman S&K.
+              Kalau hanya di sana, secara praktis dianggap tidak diberitahukan.
+              Lihat KEPUTUSAN.md K-12. */}
+          <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-500">
+            Produk digital &mdash; tidak dapat dikembalikan setelah kode aktivasi diterima.
+          </p>
+
+          <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-slate-500">
             Ingin bayar sekali tanpa perpanjangan?{" "}
             <a href="/checkout?produk=amanin-selamanya" className="font-semibold text-emerald-cta-hover underline">
               Rp199.000 berlaku selamanya

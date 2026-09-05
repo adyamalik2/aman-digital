@@ -58,6 +58,20 @@ export async function ratelimitReset(kv: KVNamespace, scope: string, ip: string)
  * file; di sini per-IP lewat KV supaya berlaku lintas-request/edge).
  * Return null = boleh lanjut. Return angka = detik sisa sebelum boleh coba lagi.
  */
+/**
+ * Intip berapa kali sudah dipakai dalam jendela berjalan, TANPA menambah
+ * hitungannya. Murni untuk ditampilkan ke pengguna (mis. "sisa 27/30 hari
+ * ini") -- dipanggil setelah checkUsageLimit(), tidak menggantikannya.
+ */
+export async function peekUsageCount(kv: KVNamespace, scope: string, ip: string): Promise<number> {
+  const raw = await kv.get(`use:${scope}:${ip}`);
+  if (!raw) return 0;
+  const e = JSON.parse(raw) as { count: number; resetAt: number };
+  const now = Math.floor(Date.now() / 1000);
+  if (e.resetAt <= now) return 0;
+  return e.count;
+}
+
 export async function checkUsageLimit(
   kv: KVNamespace,
   scope: string,

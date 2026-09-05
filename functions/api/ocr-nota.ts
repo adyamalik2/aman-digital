@@ -15,7 +15,7 @@
  * ini, kunci Gemini bisa dipakai siapa pun yang menemukan alamat endpoint.
  */
 
-import { checkUsageLimit } from "../_lib/ratelimit";
+import { checkUsageLimit, peekUsageCount } from "../_lib/ratelimit";
 import { statusPro } from "../_lib/amanin";
 
 interface Env {
@@ -175,9 +175,15 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const jam = Math.ceil(tunggu / 3600);
     return json(429, {
       ok: false,
+      sisaScan: 0,
+      limitScan: LIMIT_PER_USER,
       message: `Batas scan nota tercapai (${LIMIT_PER_USER} per hari). Coba lagi dalam ${jam} jam.`,
     }, origin);
   }
+
+  // Dipakai murni untuk ditampilkan ("sisa X hari ini") -- checkUsageLimit di
+  // atas sudah menaikkan hitungannya, ini cuma membacanya kembali.
+  const sisaScan = Math.max(0, LIMIT_PER_USER - (await peekUsageCount(env.AMAN_LEDGER, "ocr", uid)));
 
   // Terima data URL ("data:image/jpeg;base64,....") maupun base64 polos.
   const raw = String(body.image || "");
@@ -203,11 +209,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
     );
   } catch {
-    return json(200, { ok: false, message: "Tidak bisa menghubungi layanan AI. Coba lagi." }, origin);
+    return json(200, { ok: false, sisaScan, limitScan: LIMIT_PER_USER, message: "Tidak bisa menghubungi layanan AI. Coba lagi." }, origin);
   }
 
   if (!upstream.ok) {
-    return json(200, { ok: false, message: "Layanan AI sedang sibuk. Coba lagi sebentar." }, origin);
+    return json(200, { ok: false, sisaScan, limitScan: LIMIT_PER_USER, message: "Layanan AI sedang sibuk. Coba lagi sebentar." }, origin);
   }
 
   const hasil = (await upstream.json()) as {
@@ -220,11 +226,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // Jaga-jaga kalau model tetap membungkusnya dengan blok kode.
     data = JSON.parse(teks.replace(/^```(?:json)?\s*|\s*```$/g, "").trim());
   } catch {
-    return json(200, { ok: false, message: "Struk tidak terbaca. Coba foto ulang lebih terang." }, origin);
+    return json(200, { ok: false, sisaScan, limitScan: LIMIT_PER_USER, message: "Struk tidak terbaca. Coba foto ulang lebih terang." }, origin);
   }
 
   if (data.error === "bukan_struk") {
-    return json(200, { ok: false, message: "Gambar ini sepertinya bukan struk. Coba foto struk belanja." }, origin);
+    return json(200, { ok: false, sisaScan, limitScan: LIMIT_PER_USER, message: "Gambar ini sepertinya bukan struk. Coba foto struk belanja." }, origin);
   }
 
   const type = data.type === "in" ? "in" : "out";
@@ -233,11 +239,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const amount = Math.max(0, Math.round(Number(data.amount) || 0));
 
   if (!amount) {
-    return json(200, { ok: false, message: "Nominal tidak terbaca di struk. Isi manual saja." }, origin);
+    return json(200, { ok: false, sisaScan, limitScan: LIMIT_PER_USER, message: "Nominal tidak terbaca di struk. Isi manual saja." }, origin);
   }
 
   return json(200, {
     ok: true,
+    sisaScan,
+    limitScan: LIMIT_PER_USER,
     data: {
       type,
       amount,

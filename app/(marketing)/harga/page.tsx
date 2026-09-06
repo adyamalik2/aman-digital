@@ -11,6 +11,13 @@ import {
   type FeatureGroup,
 } from "@/lib/pricing";
 
+import {
+  ALAT_BAYAR_SEKALI,
+  PAKET_AMANIN,
+  checkoutUrl,
+  rupiah,
+} from "@/lib/produk";
+
 const WA = "https://wa.me/6282210768038";
 const wa = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
 
@@ -369,6 +376,122 @@ export default function HargaPage() {
               style={{ background: "linear-gradient(to left, rgba(255,255,255,.95), rgba(255,255,255,0))" }}
               aria-hidden="true"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== BISA DIBELI SEKARANG =====
+          Halaman ini sebelumnya hanya memuat paket berlangganan
+          Kasir/Budget/Invoice, sementara lima produk lain harganya tersebar di
+          halaman masing-masing. Pengunjung tidak punya satu tempat untuk
+          melihat seluruh harga.
+
+          Angkanya berasal dari lib/produk.ts, dan `npm run cek:harga`
+          memastikannya sama dengan katalog server yang benar-benar menagih. */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center">
+            <span className="inline-block rounded-full border border-emerald/20 bg-emerald/10 px-3 py-1 text-xs font-bold text-emerald-cta-hover">
+              Tersedia Sekarang
+            </span>
+            <h2 className="mt-5 text-3xl font-bold text-navy sm:text-4xl">
+              Produk yang bisa langsung dibeli
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
+              Berbeda dari paket aplikasi di atas yang masih disiapkan, produk
+              berikut sudah bisa Anda beli dan pakai hari ini juga.
+            </p>
+          </div>
+
+          <h3 className="mt-12 mb-1 text-lg font-bold text-navy">Alat bantu &mdash; bayar sekali</h3>
+          <p className="mb-5 text-sm text-slate-500">
+            Dibuka dengan kode akses, langsung jalan di peramban, tanpa pemasangan.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {ALAT_BAYAR_SEKALI.map((p) => (
+              <div
+                key={p.id}
+                className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5"
+              >
+                <h4 className="font-bold text-navy">{p.nama}</h4>
+                <p className="mt-1 flex-1 text-sm leading-relaxed text-slate-600">{p.ringkas}</p>
+                <div className="mt-4 flex items-baseline gap-1.5">
+                  <span className="text-2xl font-bold text-navy">{rupiah(p.harga)}</span>
+                  <span className="text-sm text-slate-500">{p.satuan}</span>
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <a
+                    href={checkoutUrl(p.id)}
+                    className="flex-1 rounded-full bg-emerald-cta px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-cta-hover"
+                  >
+                    Beli
+                  </a>
+                  <a
+                    href={p.halaman}
+                    className="rounded-full border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-navy transition-colors hover:border-emerald-cta hover:text-emerald-cta-hover"
+                  >
+                    Detail
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="mt-12 mb-1 text-lg font-bold text-navy">AMAN-in Pro</h3>
+          <p className="mb-5 text-sm text-slate-500">
+            Mencatat transaksi gratis selamanya. Yang berbayar: melihat riwayat
+            lebih dari sebulan ke belakang, dan fitur Scan Nota.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {PAKET_AMANIN.map((p) => (
+              <div
+                key={p.id}
+                className={`flex flex-col rounded-2xl border p-5 ${
+                  p.disarankan ? "border-emerald-cta bg-emerald/5 shadow-lg" : "border-slate-200 bg-white"
+                }`}
+              >
+                {p.disarankan && (
+                  <span className="mb-2 self-start rounded-full bg-emerald-cta px-2.5 py-1 text-[11px] font-bold text-white">
+                    PALING HEMAT
+                  </span>
+                )}
+                <h4 className="font-bold text-navy">{p.nama}</h4>
+                <p className="mt-1 flex-1 text-sm leading-relaxed text-slate-600">{p.ringkas}</p>
+                <div className="mt-4 flex items-baseline gap-1.5">
+                  <span className="text-2xl font-bold text-navy">{rupiah(p.harga)}</span>
+                  <span className="text-sm text-slate-500">{p.satuan}</span>
+                </div>
+                <a
+                  href={checkoutUrl(p.id)}
+                  className={`mt-4 rounded-full px-4 py-2.5 text-center text-sm font-semibold transition-colors ${
+                    p.disarankan
+                      ? "bg-emerald-cta text-white hover:bg-emerald-cta-hover"
+                      : "border border-slate-300 text-navy hover:border-emerald-cta hover:text-emerald-cta-hover"
+                  }`}
+                >
+                  Pilih {p.nama}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Cara bayar. Halaman ini sebelumnya tidak menyebutkannya sama
+              sekali setelah paragraf lama dihapus karena tidak terverifikasi. */}
+          <div className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h3 className="font-bold text-navy">Cara membayar</h3>
+            <ol className="mt-3 space-y-2 text-sm leading-relaxed text-slate-600">
+              <li>1. Pilih produknya, lalu isi nama, email, dan nomor WhatsApp di halaman checkout.</li>
+              <li>2. Bayar lewat metode yang tersedia &mdash; transfer bank, virtual account, atau e-wallet.</li>
+              <li>3. Kode akses terbit <strong className="text-navy">otomatis</strong> begitu pembayaran dikonfirmasi lunas.</li>
+            </ol>
+            <p className="mt-4 text-sm leading-relaxed text-slate-500">
+              Produk digital <strong className="text-navy">tidak dapat dikembalikan</strong> setelah
+              kode diterima. Ketentuan lengkapnya ada di{" "}
+              <a href="/syarat-ketentuan" className="font-semibold text-emerald-cta-hover underline">
+                Syarat &amp; Ketentuan
+              </a>
+              .
+            </p>
           </div>
         </div>
       </section>

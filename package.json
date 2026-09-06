@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve out",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cek:harga": "node scripts/cek-harga.mjs"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.20",

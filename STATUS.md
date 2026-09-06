@@ -83,7 +83,7 @@ Diurutkan dari yang paling menghambat.
 |---|---|---|
 | 1 | ~~Skema harga AMAN-in~~ | ✅ **SELESAI 01-09.** Angkanya ditetapkan (K-15), gerbangnya menyala, aktivasi kode teruji ujung-ke-ujung. Tidak menunggu apa pun lagi. |
 | 2 | ~~Dokumen legal~~ | ✅ **SELESAI 06-09.** Kebijakan Privasi & Syarat–Ketentuan terbit dan tertaut di footer; tiga halaman legal portal berita terisi; tautan privasi ada di form komentar. Sisa hanya Kelompok C (tinjauan ahli hukum). |
-| 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
+| 3 | ~~Cara pembayaran di `/harga`~~ | ✅ **SELESAI 06-09.** Blok "Cara membayar" tiga langkah dipasang, plus ketujuh produk beserta tautan checkout-nya. |
 | 4 | **Duitku** | ✅ Ketiga syarat **selesai 28-08**: harga di halaman utama, checkout di situs sendiri, integrasi Sandbox teruji (kode akses terbit otomatis, callback palsu & nominal dikurangi ditolak, kode terikat produk). Tombol beli sudah diarahkan ke `/checkout`. **MASIH SANDBOX** (`DUITKU_SANDBOX=1`) — pembayaran belum menagih uang sungguhan, jadi halaman checkout menampilkan jalur Lynk.id sebagai pembelian nyata. Begitu akun Duitku aktif: ganti secret ke kredensial produksi + `DUITKU_SANDBOX=0`, banner hilang sendiri. Panduan: `docs/duitku-setup.md`. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
 | 6 | **Email bisnis** | Belum ada email `@amandigital.my.id`. Kartu Email di `/kontak` sementara diganti kartu Telepon (ada komentar penjelasnya di kode). |
@@ -126,11 +126,14 @@ orang yang paham hukum atas batasan tanggung jawab (S&K bagian 12) dan klaim
 keamanan data (Kebijakan Privasi bagian 7). Saya bisa menyusun kalimatnya,
 tapi saya bukan penasihat hukum.
 
-**Penataan halaman `/harga`.** Sekarang hanya memuat Kasir/Budget/Invoice;
-5 produk lain harganya hardcode terpisah di halaman masing-masing, jadi
-pengunjung tidak punya satu tempat untuk melihat seluruh harga. Usulan: satu
-halaman dengan tiga blok — langganan, bayar-sekali, gratis. Tanpa mengubah
-angka mana pun. Belum dikerjakan.
+**~~Penataan halaman `/harga`~~** — ✅ **SELESAI 06-09.** Ketujuh produk kini
+tampil di satu halaman: paket berlangganan (masih "Segera Hadir"), empat alat
+bayar-sekali, dan tiga paket AMAN-in Pro. Tanpa mengubah angka mana pun.
+
+Harga tampilannya diambil dari `lib/produk.ts`, dan **`npm run cek:harga`**
+memastikannya sama dengan katalog server yang benar-benar menagih. Penjaga itu
+sudah diuji dengan sengaja merusak satu harga — terdeteksi, bukan lolos.
+Jalankan setiap kali mengubah harga di mana pun.
 
 ---
 

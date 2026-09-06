@@ -17,7 +17,7 @@ import { pageMeta } from "@/lib/seo";
 const CHECKOUT = "/checkout?produk=aman-content-engine";
 
 export const metadata: Metadata = pageMeta({
-  title: "AMAN Content Engine — Satu Topik Jadi Paket Konten | AMAN Digital",
+  title: "AMAN Content Engine — Satu Topik Jadi Konten | AMAN Digital",
   description:
     "AMAN Content Engine mengubah satu ide, masalah, atau pertanyaan jadi naskah video, caption, hook, hashtag, sampai shot list untuk TikTok & Instagram Reels.",
   path: "/aman-content-engine",

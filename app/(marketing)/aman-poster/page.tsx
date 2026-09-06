@@ -17,9 +17,9 @@ import { pageMeta } from "@/lib/seo";
 const CHECKOUT = "/checkout?produk=aman-poster";
 
 export const metadata: Metadata = pageMeta({
-  title: "AMAN Poster Generator — Prompt Poster Siap Pakai | AMAN Digital",
+  title: "AMAN Poster Generator — Prompt Siap Pakai | AMAN Digital",
   description:
-    "AMAN Poster Generator meracik headline, keunggulan produk, penawaran, CTA, sampai prompt visual lengkap (JSON + teks) untuk Canva, ChatGPT, Gemini & AI gambar lainnya.",
+    "Meracik headline, keunggulan produk, penawaran, CTA, sampai prompt visual (JSON + teks) untuk Canva, ChatGPT, Gemini, dan AI gambar lainnya.",
   path: "/aman-poster",
 });
 

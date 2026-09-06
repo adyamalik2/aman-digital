@@ -6,7 +6,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata = pageMeta({
   title: "700+ Produk Digital 2026 | Sekali Beli, Akses Selamanya",
   description:
-    "44 produk digital terkurasi — tema Islami, edukasi anak, game ringan, dan template konten — plus folder Google Drive berisi 700+ berkas. Satu kode akses, buka langsung di browser tanpa unduh satu per satu.",
+    "44 produk digital terkurasi — tema Islami, edukasi anak, game ringan, template konten — plus folder Drive berisi 700+ berkas. Satu kode akses.",
   path: "/digital-store",
 });
 

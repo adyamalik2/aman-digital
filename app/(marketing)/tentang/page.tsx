@@ -19,7 +19,7 @@ const KONSULTASI_WA = wa("Halo AMAN Digital, saya ingin konsultasi gratis.");
 export const metadata = pageMeta({
   title: "Tentang AMAN Digital — Adya Malik",
   description:
-    "AMAN Digital dibangun oleh Adya Malik, praktisi IT dan data dari Aceh. Membantu UMKM, toko, dan kantor kecil punya sistem kerja yang lebih rapi — mulai dari konsultasi gratis.",
+    "AMAN Digital dibangun Adya Malik, praktisi IT dan data dari Aceh. Membantu UMKM dan kantor kecil punya sistem kerja lebih rapi — mulai dari konsultasi gratis.",
   path: "/tentang",
 });
 

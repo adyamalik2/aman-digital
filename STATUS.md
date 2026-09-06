@@ -361,11 +361,20 @@ laporan). Empat yang paling merusak data sudah diperbaiki dan live:
 | 8 | `hideBalance` (ikon mata) tidak berlaku di layar Wallet | Prop dioper seperti layar lain | terverifikasi bundel |
 | 9 | Form Wallet melompat sendiri ke mode Edit, bisa menimpa ketikan | Dependensi effect dipersempit ke `[initialEditName]` saja | (gabung #7) |
 
-**3 temuan masih terbuka**, kosmetik/berdampak kecil: "Transaksi Terbaru" di
-Beranda tidak diurutkan, Kelola Kategori salah untuk akun Pribadi (menampilkan
-kategori Usaha, menyembunyikan kategori Pribadi), dua baris geser-hapus bisa
-sama-sama terbuka sebentar saat digeser bersamaan, timer penyimpanan tidak
-dibatalkan saat keluar akun.
+**06-09 lanjutan — 4 temuan terakhir juga selesai:**
+
+| # | Bug | Perbaikan | Uji |
+|---|---|---|---|
+| 10 | "Transaksi Terbaru" Beranda tidak diurutkan | Diurutkan `b.ts - a.ts` sebelum `.slice(0, 5)` | 3/3 |
+| 11 | Kelola Kategori selalu tampilkan set Usaha | Memakai `catsForAccountType(accountType)` | 6/6 |
+| 13 | Dua baris geser-hapus bisa sama-sama terbuka | Diklaim segera saat arah gestur terkunci | 2/2 |
+| 14 | Timer penyimpanan tidak dibatalkan saat logout | Effect App.jsx dapat fungsi cleanup | 2/2 (+ kontrol) |
+
+**AUDIT 06-09 TUNTAS: 14 dari 14 temuan diperbaiki.** #4 dan #12 ternyata
+satu akar masalah, tertutup satu perbaikan -- jadi 13 perubahan kode menutup
+14 temuan. Total 47 pemeriksaan baru sepanjang audit ini, semua lulus.
+Detail tiap temuan (file:baris, skenario, akibat, cara uji) ada di
+`aman-in/AGENTS.md`.
 
 Detail lengkap tiap temuan (file:baris, skenario, akibat) ada di transkrip
 percakapan 06-09 -- belum dipindah ke dokumen ini.

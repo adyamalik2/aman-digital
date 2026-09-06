@@ -351,14 +351,21 @@ laporan). Empat yang paling merusak data sudah diperbaiki dan live:
 | 3 | `receipts.set()` bisa menggantung selamanya (tidak seperti `get()`) | `WRITE_TIMEOUT_MS` ditambahkan | 9/9 + regresi 39/39 |
 | 4 | Edit wallet setelah restore backup / gabung wallet yatim menggandakan saldo | `rawBalance` dicari dari `walletByName`, bukan asumsi `baseBalance`/`0` | 15/15 |
 
-**10 temuan lain masih terbuka**, diurutkan dari yang paling serius:
-cadangan otomatis tidak dipisah per akun (HP dipakai berdua bisa lihat data
-akun lain), kolom Tanggal kosong membuat transaksi hantu, hapus usaha
-meninggalkan penyesuaian yatim, `hideBalance` tidak berlaku di layar Wallet,
-form Wallet melompat sendiri ke mode Edit, "Transaksi Terbaru" tidak
-diurutkan, Kelola Kategori salah untuk akun Pribadi, dua baris geser-hapus
-bisa sama-sama terbuka (kosmetik), timer penyimpanan tidak dibatalkan saat
-keluar akun.
+**Lanjutan 06-09 — 5 temuan berikutnya juga sudah diperbaiki:**
+
+| # | Bug | Perbaikan | Uji |
+|---|---|---|---|
+| 5 | Cadangan otomatis tidak dipisah per akun (HP dipakai berdua bisa lihat data akun lain) | `backup.js` dapat `initBackup(uid)`, kunci per-akun seperti `store.js` | 9/9 |
+| 6 | Kolom Tanggal kosong membuat transaksi hantu (`ts` jadi NaN) | `tanggalValid()` jadi gerbang wajib di `isDisabled` + `handleSubmit` | 16/16 |
+| 7 | Hapus usaha meninggalkan penyesuaian saldo yatim | `deleteBusiness` ikut membersihkan `walletAdjustments[id]` | 9/9 |
+| 8 | `hideBalance` (ikon mata) tidak berlaku di layar Wallet | Prop dioper seperti layar lain | terverifikasi bundel |
+| 9 | Form Wallet melompat sendiri ke mode Edit, bisa menimpa ketikan | Dependensi effect dipersempit ke `[initialEditName]` saja | (gabung #7) |
+
+**3 temuan masih terbuka**, kosmetik/berdampak kecil: "Transaksi Terbaru" di
+Beranda tidak diurutkan, Kelola Kategori salah untuk akun Pribadi (menampilkan
+kategori Usaha, menyembunyikan kategori Pribadi), dua baris geser-hapus bisa
+sama-sama terbuka sebentar saat digeser bersamaan, timer penyimpanan tidak
+dibatalkan saat keluar akun.
 
 Detail lengkap tiap temuan (file:baris, skenario, akibat) ada di transkrip
 percakapan 06-09 -- belum dipindah ke dokumen ini.

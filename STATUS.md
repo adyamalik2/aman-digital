@@ -338,6 +338,33 @@ muncul hanya kalau sesi masuknya sudah lama.
 
 ---
 
+### Audit AMAN-in 06-09-2026 — 4 bug parah diperbaiki, 10 masih terbuka
+
+Audit menyeluruh diminta Malik. 14 temuan, semua dari pembacaan kode
+(4 diverifikasi ulang langsung sebelum diperbaiki, bukan cuma dipercaya dari
+laporan). Empat yang paling merusak data sudah diperbaiki dan live:
+
+| # | Bug | Perbaikan | Uji |
+|---|---|---|---|
+| 1 | Membuka transaksi "Penyesuaian Saldo" mengganti kategorinya sendiri | Early-return untuk `SYSTEM_CATS` di effect penjaga kategori | 9/9 |
+| 2 | Transaksi hilang kalau dicatat saat aplikasi baru dimuat | `applyData` baca state terkini lewat `resolveTx` fungsional | 11/11 |
+| 3 | `receipts.set()` bisa menggantung selamanya (tidak seperti `get()`) | `WRITE_TIMEOUT_MS` ditambahkan | 9/9 + regresi 39/39 |
+| 4 | Edit wallet setelah restore backup / gabung wallet yatim menggandakan saldo | `rawBalance` dicari dari `walletByName`, bukan asumsi `baseBalance`/`0` | 15/15 |
+
+**10 temuan lain masih terbuka**, diurutkan dari yang paling serius:
+cadangan otomatis tidak dipisah per akun (HP dipakai berdua bisa lihat data
+akun lain), kolom Tanggal kosong membuat transaksi hantu, hapus usaha
+meninggalkan penyesuaian yatim, `hideBalance` tidak berlaku di layar Wallet,
+form Wallet melompat sendiri ke mode Edit, "Transaksi Terbaru" tidak
+diurutkan, Kelola Kategori salah untuk akun Pribadi, dua baris geser-hapus
+bisa sama-sama terbuka (kosmetik), timer penyimpanan tidak dibatalkan saat
+keluar akun.
+
+Detail lengkap tiap temuan (file:baris, skenario, akibat) ada di transkrip
+percakapan 06-09 -- belum dipindah ke dokumen ini.
+
+---
+
 ### Halaman legal portal berita — catatan penerapan
 
 Ketiganya ditulis langsung ke D1 produksi 06-09 (bukan lewat panel admin).

@@ -117,6 +117,12 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
           <label for="komentar-isi" class="sr-only">Tulis komentar</label>
           <textarea id="komentar-isi" name="content" placeholder="Tulis komentar…" required maxlength="2000" rows="3" style="width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font:inherit;resize:vertical"></textarea>
           <button type="submit" style="margin-top:10px;background:#059669;color:#fff;border:0;padding:10px 22px;border-radius:999px;font-weight:700;font-size:.88rem;cursor:pointer">Kirim Komentar</button>
+          <p style="margin:10px 0 0;font-size:.78rem;line-height:1.6;color:#64748b">
+            Nama dan isi komentar Anda akan tampil publik setelah disetujui redaksi.
+            Email tidak pernah ditampilkan. Lihat
+            <a href="/kebijakan-privasi" style="color:#047857;font-weight:600">Kebijakan Privasi</a>
+            untuk data apa yang kami simpan dan cara memintanya dihapus.
+          </p>
         </form>
       </div>
       ${commentsHtml}

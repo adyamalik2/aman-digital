@@ -82,7 +82,7 @@ Diurutkan dari yang paling menghambat.
 | # | Perkara | Yang dibutuhkan |
 |---|---|---|
 | 1 | ~~Skema harga AMAN-in~~ | ✅ **SELESAI 01-09.** Angkanya ditetapkan (K-15), gerbangnya menyala, aktivasi kode teruji ujung-ke-ujung. Tidak menunggu apa pun lagi. |
-| 2 | **Syarat & Ketentuan** | ✅ **Kebijakan Privasi TERBIT 06-09** di `/kebijakan-privasi`, ditautkan dari footer. Sisa: S&K menunggu Kelompok B — **B6 (lisensi produk)** dan **B7 (arti "akses selamanya")** yang paling mendesak. B2/B3/B5 sudah bisa dijawab dari kode. |
+| 2 | ~~Dokumen legal~~ | ✅ **SELESAI 06-09.** Kebijakan Privasi & Syarat–Ketentuan terbit dan tertaut di footer; tiga halaman legal portal berita terisi; tautan privasi ada di form komentar. Sisa hanya Kelompok C (tinjauan ahli hukum). |
 | 3 | **Cara pembayaran di `/harga`** | Paragraf lama dihapus karena tidak terverifikasi. Halaman harga kini tidak menjelaskan cara bayar sama sekali. Menunggu Duitku atau konfirmasi jalur lain. |
 | 4 | **Duitku** | ✅ Ketiga syarat **selesai 28-08**: harga di halaman utama, checkout di situs sendiri, integrasi Sandbox teruji (kode akses terbit otomatis, callback palsu & nominal dikurangi ditolak, kode terikat produk). Tombol beli sudah diarahkan ke `/checkout`. **MASIH SANDBOX** (`DUITKU_SANDBOX=1`) — pembayaran belum menagih uang sungguhan, jadi halaman checkout menampilkan jalur Lynk.id sebagai pembelian nyata. Begitu akun Duitku aktif: ganti secret ke kredensial produksi + `DUITKU_SANDBOX=0`, banner hilang sendiri. Panduan: `docs/duitku-setup.md`. |
 | 5 | **Hosting `web.id`** | Domain `amandigital.web.id` sudah **terminated 21-08-2026**. Belum diputuskan Hostinger atau Rumahweb. Terpisah dari my.id — my.id bukan hasil migrasi web.id, melainkan platform baru. |
@@ -115,9 +115,16 @@ Yang sudah menyusul: (1) ✅ halaman `/kebijakan-privasi` + tautan footer,
 (3) ✅ keterangan "tidak ada refund" kini ada di **semua** halaman jual
 (`/amanin` menyusul 06-09; empat lainnya sudah sejak lama).
 
-Yang **belum**: (2) isi ulang tiga halaman legal portal berita di D1
-(`privacy`, `disclaimer`, `pedoman-media-siber`) yang masih placeholder, dan
-(4) tautan kebijakan privasi di dekat form komentar berita.
+(2) ✅ **Tiga halaman legal portal berita terisi 06-09** — `privacy`,
+`disclaimer`, `pedoman-media-siber`, ditulis langsung ke D1 produksi.
+(4) ✅ **Tautan kebijakan privasi kini ada di form komentar**, beserta
+keterangan singkat bahwa nama & isi tampil publik dan email tidak pernah
+ditampilkan.
+
+**Seluruh daftar legal selesai.** Yang tersisa hanya Kelompok C: tinjauan
+orang yang paham hukum atas batasan tanggung jawab (S&K bagian 12) dan klaim
+keamanan data (Kebijakan Privasi bagian 7). Saya bisa menyusun kalimatnya,
+tapi saya bukan penasihat hukum.
 
 **Penataan halaman `/harga`.** Sekarang hanya memuat Kasir/Budget/Invoice;
 5 produk lain harganya hardcode terpisah di halaman masing-masing, jadi
@@ -325,6 +332,27 @@ muncul hanya kalau sesi masuknya sudah lama.
 | Pembaca notifikasi otomatis penuh | Butuh plugin native + izin sensitif Play Store, dan 20+ pengurai teks bank yang harus dirawat selamanya. Dicoba dulu versi ringannya (nomor 4) |
 | Baca SMS | Izin sensitif, dan bank sekarang memakai notifikasi aplikasi, bukan SMS |
 | Bot Telegram | Ditolak Malik 30-08 ("jangan dulu") |
+
+---
+
+### Halaman legal portal berita — catatan penerapan
+
+Ketiganya ditulis langsung ke D1 produksi 06-09 (bukan lewat panel admin).
+
+- **`privacy`** sengaja **tidak menduplikasi** kebijakan privasi utama. Isinya
+  ringkasan untuk pembaca/pengomentar lalu menautkan ke `/kebijakan-privasi`.
+  Dua dokumen hukum yang saling menyalin pasti menyimpang.
+- **`pedoman-media-siber`** **tidak menyalin naskah resmi Dewan Pers.** Yang
+  ditulis adalah komitmen AMAN News dan cara penerapannya, plus tautan ke
+  sumber resminya. Kalau Malik ingin naskah verbatim, salin sendiri dari
+  dewanpers.or.id — jangan dikutip dari ingatan.
+- **Waktu tanggap ralat/hak jawab ditulis 1×24 jam**, mengikuti standar yang
+  sudah ditetapkan untuk kanal email yang sama (K-12). Kalau untuk urusan
+  redaksi angkanya perlu beda, tinggal diubah.
+
+**Temuan sampingan:** Cloudflare menyamarkan otomatis alamat email di halaman
+portal berita (`__cf_email__`) — bagus untuk menahan panen spam, dan nomor
+WhatsApp tetap terlihat sebagai jalur cadangan bila JavaScript mati.
 
 ---
 
